@@ -81,6 +81,5 @@ func (hm *HashMap) walk(path string, info os.FileInfo, err error) error {
 	if err != nil {
 		log.Warning(err)
 	}
-	hm.logger.WithField("path", path).Debug("Updated file...")
 	return nil
 }

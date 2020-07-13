@@ -26,10 +26,16 @@ func New() *Server {
 		logger:  log.WithField("component", "server"),
 	}
 	handler.Use(loggingMiddleware)
+
 	authenticationSubRouter := handler.NewRoute().Subrouter()
 	authenticationSubRouter.Use(configAuthMiddleware)
+	apiRouter := authenticationSubRouter.PathPrefix(config.Config.APIPathPrefix).Subrouter()
+
+	// General Get Requests don't need authentication
 	handler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
 	authenticationSubRouter.PathPrefix("/").Methods(http.MethodPut).HandlerFunc(server.PutHandler)
+	apiRouter.Path("/list").HandlerFunc(server.APIListHandler)
+	apiRouter.Path("/move").HandlerFunc(server.APIMoveHandler)
 	return server
 }
 

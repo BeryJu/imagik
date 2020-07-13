@@ -9,6 +9,7 @@ import (
 
 type Configuration struct {
 	RootDir                     string            `yaml:"root_dir"`
+	APIPathPrefix               string            `yaml:"api_path_prefix"`
 	AuthenticationDriver        string            `yaml:"authentication_driver"`
 	AuthenticationDriverContext map[string]string `yaml:"authentication_driver_context"`
 
