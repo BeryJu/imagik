@@ -32,7 +32,7 @@ func New() *Server {
 
 	authenticationSubRouter := handler.NewRoute().Subrouter()
 	authenticationSubRouter.Use(configAuthMiddleware)
-	apiRouter := authenticationSubRouter.PathPrefix(viper.GetString(config.ConfigAPIPathPrefix)).Subrouter()
+	apiRouter := authenticationSubRouter.PathPrefix("/api").Subrouter()
 
 	// General Get Requests don't need authentication
 	handler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
