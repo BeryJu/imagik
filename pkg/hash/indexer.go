@@ -11,8 +11,8 @@ import (
 	"sync"
 
 	"github.com/cornelk/hashmap"
+	"github.com/spf13/viper"
 
-	"github.com/BeryJu/gopyazo/pkg/config"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -34,7 +34,7 @@ func New() *HashMap {
 // RunIndexer Run full indexing
 func (hm *HashMap) RunIndexer() {
 	hm.logger.Debug("Started indexing...")
-	filepath.Walk(config.Config.RootDir, func(path string, info os.FileInfo, err error) error {
+	filepath.Walk(viper.GetString("root_dir"), func(path string, info os.FileInfo, err error) error {
 		return hm.walk(path, info, err)
 	})
 	hm.logger.WithField("hashes", hm.hashMap.Len()).Debug("Finished indexing...")

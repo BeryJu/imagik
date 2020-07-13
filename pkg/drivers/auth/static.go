@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -12,8 +13,8 @@ type StaticAuth struct {
 	logger       *log.Entry
 }
 
-func (sa *StaticAuth) Init(driverConfig map[string]string) {
-	sa.staticTokens = driverConfig
+func (sa *StaticAuth) Init() {
+	sa.staticTokens = viper.GetStringMapString("auth_static_tokens")
 	sa.logger = log.WithField("component", "static-auth")
 }
 
