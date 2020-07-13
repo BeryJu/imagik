@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: gopyazo
+  name: gopyazo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: gopyazo
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: gopyazo
+    spec:
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: minio-pv-claim
+      containers:
+        - args:
+            - server
+          command:
+            - /gopyazo
+          envFrom:
+          - configMapRef:
+              name: gopyazo-config
+          image: beryju/gopyazo
+          imagePullPolicy: Always
+          name: gopyazo
+          ports:
+            - containerPort: 8000
+              name: http
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /data
+              name: storage
+          livenessProbe:
+            httpGet:
+              path: /api/pub/health/liveness
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /api/pub/health/readiness
+              port: http
+          resources:
+            requests:
+              cpu: 10m
+              memory: 10M
+            limits:
+              cpu: 500m
+              memory: 250M

@@ -32,6 +32,10 @@ func New() *HashMap {
 	return m
 }
 
+func (hm *HashMap) Populated() bool {
+	return hm.hashMap.Len() > 0
+}
+
 // RunIndexer Run full indexing
 func (hm *HashMap) RunIndexer() {
 	hm.logger.Debug("Started indexing...")

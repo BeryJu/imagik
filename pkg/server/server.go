@@ -22,23 +22,34 @@ type Server struct {
 }
 
 func New() *Server {
-	handler := mux.NewRouter()
+	mainHandler := mux.NewRouter()
 	server := &Server{
 		rootDir: viper.GetString(config.ConfigRootDir),
-		handler: handler,
+		handler: mainHandler,
 		logger:  log.WithField("component", "server"),
 	}
-	handler.Use(loggingMiddleware)
+	mainHandler.Use(loggingMiddleware)
 
-	authenticationSubRouter := handler.NewRoute().Subrouter()
-	authenticationSubRouter.Use(configAuthMiddleware)
-	apiRouter := authenticationSubRouter.PathPrefix("/api").Subrouter()
+	authHandler := mainHandler.NewRoute().Subrouter()
+	authHandler.Use(configAuthMiddleware)
+	apiPrivHandler := authHandler.PathPrefix("/api/priv").Subrouter()
+	apiHandler := mainHandler.PathPrefix("/api/pub").Subrouter()
 
 	// General Get Requests don't need authentication
-	handler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
-	authenticationSubRouter.PathPrefix("/").Methods(http.MethodPut).HandlerFunc(server.PutHandler)
-	apiRouter.Path("/list").HandlerFunc(server.APIListHandler)
-	apiRouter.Path("/move").HandlerFunc(server.APIMoveHandler)
+	mainHandler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
+	authHandler.PathPrefix("/").Methods(http.MethodPut).HandlerFunc(server.PutHandler)
+	apiPrivHandler.Path("/list").HandlerFunc(server.APIListHandler)
+	apiPrivHandler.Path("/move").HandlerFunc(server.APIMoveHandler)
+	apiHandler.Path("/health/liveness").HandlerFunc(server.HealthLiveness)
+	apiHandler.Path("/health/readiness").HandlerFunc(server.HealthReadiness)
+
+	mainHandler.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
+		pathTemplate, err := route.GetPathTemplate()
+		if err == nil {
+			server.logger.Debug(pathTemplate)
+		}
+		return nil
+	})
 	return server
 }
 

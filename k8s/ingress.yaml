@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/tls-acme: "true"
+  labels:
+    app.kubernetes.io/name: gopyazo
+  name: gopyazo
+spec:
+  rules:
+  - host: i.beryju.org
+    http:
+      paths:
+      - backend:
+          serviceName: gopyazo
+          servicePort: http
+        path: /
+  tls:
+  - hosts:
+    - i.beryju.org
+    secretName: gopyazo-acme
