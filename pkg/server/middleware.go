@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/drivers/auth"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -24,7 +25,7 @@ func loggingMiddleware(next http.Handler) http.Handler {
 }
 
 func configAuthMiddleware(next http.Handler) http.Handler {
-	authDriverType := viper.GetString("authentication_driver")
+	authDriverType := viper.GetString(config.ConfigAuthenticationDriver)
 	var authDriver auth.AuthDriver
 	switch authDriverType {
 	case "static":

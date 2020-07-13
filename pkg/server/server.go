@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/hash"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
@@ -23,7 +24,7 @@ type Server struct {
 func New() *Server {
 	handler := mux.NewRouter()
 	server := &Server{
-		rootDir: viper.GetString("root_dir"),
+		rootDir: viper.GetString(config.ConfigRootDir),
 		handler: handler,
 		logger:  log.WithField("component", "server"),
 	}
@@ -31,7 +32,7 @@ func New() *Server {
 
 	authenticationSubRouter := handler.NewRoute().Subrouter()
 	authenticationSubRouter.Use(configAuthMiddleware)
-	apiRouter := authenticationSubRouter.PathPrefix(viper.GetString("api_path_prefix")).Subrouter()
+	apiRouter := authenticationSubRouter.PathPrefix(viper.GetString(config.ConfigAPIPathPrefix)).Subrouter()
 
 	// General Get Requests don't need authentication
 	handler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
@@ -58,6 +59,6 @@ func notFoundHandler(msg string, w http.ResponseWriter) {
 }
 
 func (s *Server) Run() {
-	log.Infof("Server running '%s'", viper.GetString("listen"))
-	http.ListenAndServe(viper.GetString("listen"), s.handler)
+	log.Infof("Server running '%s'", viper.GetString(config.ConfigListen))
+	http.ListenAndServe(viper.GetString(config.ConfigListen), s.handler)
 }

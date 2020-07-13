@@ -3,6 +3,7 @@ package auth
 import (
 	"net/http"
 
+	"github.com/BeryJu/gopyazo/pkg/config"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"golang.org/x/crypto/bcrypt"
@@ -14,7 +15,7 @@ type StaticAuth struct {
 }
 
 func (sa *StaticAuth) Init() {
-	sa.staticTokens = viper.GetStringMapString("auth_static_tokens")
+	sa.staticTokens = viper.GetStringMapString(config.ConfigAuthStaticTokens)
 	sa.logger = log.WithField("component", "static-auth")
 }
 
