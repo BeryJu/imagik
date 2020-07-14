@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  gopyazo:
+    image: beryju/gopyazo
+    ports:
+      - 8000:8000
+    environment:
+      GOPYAZO_ROOT_DIR: /data
+      GOPYAZO_LISTEN: 0.0.0.0:8000
+      GOPYAZO_AUTHENTICATION_DRIVER: 'null'
+    volumes:
+      - ./data:/data

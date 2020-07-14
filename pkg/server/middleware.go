@@ -8,15 +8,17 @@ import (
 	"github.com/BeryJu/gopyazo/pkg/drivers/auth"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"go.elastic.co/apm/module/apmlogrus"
 )
 
 func loggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		traceContextFields := apmlogrus.TraceContext(r.Context())
 		before := time.Now()
 		// Call the next handler, which can be another middleware in the chain, or the final handler.
 		next.ServeHTTP(w, r)
 		after := time.Now()
-		log.WithFields(log.Fields{
+		log.WithFields(traceContextFields).WithFields(log.Fields{
 			"remote": r.RemoteAddr,
 			"method": r.Method,
 			"took":   after.Sub(before),

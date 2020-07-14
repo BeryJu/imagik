@@ -12,6 +12,7 @@ import (
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"go.elastic.co/apm/module/apmhttp"
 )
 
 type Server struct {
@@ -71,5 +72,5 @@ func notFoundHandler(msg string, w http.ResponseWriter) {
 
 func (s *Server) Run() {
 	log.Infof("Server running '%s'", viper.GetString(config.ConfigListen))
-	http.ListenAndServe(viper.GetString(config.ConfigListen), s.handler)
+	http.ListenAndServe(viper.GetString(config.ConfigListen), apmhttp.Wrap(s.handler))
 }
