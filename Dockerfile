@@ -10,5 +10,6 @@ FROM scratch
 COPY --from=builder /go/bin/gopyazo /gopyazo
 EXPOSE 8080
 WORKDIR /web-root
+ENV ELASTIC_APM_ACTIVE=false
 CMD [ "/gopyazo" ]
 ENTRYPOINT [ "/gopyazo" ]

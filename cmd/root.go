@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/BeryJu/gopyazo/pkg/config"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -50,5 +51,9 @@ func initConfig() {
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
 		log.WithField("config-file", viper.ConfigFileUsed()).Info("Using config file")
+	}
+
+	if viper.GetString(config.ConfigLogFormat) == "json" {
+		log.SetFormatter(&log.JSONFormatter{})
 	}
 }
