@@ -38,8 +38,12 @@ func (hm *HashMap) Populated() bool {
 
 // RunIndexer Run full indexing
 func (hm *HashMap) RunIndexer() {
-	hm.logger.Debug("Started indexing...")
-	filepath.Walk(viper.GetString(config.ConfigRootDir), func(path string, info os.FileInfo, err error) error {
+	dir := viper.GetString(config.ConfigRootDir)
+	hm.logger.WithField("dir", dir).Debug("Started indexing...")
+	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
 		return hm.walk(path, info, err)
 	})
 	hm.logger.WithField("hashes", hm.hashMap.Len()).Debug("Finished indexing...")

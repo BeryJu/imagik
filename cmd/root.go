@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/BeryJu/gopyazo/pkg/config"
 	log "github.com/sirupsen/logrus"
@@ -46,6 +47,7 @@ func initConfig() {
 		viper.SetConfigFile("config.yaml")
 	}
 	viper.SetEnvPrefix("gopyazo")
+	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	viper.AutomaticEnv()
 
 	// If a config file is found, read it in.

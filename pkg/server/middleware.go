@@ -1,7 +1,9 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/BeryJu/gopyazo/pkg/config"
@@ -35,6 +37,9 @@ func configAuthMiddleware(r *mux.Router) func(next http.Handler) http.Handler {
 		authDriver = &auth.StaticAuth{}
 	case "null":
 		authDriver = &auth.NullAuth{}
+	if authDriver == nil {
+		fmt.Printf("Could not configure AuthDriver '%s'", authDriverType)
+		os.Exit(1)
 	}
 	authDriver.Init()
 	authDriver.InitRoutes(r)

@@ -9,6 +9,7 @@ import (
 
 	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/hash"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
@@ -29,7 +30,9 @@ func New() *Server {
 		handler: mainHandler,
 		logger:  log.WithField("component", "server"),
 	}
+	mainHandler.Use(handlers.ProxyHeaders)
 	mainHandler.Use(loggingMiddleware)
+	mainHandler.Use(handlers.CompressHandler)
 
 	apiPubHandler := mainHandler.PathPrefix("/api/pub").Subrouter()
 	authHandler := mainHandler.NewRoute().Subrouter()
@@ -47,7 +50,7 @@ func New() *Server {
 	mainHandler.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		pathTemplate, err := route.GetPathTemplate()
 		if err == nil {
-			server.logger.Debug(pathTemplate)
+			server.logger.Debugf("Registered route '%s'", pathTemplate)
 		}
 		return nil
 	})
@@ -71,6 +74,6 @@ func notFoundHandler(msg string, w http.ResponseWriter) {
 }
 
 func (s *Server) Run() {
-	log.Infof("Server running '%s'", viper.GetString(config.ConfigListen))
+	log.Infof("Server running on '%s'", viper.GetString(config.ConfigListen))
 	http.ListenAndServe(viper.GetString(config.ConfigListen), apmhttp.Wrap(s.handler))
 }
