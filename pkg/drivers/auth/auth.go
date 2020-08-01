@@ -7,6 +7,6 @@ import (
 )
 
 type AuthDriver interface {
-	drivers.Driver
+	drivers.HTTPDriver
 	AuthenticateRequest(w http.ResponseWriter, r *http.Request, next http.Handler)
 }

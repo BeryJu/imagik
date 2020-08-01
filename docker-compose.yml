@@ -9,5 +9,6 @@ services:
       GOPYAZO_ROOT_DIR: /data
       GOPYAZO_LISTEN: 0.0.0.0:8000
       GOPYAZO_AUTHENTICATION_DRIVER: 'null'
+      ELASTIC_APM_ACTIVE: 'false'
     volumes:
       - ./data:/data

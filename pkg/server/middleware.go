@@ -6,6 +6,7 @@ import (
 
 	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/drivers/auth"
+	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"go.elastic.co/apm/module/apmlogrus"
@@ -26,7 +27,7 @@ func loggingMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func configAuthMiddleware(next http.Handler) http.Handler {
+func configAuthMiddleware(r *mux.Router) func(next http.Handler) http.Handler {
 	authDriverType := viper.GetString(config.ConfigAuthenticationDriver)
 	var authDriver auth.AuthDriver
 	switch authDriverType {
@@ -36,8 +37,11 @@ func configAuthMiddleware(next http.Handler) http.Handler {
 		authDriver = &auth.NullAuth{}
 	}
 	authDriver.Init()
+	authDriver.InitRoutes(r)
+	return func(next http.Handler) http.Handler {
 
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		authDriver.AuthenticateRequest(w, r, next)
-	})
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			authDriver.AuthenticateRequest(w, r, next)
+		})
+	}
 }
