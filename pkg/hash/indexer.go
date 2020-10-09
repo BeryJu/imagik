@@ -12,7 +12,6 @@ import (
 
 	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/cornelk/hashmap"
-	"github.com/spf13/viper"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -38,7 +37,7 @@ func (hm *HashMap) Populated() bool {
 
 // RunIndexer Run full indexing
 func (hm *HashMap) RunIndexer() {
-	dir := viper.GetString(config.ConfigRootDir)
+	dir := config.C.RootDir
 	hm.logger.WithField("dir", dir).Debug("Started indexing...")
 	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {

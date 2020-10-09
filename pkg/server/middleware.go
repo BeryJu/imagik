@@ -10,7 +10,6 @@ import (
 	"github.com/BeryJu/gopyazo/pkg/drivers/auth"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 )
 
 func loggingMiddleware(next http.Handler) http.Handler {
@@ -29,13 +28,13 @@ func loggingMiddleware(next http.Handler) http.Handler {
 }
 
 func configAuthMiddleware(r *mux.Router) func(next http.Handler) http.Handler {
-	authDriverType := viper.GetString(config.ConfigAuthenticationDriver)
+	authDriverType := config.C.AuthDriver
 	var authDriver auth.AuthDriver
 	switch authDriverType {
-	case "static":
-		authDriver = &auth.StaticAuth{}
 	case "null":
 		authDriver = &auth.NullAuth{}
+	case "static":
+		authDriver = &auth.StaticAuth{}
 	case "oidc":
 		authDriver = &auth.OIDCAuth{}
 	}

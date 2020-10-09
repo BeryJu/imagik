@@ -10,7 +10,7 @@ require (
 	github.com/gorilla/mux v1.7.4
 	github.com/gorilla/securecookie v1.1.1
 	github.com/gorilla/sessions v1.2.0
-	github.com/pkg/errors v0.9.1 // indirect
+	github.com/pkg/errors v0.9.1
 	github.com/pquerna/cachecontrol v0.0.0-20180517163645-1555304b9b35 // indirect
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/cobra v1.0.0
@@ -22,5 +22,5 @@ require (
 	golang.org/x/sys v0.0.0-20200625212154-ddb9806d33ae // indirect
 	golang.org/x/text v0.3.2 // indirect
 	gopkg.in/square/go-jose.v2 v2.5.1 // indirect
-	gopkg.in/yaml.v2 v2.3.0 // indirect
+	gopkg.in/yaml.v2 v2.3.0
 )

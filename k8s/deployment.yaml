@@ -27,7 +27,9 @@ spec:
           envFrom:
           - configMapRef:
               name: gopyazo-config
-          image: beryju/gopyazo
+          - secretRef:
+              name: gopyazo-secrets
+          image: beryju/gopyazo:sentry
           imagePullPolicy: Always
           name: gopyazo
           ports:

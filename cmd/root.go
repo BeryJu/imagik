@@ -3,14 +3,11 @@ package cmd
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/BeryJu/gopyazo/pkg/config"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"go.elastic.co/apm"
-	"go.elastic.co/apm/module/apmlogrus"
 )
 
 var cfgFile string
@@ -29,33 +26,22 @@ func Execute() {
 }
 
 func init() {
-	cobra.OnInitialize(initConfig)
+	cobra.OnInitialize(onInit)
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "config file (default is config.yaml)")
 }
 
-// initConfig reads in config file and ENV variables if set.
-func initConfig() {
+// onInit reads in config file and ENV variables if set.
+func onInit() {
 	log.SetLevel(log.DebugLevel)
-	log.AddHook(&apmlogrus.Hook{})
-	t := apm.DefaultTracer
-	t.SetLogger(log.WithField("component", "apm"))
+	config.DefaultConfig()
 
-	if cfgFile != "" {
-		// Use config file from the flag.
-		viper.SetConfigFile(cfgFile)
-	} else {
-		viper.SetConfigFile("config.yaml")
-	}
-	viper.SetEnvPrefix("gopyazo")
-	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
-	viper.AutomaticEnv()
+	configPath := "./config.yml"
 
-	// If a config file is found, read it in.
-	if err := viper.ReadInConfig(); err == nil {
-		log.WithField("config-file", viper.ConfigFileUsed()).Info("Using config file")
+	if err := config.LoadConfig(configPath); err == nil {
+		log.WithField("config-file", configPath).Info("Using config file")
 	}
 
-	if viper.GetString(config.ConfigLogFormat) == "json" {
+	if viper.GetString(config.C.LogFormat) == "json" {
 		log.SetFormatter(&log.JSONFormatter{})
 	}
 }

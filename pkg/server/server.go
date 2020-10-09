@@ -13,7 +13,6 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 )
 
 type Server struct {
@@ -26,7 +25,7 @@ type Server struct {
 func New() *Server {
 	mainHandler := mux.NewRouter()
 	server := &Server{
-		rootDir: viper.GetString(config.ConfigRootDir),
+		rootDir: config.C.RootDir,
 		handler: mainHandler,
 		logger:  log.WithField("component", "server"),
 	}
@@ -73,8 +72,8 @@ func notFoundHandler(msg string, w http.ResponseWriter) {
 	fmt.Fprint(w, msg)
 }
 
-func (s *Server) Run() {
-	log.Infof("Server running on '%s'", viper.GetString(config.ConfigListen))
+func (s *Server) Run() error {
+	log.WithField("listen", config.C.Listen).Info("Server running")
 	sentryHandler := sentryhttp.New(sentryhttp.Options{})
-	http.ListenAndServe(viper.GetString(config.ConfigListen), sentryHandler.Handle(s.handler))
+	return http.ListenAndServe(config.C.Listen, sentryHandler.Handle(s.handler))
 }

@@ -10,7 +10,6 @@ import (
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 	log "github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 	"golang.org/x/oauth2"
 )
 
@@ -64,15 +63,15 @@ func (oa *OIDCAuth) handleOAuth2Callback(w http.ResponseWriter, r *http.Request)
 func (oa *OIDCAuth) Init() {
 	oa.logger = log.WithField("component", "OIDC-auth")
 	oa.context = context.Background()
-	provider, err := oidc.NewProvider(oa.context, viper.GetString(config.ConfigAuthOIDCURL))
+	provider, err := oidc.NewProvider(oa.context, config.C.AuthOIDCConfig.URL)
 	if err != nil {
 		oa.logger.Warn(err)
 	}
 	oa.provider = provider
 	oa.config = oauth2.Config{
-		ClientID:     viper.GetString(config.ConfigAuthOIDCClientID),
-		ClientSecret: viper.GetString(config.ConfigAuthOIDCClientSecret),
-		RedirectURL:  viper.GetString(config.ConfigAuthOIDCRediret),
+		ClientID:     config.C.AuthOIDCConfig.ClientID,
+		ClientSecret: config.C.AuthOIDCConfig.ClientSecret,
+		RedirectURL:  config.C.AuthOIDCConfig.Redirect,
 		Endpoint:     provider.Endpoint(),
 		Scopes:       []string{oidc.ScopeOpenID, "profile", "email"},
 	}
@@ -87,6 +86,6 @@ func (oa *OIDCAuth) InitRoutes(r *mux.Router) {
 func (oa *OIDCAuth) AuthenticateRequest(w http.ResponseWriter, r *http.Request, next http.Handler) {
 	session, _ := store.Get(r, "session-name")
 	if _, ok := session.Values["oidc_state"]; !ok {
-		http.Redirect(w, r, viper.GetString(config.ConfigAuthOIDCRediret), http.StatusFound)
+		http.Redirect(w, r, config.C.AuthOIDCConfig.Redirect, http.StatusFound)
 	}
 }

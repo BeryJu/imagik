@@ -5,5 +5,7 @@ metadata:
 data:
   GOPYAZO_ROOT_DIR: /data/images
   GOPYAZO_LISTEN: 0.0.0.0:8000
-  GOPYAZO_AUTHENTICATION_DRIVER: 'null'
+  GOPYAZO_AUTHENTICATION_DRIVER: "null"
   GOPYAZO_LOG_FORMAT: json
+  # Sentry configuration
+  SENTRY_ENVIRONMENT: beryjuorg-prod
