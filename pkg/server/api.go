@@ -18,7 +18,7 @@ func errorHandlerAPI(err error, w http.ResponseWriter) {
 }
 
 func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
-	offset := r.URL.Query().Get("offset")
+	offset := r.URL.Query().Get("pathOffset")
 	fullDir := s.cleanURL(offset)
 	files, err := ioutil.ReadDir(fullDir)
 	if err != nil {

@@ -9,11 +9,11 @@ import (
 
 	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/hash"
+	sentryhttp "github.com/getsentry/sentry-go/http"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"go.elastic.co/apm/module/apmhttp"
 )
 
 type Server struct {
@@ -75,5 +75,6 @@ func notFoundHandler(msg string, w http.ResponseWriter) {
 
 func (s *Server) Run() {
 	log.Infof("Server running on '%s'", viper.GetString(config.ConfigListen))
-	http.ListenAndServe(viper.GetString(config.ConfigListen), apmhttp.Wrap(s.handler))
+	sentryHandler := sentryhttp.New(sentryhttp.Options{})
+	http.ListenAndServe(viper.GetString(config.ConfigListen), sentryHandler.Handle(s.handler))
 }

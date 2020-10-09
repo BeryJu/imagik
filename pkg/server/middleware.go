@@ -11,17 +11,16 @@ import (
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"go.elastic.co/apm/module/apmlogrus"
 )
 
 func loggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		traceContextFields := apmlogrus.TraceContext(r.Context())
+		// w.Header().Set("Access-Control-Allow-Origin", "*")
 		before := time.Now()
 		// Call the next handler, which can be another middleware in the chain, or the final handler.
 		next.ServeHTTP(w, r)
 		after := time.Now()
-		log.WithFields(traceContextFields).WithFields(log.Fields{
+		log.WithFields(log.Fields{
 			"remote": r.RemoteAddr,
 			"method": r.Method,
 			"took":   after.Sub(before),
@@ -37,6 +36,9 @@ func configAuthMiddleware(r *mux.Router) func(next http.Handler) http.Handler {
 		authDriver = &auth.StaticAuth{}
 	case "null":
 		authDriver = &auth.NullAuth{}
+	case "oidc":
+		authDriver = &auth.OIDCAuth{}
+	}
 	if authDriver == nil {
 		fmt.Printf("Could not configure AuthDriver '%s'", authDriverType)
 		os.Exit(1)
