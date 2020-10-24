@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"path/filepath"
 
 	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/schema"
@@ -38,7 +39,7 @@ func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
 		fullName := path.Join(fullDir, f.Name())
 		file := schema.ListFile{
 			Name:     f.Name(),
-			FullPath: fullName,
+			FullPath: filepath.Join(filepath.FromSlash(path.Clean("/"+offset)), f.Name()),
 		}
 		if f.IsDir() {
 			file.Type = "directory"
