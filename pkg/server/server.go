@@ -12,7 +12,6 @@ import (
 	sentryhttp "github.com/getsentry/sentry-go/http"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 	log "github.com/sirupsen/logrus"
 )
@@ -26,7 +25,7 @@ type Server struct {
 }
 
 func New() *Server {
-	store := sessions.NewCookieStore(securecookie.GenerateRandomKey(32))
+	store := sessions.NewCookieStore(config.C.SecretKey)
 
 	mainHandler := mux.NewRouter()
 	server := &Server{

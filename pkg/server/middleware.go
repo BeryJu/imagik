@@ -1,7 +1,6 @@
 package server
 
 import (
-	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -15,7 +14,6 @@ import (
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
-	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -60,11 +58,7 @@ func configAuthMiddleware(store *sessions.CookieStore, r *mux.Router) func(next 
 }
 
 func csrfMiddleware(r *mux.Router) func(next http.Handler) http.Handler {
-	secretKey, err := base64.StdEncoding.DecodeString(config.C.SecretKey)
-	if err != nil {
-		panic(errors.Wrap(err, "Failed to parse Secret Key as base64"))
-	}
-	csrfMiddleware := csrf.Protect(secretKey, csrf.Secure(false))
+	csrfMiddleware := csrf.Protect(config.C.SecretKey, csrf.Secure(false))
 	r.Use(csrfMiddleware)
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
