@@ -34,9 +34,12 @@ func init() {
 func onInit() {
 	log.SetLevel(log.DebugLevel)
 	config.DefaultConfig()
+	err := config.LoadConfig(cfgFile)
 
-	if err := config.LoadConfig(cfgFile); err == nil {
+	if err == nil {
 		log.WithField("config-file", cfgFile).Info("Using config file")
+	} else {
+		log.WithField("config-file", cfgFile).WithError(err).Warning("Failed to read config")
 	}
 
 	if viper.GetString(config.C.LogFormat) == "json" {

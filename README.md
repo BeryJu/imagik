@@ -13,10 +13,10 @@ Pyazo, but fast. GoPyazo is a fast and lightweight fileserver, that
 Run the container like this:
 
 ```
-docker run -v "whatever directory you want to share":/data -w /data beryju/gopyazo:latest-amd64
+docker run -p 8000:8000 -v "whatever directory you want to share":/share beryju/gopyazo server
 ```
 
-Now you can access gopyazo on http://localhost:8080
+Now you can access gopyazo on http://localhost:8000
 
 ### Binary
 
@@ -26,7 +26,7 @@ Download a binary from [GitHub](https://github.com/BeryJu/gopyazo/releases) and 
 ./gopyazo server
 ```
 
-Now you can access gopyazo on http://localhost:8080
+Now you can access gopyazo on http://localhost:8000
 
 ## Configuration
 

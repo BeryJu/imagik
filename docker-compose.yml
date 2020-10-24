@@ -3,10 +3,10 @@ version: '3.7'
 services:
   gopyazo:
     image: beryju/gopyazo
+    command: server
     ports:
       - 8000:8000
     environment:
-      GOPYAZO_ROOT_DIR: /data
-      GOPYAZO_LISTEN: 0.0.0.0:8000
+      # Set GOPYAZO_SECRET from the output of `docker run -it --rm beryju/gopyazo generate-key`
     volumes:
-      - ./data:/data
+      - ./share:/share

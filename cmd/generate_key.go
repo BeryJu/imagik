@@ -14,8 +14,7 @@ var generateKeysCmd = &cobra.Command{
 	Short: "Generate Key for Session Signing and CSRF Token",
 	Run: func(cmd *cobra.Command, args []string) {
 		key := base64.StdEncoding.EncodeToString(securecookie.GenerateRandomKey(32))
-		fmt.Println("Append this to the config file:")
-		fmt.Printf("secretKey: '%s'\r\n", key)
+		fmt.Printf("'%s'\r\n", key)
 	},
 }
 

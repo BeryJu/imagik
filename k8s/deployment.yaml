@@ -20,13 +20,11 @@ spec:
           persistentVolumeClaim:
             claimName: minio-pv-claim
       containers:
-        - args:
+        - command:
             - server
-          command:
-            - /gopyazo
           envFrom:
-          - secretRef:
-              name: gopyazo-secrets
+          - configMapRef:
+              name: gopyazo-config
           image: beryju/gopyazo:sentry
           imagePullPolicy: Always
           name: gopyazo

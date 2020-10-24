@@ -1,14 +1,17 @@
 FROM golang:latest AS builder
-WORKDIR $GOPATH/src/github.com/BeryJu/gopyazo
-COPY . .
-ENV CGO_ENABLED=0
-ENV GOOS=linux
-ENV GOARCH=amd64
+
+WORKDIR /go/src/app
+COPY . /go/src/app
+
+RUN go get -d -v ./...
+
 RUN go build -v -o /go/bin/gopyazo
 
-FROM scratch
+FROM gcr.io/distroless/base-debian10
 COPY --from=builder /go/bin/gopyazo /gopyazo
-EXPOSE 8080
-WORKDIR /web-root
-CMD [ "/gopyazo" ]
-ENTRYPOINT [ "/gopyazo" ]
+COPY ./config.docker.yml /config.yml
+EXPOSE 8000
+WORKDIR /share
+ENV GOPYAZO_ROOT=/share
+ENV GOPYAZO_AUTH_DRIVER=null
+ENTRYPOINT [ "/gopyazo", "-c=/config.yml" ]

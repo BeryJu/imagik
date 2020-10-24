@@ -3,10 +3,6 @@ kind: ConfigMap
 metadata:
   name: gopyazo-config
 data:
-  config: |
-    listen: localhost:8000
-    rootDir: ./root
-    authDriver: static
-    authStaticConfig:
-      tokens:
-        test: "$2a$10$TanDKWLYO3LUS3SEyQGTz.L51M6cSJsLsK0wVEWl5lIK1XucTBQ8u" # test
+  GOPYAZO_ROOT: /data/images
+  # Sentry configuration
+  SENTRY_ENVIRONMENT: beryjuorg-prod
