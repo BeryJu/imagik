@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"encoding/base64"
 	"net/http"
 
 	"github.com/BeryJu/gopyazo/pkg/config"
@@ -25,7 +26,7 @@ type OIDCAuth struct {
 
 func (oa *OIDCAuth) handleRedirect(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session-name")
-	state := string(securecookie.GenerateRandomKey(32))
+	state := base64.StdEncoding.EncodeToString(securecookie.GenerateRandomKey(32))
 	session.Values["oidc_state"] = state
 	http.Redirect(w, r, oa.config.AuthCodeURL(state), http.StatusFound)
 }
@@ -86,6 +87,6 @@ func (oa *OIDCAuth) InitRoutes(r *mux.Router) {
 func (oa *OIDCAuth) AuthenticateRequest(w http.ResponseWriter, r *http.Request, next http.Handler) {
 	session, _ := store.Get(r, "session-name")
 	if _, ok := session.Values["oidc_state"]; !ok {
-		http.Redirect(w, r, config.C.AuthOIDCConfig.Redirect, http.StatusFound)
+		http.Redirect(w, r, "/api/pub/oidc/redirect", http.StatusFound)
 	}
 }

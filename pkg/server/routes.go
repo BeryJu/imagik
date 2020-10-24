@@ -20,7 +20,7 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 		http.ServeFile(w, r, filePath)
 		return
 	}
-	// Since we only store the hash, we need to get rid of the lading slash
+	// Since we only store the hash, we need to get rid of the leading slash
 	path, exists := s.HashMap.Get(r.URL.Path[1:])
 	if exists {
 		s.logger.WithField("path", path).Debug("Found path in hashmap")

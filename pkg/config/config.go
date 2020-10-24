@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"io/ioutil"
 
 	"github.com/pkg/errors"
@@ -45,7 +44,6 @@ func LoadConfig(path string) error {
 	if err != nil {
 		return errors.Wrap(err, "Failed to parse YAML")
 	}
-	fmt.Printf("%+v\n", &C)
 	return nil
 }
 
