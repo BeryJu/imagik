@@ -29,7 +29,6 @@ func New() *Server {
 		handler: mainHandler,
 		logger:  log.WithField("component", "server"),
 	}
-	mainHandler.Use(recoveryMiddleware())
 	mainHandler.Use(handlers.ProxyHeaders)
 	mainHandler.Use(loggingMiddleware)
 	mainHandler.Use(handlers.CompressHandler)

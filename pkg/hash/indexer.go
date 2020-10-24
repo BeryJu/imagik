@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
+	"crypto/sha512"
 	"encoding/hex"
 	"io"
 	"os"
@@ -52,9 +53,8 @@ func (hm *HashMap) Get(hash string) (string, bool) {
 	val, exists := hm.hashMap.Get(hash)
 	if val == nil {
 		return "", exists
-	} else {
-		return val.(string), exists
 	}
+	return val.(string), exists
 }
 
 func (hm *HashMap) UpdateSingle(path string) error {
@@ -71,19 +71,21 @@ func (hm *HashMap) walk(path string, info os.FileInfo, err error) error {
 		log.Warning(err)
 	}
 	defer f.Close()
+	sha512hasher := sha512.New()
 	sha256hasher := sha256.New()
 	sha1hasher := sha1.New()
 	md5hasher := md5.New()
-	mw := io.MultiWriter(sha256hasher, sha1hasher, md5hasher)
+	mw := io.MultiWriter(sha512hasher, sha256hasher, sha1hasher, md5hasher)
 
 	if _, err := io.Copy(mw, f); err != nil {
 		log.Warning(err)
 	}
-	sha256sum := hex.EncodeToString(sha256hasher.Sum(nil))
+	sha512sum := sha512hasher.Sum(nil)
 	hm.writeM.Lock()
 	defer hm.writeM.Unlock()
-	hm.hashMap.Set(sha256sum, path)
-	hm.hashMap.Set(sha256sum[:16], path)
+	hm.hashMap.Set(sha512sum, path)
+	hm.hashMap.Set(sha512sum[:16], path)
+	hm.hashMap.Set(hex.EncodeToString(sha256hasher.Sum(nil)), path)
 	hm.hashMap.Set(hex.EncodeToString(sha1hasher.Sum(nil)), path)
 	hm.hashMap.Set(hex.EncodeToString(md5hasher.Sum(nil)), path)
 	if err != nil {

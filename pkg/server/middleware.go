@@ -2,7 +2,6 @@ package server
 
 import (
 	"encoding/base64"
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
@@ -10,8 +9,6 @@ import (
 
 	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/drivers/auth"
-	"github.com/BeryJu/gopyazo/pkg/schema"
-	sentryhttp "github.com/getsentry/sentry-go/http"
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
@@ -68,28 +65,6 @@ func csrfMiddleware(r *mux.Router) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			w.Header().Set("X-CSRF-Token", csrf.Token(r))
-		})
-	}
-}
-
-func recoveryMiddleware() func(next http.Handler) http.Handler {
-	sentryHandler := sentryhttp.New(sentryhttp.Options{})
-	return func(next http.Handler) http.Handler {
-		sentryHandler.Handle(next)
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			defer func() {
-				err := recover().(error)
-				if err != nil {
-					jsonBody, _ := json.Marshal(schema.GenericResponse{
-						Successful: false,
-						Error:      err.Error(),
-					})
-
-					w.Header().Set("Content-Type", "application/json")
-					w.WriteHeader(http.StatusInternalServerError)
-					w.Write(jsonBody)
-				}
-			}()
 		})
 	}
 }
