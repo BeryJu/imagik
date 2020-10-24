@@ -59,6 +59,8 @@ func (oa *OIDCAuth) handleOAuth2Callback(w http.ResponseWriter, r *http.Request)
 	}
 	session, _ := store.Get(r, "session-name")
 	session.Values["test"] = "test"
+	// TODO: Write user info to session
+	http.Redirect(w, r, session.Values["oidc_redirect"].(string), http.StatusFound)
 }
 
 func (oa *OIDCAuth) Init() {
@@ -87,6 +89,7 @@ func (oa *OIDCAuth) InitRoutes(r *mux.Router) {
 func (oa *OIDCAuth) AuthenticateRequest(w http.ResponseWriter, r *http.Request, next http.Handler) {
 	session, _ := store.Get(r, "session-name")
 	if _, ok := session.Values["oidc_state"]; !ok {
+		session.Values["oidc_redirect"] = r.URL.Path
 		http.Redirect(w, r, "/api/pub/oidc/redirect", http.StatusFound)
 	}
 }
