@@ -1,7 +1,11 @@
 package config
 
 import (
+	"encoding/base64"
 	"io/ioutil"
+
+	"github.com/gorilla/securecookie"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/pkg/errors"
 	"gopkg.in/yaml.v2"
@@ -11,6 +15,7 @@ type Config struct {
 	Listen           string                      `yaml:"listen"`
 	LogFormat        string                      `yaml:"logFormat"`
 	RootDir          string                      `yaml:"rootDir"`
+	CSRFKey          string                      `yaml:"csrfKey"`
 	AuthDriver       string                      `yaml:"authDriver"`
 	AuthStaticConfig *AuthenticationStaticConfig `yaml:"authStaticConfig"`
 	AuthOIDCConfig   *AuthenticationOIDCConfig   `yaml:"authOIDCConfig"`
@@ -32,6 +37,7 @@ func DefaultConfig() {
 		LogFormat:  "plain",
 		RootDir:    "./root",
 		AuthDriver: "null",
+		CSRFKey:    "",
 	}
 }
 
@@ -43,6 +49,10 @@ func LoadConfig(path string) error {
 	err = yaml.Unmarshal(raw, &C)
 	if err != nil {
 		return errors.Wrap(err, "Failed to parse YAML")
+	}
+	if C.CSRFKey == "" {
+		log.Warning("No CSRF Key has been set, defaulting to a random key. You should set 'csrfKey' in the settings to a 32-byte, base64 encoded string to fix this.")
+		C.CSRFKey = base64.StdEncoding.EncodeToString(securecookie.GenerateRandomKey(32))
 	}
 	return nil
 }

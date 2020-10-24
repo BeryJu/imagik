@@ -1,6 +1,7 @@
 package server
 
 import (
+	"encoding/base64"
 	"fmt"
 	"net/http"
 	"os"
@@ -8,7 +9,9 @@ import (
 
 	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/drivers/auth"
+	"github.com/gorilla/csrf"
 	"github.com/gorilla/mux"
+	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -48,6 +51,20 @@ func configAuthMiddleware(r *mux.Router) func(next http.Handler) http.Handler {
 
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			authDriver.AuthenticateRequest(w, r, next)
+		})
+	}
+}
+
+func csrfMiddleware(r *mux.Router) func(next http.Handler) http.Handler {
+	csrfKey, err := base64.StdEncoding.DecodeString(config.C.CSRFKey)
+	if err != nil {
+		panic(errors.Wrap(err, "Failed to parse CSRF Key as base64"))
+	}
+	csrfMiddleware := csrf.Protect(csrfKey, csrf.Secure(false))
+	r.Use(csrfMiddleware)
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.Header().Set("X-CSRF-Token", csrf.Token(r))
 		})
 	}
 }

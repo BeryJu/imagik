@@ -37,6 +37,7 @@ func New() *Server {
 	authHandler := mainHandler.NewRoute().Subrouter()
 	authHandler.Use(configAuthMiddleware(apiPubHandler))
 	apiPrivHandler := authHandler.PathPrefix("/api/priv").Subrouter()
+	apiPrivHandler.Use(csrfMiddleware(apiPrivHandler))
 
 	// General Get Requests don't need authentication
 	mainHandler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
