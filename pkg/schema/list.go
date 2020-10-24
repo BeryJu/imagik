@@ -8,6 +8,7 @@ type ListResponse struct {
 
 type ListFile struct {
 	Name string `json:"name"`
+	Mime string `json:"mime"`
 }
 type ListDirectory struct {
 	Name string `json:"name"`

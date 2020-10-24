@@ -5,8 +5,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"path"
 
 	"github.com/BeryJu/gopyazo/pkg/schema"
+	"github.com/vimeo/go-magic/magic"
 )
 
 func errorHandlerAPI(err error, w http.ResponseWriter) {
@@ -37,7 +39,10 @@ func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
 			dir := schema.ListDirectory{Name: f.Name()}
 			response.Directories = append(response.Directories, dir)
 		} else {
-			file := schema.ListFile{Name: f.Name()}
+			file := schema.ListFile{
+				Name: f.Name(),
+				Mime: magic.MimeFromFile(path.Join(fullDir, f.Name())),
+			}
 			response.Files = append(response.Files, file)
 		}
 	}
