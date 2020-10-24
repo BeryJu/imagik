@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"encoding/base64"
+	"fmt"
 	"net/http"
 
 	"github.com/BeryJu/gopyazo/pkg/config"
@@ -14,9 +15,9 @@ import (
 	"golang.org/x/oauth2"
 )
 
-var store = sessions.NewCookieStore(securecookie.GenerateRandomKey(32))
-
 type OIDCAuth struct {
+	Store *sessions.CookieStore
+
 	context  context.Context
 	config   oauth2.Config
 	provider *oidc.Provider
@@ -25,9 +26,10 @@ type OIDCAuth struct {
 }
 
 func (oa *OIDCAuth) handleRedirect(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "session-name")
+	session, _ := oa.Store.Get(r, "session-name")
 	state := base64.StdEncoding.EncodeToString(securecookie.GenerateRandomKey(32))
 	session.Values["oidc_state"] = state
+	oa.Store.Save(r, w, session)
 	http.Redirect(w, r, oa.config.AuthCodeURL(state), http.StatusFound)
 }
 
@@ -35,18 +37,24 @@ func (oa *OIDCAuth) handleOAuth2Callback(w http.ResponseWriter, r *http.Request)
 	oauth2Token, err := oa.config.Exchange(oa.context, r.URL.Query().Get("code"))
 	if err != nil {
 		oa.logger.Warn(err)
+		fmt.Fprintf(w, "Error: %s", err)
+		return
 	}
 
 	// Extract the ID Token from OAuth2 token.
 	rawIDToken, ok := oauth2Token.Extra("id_token").(string)
 	if !ok {
 		oa.logger.Warn(err)
+		fmt.Fprintf(w, "Error: %s", err)
+		return
 	}
 
 	// Parse and verify ID Token payload.
 	idToken, err := oa.verifier.Verify(oa.context, rawIDToken)
 	if err != nil {
 		oa.logger.Warn(err)
+		fmt.Fprintf(w, "Error: %s", err)
+		return
 	}
 
 	// Extract custom claims
@@ -56,10 +64,17 @@ func (oa *OIDCAuth) handleOAuth2Callback(w http.ResponseWriter, r *http.Request)
 	}
 	if err := idToken.Claims(&claims); err != nil {
 		oa.logger.Warn(err)
+		fmt.Fprintf(w, "Error: %s", err)
+		return
 	}
-	session, _ := store.Get(r, "session-name")
-	session.Values["test"] = "test"
+	session, err := oa.Store.Get(r, "session-name")
+	if err != nil {
+		oa.logger.Warn(err)
+		fmt.Fprintf(w, "Error: %s", err)
+		return
+	}
 	// TODO: Write user info to session
+	oa.logger.WithField("redirect", session.Values["oidc_redirect"]).Debug("Redirecting")
 	http.Redirect(w, r, session.Values["oidc_redirect"].(string), http.StatusFound)
 }
 
@@ -87,9 +102,10 @@ func (oa *OIDCAuth) InitRoutes(r *mux.Router) {
 }
 
 func (oa *OIDCAuth) AuthenticateRequest(w http.ResponseWriter, r *http.Request, next http.Handler) {
-	session, _ := store.Get(r, "session-name")
+	session, _ := oa.Store.Get(r, "session-name")
 	if _, ok := session.Values["oidc_state"]; !ok {
 		session.Values["oidc_redirect"] = r.URL.Path
+		oa.Store.Save(r, w, session)
 		http.Redirect(w, r, "/api/pub/oidc/redirect", http.StatusFound)
 	}
 }

@@ -11,6 +11,7 @@ import (
 	"github.com/BeryJu/gopyazo/pkg/drivers/auth"
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
@@ -30,7 +31,7 @@ func loggingMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func configAuthMiddleware(r *mux.Router) func(next http.Handler) http.Handler {
+func configAuthMiddleware(store *sessions.CookieStore, r *mux.Router) func(next http.Handler) http.Handler {
 	authDriverType := config.C.AuthDriver
 	var authDriver auth.AuthDriver
 	switch authDriverType {
@@ -39,7 +40,7 @@ func configAuthMiddleware(r *mux.Router) func(next http.Handler) http.Handler {
 	case "static":
 		authDriver = &auth.StaticAuth{}
 	case "oidc":
-		authDriver = &auth.OIDCAuth{}
+		authDriver = &auth.OIDCAuth{Store: store}
 	}
 	if authDriver == nil {
 		fmt.Printf("Could not configure AuthDriver '%s'", authDriverType)

@@ -12,22 +12,28 @@ import (
 	sentryhttp "github.com/getsentry/sentry-go/http"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/securecookie"
+	"github.com/gorilla/sessions"
 	log "github.com/sirupsen/logrus"
 )
 
 type Server struct {
-	rootDir string
-	handler *mux.Router
-	logger  *log.Entry
-	HashMap *hash.HashMap
+	rootDir  string
+	handler  *mux.Router
+	logger   *log.Entry
+	HashMap  *hash.HashMap
+	sessions *sessions.CookieStore
 }
 
 func New() *Server {
+	store := sessions.NewCookieStore(securecookie.GenerateRandomKey(32))
+
 	mainHandler := mux.NewRouter()
 	server := &Server{
-		rootDir: config.C.RootDir,
-		handler: mainHandler,
-		logger:  log.WithField("component", "server"),
+		rootDir:  config.C.RootDir,
+		handler:  mainHandler,
+		logger:   log.WithField("component", "server"),
+		sessions: store,
 	}
 	mainHandler.Use(handlers.ProxyHeaders)
 	mainHandler.Use(loggingMiddleware)
@@ -35,7 +41,7 @@ func New() *Server {
 
 	apiPubHandler := mainHandler.PathPrefix("/api/pub").Subrouter()
 	authHandler := mainHandler.NewRoute().Subrouter()
-	authHandler.Use(configAuthMiddleware(apiPubHandler))
+	authHandler.Use(configAuthMiddleware(store, apiPubHandler))
 	apiPrivHandler := authHandler.PathPrefix("/api/priv").Subrouter()
 	apiPrivHandler.Use(csrfMiddleware(apiPrivHandler))
 
