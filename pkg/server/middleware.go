@@ -60,11 +60,11 @@ func configAuthMiddleware(store *sessions.CookieStore, r *mux.Router) func(next 
 }
 
 func csrfMiddleware(r *mux.Router) func(next http.Handler) http.Handler {
-	csrfKey, err := base64.StdEncoding.DecodeString(config.C.CSRFKey)
+	secretKey, err := base64.StdEncoding.DecodeString(config.C.SecretKey)
 	if err != nil {
-		panic(errors.Wrap(err, "Failed to parse CSRF Key as base64"))
+		panic(errors.Wrap(err, "Failed to parse Secret Key as base64"))
 	}
-	csrfMiddleware := csrf.Protect(csrfKey, csrf.Secure(false))
+	csrfMiddleware := csrf.Protect(secretKey, csrf.Secure(false))
 	r.Use(csrfMiddleware)
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

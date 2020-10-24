@@ -1,3 +1,2 @@
-
 run:
-	go run -v . server
+	go run -v . server -c config.local.yml
