@@ -35,10 +35,8 @@ func onInit() {
 	log.SetLevel(log.DebugLevel)
 	config.DefaultConfig()
 
-	configPath := "./config.yml"
-
-	if err := config.LoadConfig(configPath); err == nil {
-		log.WithField("config-file", configPath).Info("Using config file")
+	if err := config.LoadConfig(cfgFile); err == nil {
+		log.WithField("config-file", cfgFile).Info("Using config file")
 	}
 
 	if viper.GetString(config.C.LogFormat) == "json" {
