@@ -34,22 +34,34 @@ By default, a gallery is shown for every folder. To prevent this, create an empt
 
 ## API
 
-### `/api/pub/health/liveness`
+### GET `/api/pub/health/liveness`
 
 Healthcheck endpoint, which returns a 201 Response as soon as gopyazo is running.
 
-### `/api/pub/health/readiness`
+### GET `/api/pub/health/readiness`
 
 Healthcheck Readiness probe, which returns a 201 after the Hash Map has been populated, otherwise a 500.
 
-### `/api/priv/list`
+### GET `/api/priv/list`
 
 **Requires authentication**
 
 List contents of a directory. Accepts a query parameter `pathOffset`, which is appended to the root directory.
 
-### `/api/priv/move`
+### POST `/api/priv/move`
 
 **Requires authentication**
 
 Move a file. Requires two query parameters, `from` and `to`, which are relative to the root directory.
+
+### POST `/api/priv/upload`
+
+**Requires authentication**
+
+Accepts Multipart-Form Encoded files and uploads them to the respective path from the form relative to the root directory.
+
+### PUT `<path>`
+
+**Requires authentication**
+
+Accepts file uploads from the HTTP Request body, like using `curl --data "@/path/to/filename"`

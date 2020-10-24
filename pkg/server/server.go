@@ -41,10 +41,11 @@ func New() *Server {
 	// General Get Requests don't need authentication
 	mainHandler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
 	authHandler.PathPrefix("/").Methods(http.MethodPut).HandlerFunc(server.PutHandler)
-	apiPrivHandler.Path("/list").HandlerFunc(server.APIListHandler)
-	apiPrivHandler.Path("/move").HandlerFunc(server.APIMoveHandler)
-	apiPubHandler.Path("/health/liveness").HandlerFunc(server.HealthLiveness)
-	apiPubHandler.Path("/health/readiness").HandlerFunc(server.HealthReadiness)
+	apiPrivHandler.Path("/list").Methods(http.MethodGet).HandlerFunc(server.APIListHandler)
+	apiPrivHandler.Path("/move").Methods(http.MethodPost).HandlerFunc(server.APIMoveHandler)
+	apiPrivHandler.Path("/upload").Methods(http.MethodPost).HandlerFunc(server.UploadFormHandler)
+	apiPubHandler.Path("/health/liveness").Methods(http.MethodGet).HandlerFunc(server.HealthLiveness)
+	apiPubHandler.Path("/health/readiness").Methods(http.MethodGet).HandlerFunc(server.HealthReadiness)
 
 	mainHandler.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		pathTemplate, err := route.GetPathTemplate()
