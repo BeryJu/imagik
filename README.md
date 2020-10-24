@@ -42,13 +42,19 @@ Healthcheck endpoint, which returns a 201 Response as soon as gopyazo is running
 
 Healthcheck Readiness probe, which returns a 201 after the Hash Map has been populated, otherwise a 500.
 
-### GET `/api/priv/list`
+### GET `/api/priv/list[?pathOffset=]`
 
 **Requires authentication**
 
 List contents of a directory. Accepts a query parameter `pathOffset`, which is appended to the root directory.
 
-### POST `/api/priv/move`
+### GET `/api/priv/meta?path=`
+
+**Requires authentication**
+
+Return metadata for a file `path`.
+
+### POST `/api/priv/move?to=&from=`
 
 **Requires authentication**
 
@@ -60,7 +66,7 @@ Move a file. Requires two query parameters, `from` and `to`, which are relative 
 
 Accepts Multipart-Form Encoded files and uploads them to the respective path from the form relative to the root directory.
 
-### PUT `<path>`
+### PUT `/<path>`
 
 **Requires authentication**
 

@@ -1,12 +1,6 @@
 package hash
 
 import (
-	"crypto/md5"
-	"crypto/sha1"
-	"crypto/sha256"
-	"crypto/sha512"
-	"encoding/hex"
-	"io"
 	"os"
 	"path/filepath"
 	"sync"
@@ -66,30 +60,22 @@ func (hm *HashMap) walk(path string, info os.FileInfo, err error) error {
 	if info.IsDir() {
 		return nil
 	}
-	f, err := os.Open(path)
-	if err != nil {
-		log.Warning(err)
-	}
-	defer f.Close()
-	sha512hasher := sha512.New()
-	sha256hasher := sha256.New()
-	sha1hasher := sha1.New()
-	md5hasher := md5.New()
-	mw := io.MultiWriter(sha512hasher, sha256hasher, sha1hasher, md5hasher)
 
-	if _, err := io.Copy(mw, f); err != nil {
-		log.Warning(err)
-	}
-	sha512sum := sha512hasher.Sum(nil)
-	hm.writeM.Lock()
-	defer hm.writeM.Unlock()
-	hm.hashMap.Set(sha512sum, path)
-	hm.hashMap.Set(sha512sum[:16], path)
-	hm.hashMap.Set(hex.EncodeToString(sha256hasher.Sum(nil)), path)
-	hm.hashMap.Set(hex.EncodeToString(sha1hasher.Sum(nil)), path)
-	hm.hashMap.Set(hex.EncodeToString(md5hasher.Sum(nil)), path)
+	hashes, err := HashesForFile(path)
 	if err != nil {
-		log.Warning(err)
+		// Don't return the error to not stop the walking
+		hm.logger.Warning(err)
+	}
+
+	hm.writeM.Lock()
+	hm.hashMap.Set(hashes.MD5, path)
+	hm.hashMap.Set(hashes.SHA128, path)
+	hm.hashMap.Set(hashes.SHA256, path)
+	hm.hashMap.Set(hashes.SHA512, path)
+	hm.hashMap.Set(hashes.SHA512Short, path)
+	hm.writeM.Unlock()
+	if err != nil {
+		hm.logger.Warning(err)
 	}
 	return nil
 }

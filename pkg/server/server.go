@@ -49,6 +49,7 @@ func New() *Server {
 	mainHandler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
 	authHandler.PathPrefix("/").Methods(http.MethodPut).HandlerFunc(server.PutHandler)
 	apiPrivHandler.Path("/list").Methods(http.MethodGet).HandlerFunc(server.APIListHandler)
+	apiPrivHandler.Path("/meta").Methods(http.MethodGet).HandlerFunc(server.APIMetaHandler)
 	apiPrivHandler.Path("/move").Methods(http.MethodPost).HandlerFunc(server.APIMoveHandler)
 	apiPrivHandler.Path("/upload").Methods(http.MethodPost).HandlerFunc(server.UploadFormHandler)
 	apiPubHandler.Path("/health/liveness").Methods(http.MethodGet).HandlerFunc(server.HealthLiveness)

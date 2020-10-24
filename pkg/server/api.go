@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 
+	"github.com/BeryJu/gopyazo/pkg/hash"
 	"github.com/BeryJu/gopyazo/pkg/schema"
 	"github.com/vimeo/go-magic/magic"
 )
@@ -57,6 +58,38 @@ func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			response.Files = append(response.Files, file)
 		}
+	}
+	w.Header().Set("Content-Type", "application/json")
+	err = json.NewEncoder(w).Encode(response)
+	if err != nil {
+		errorHandlerAPI(err, w)
+		return
+	}
+}
+
+func (s *Server) APIMetaHandler(w http.ResponseWriter, r *http.Request) {
+	path := r.URL.Query().Get("path")
+	fullPath := s.cleanURL(path)
+	// Get stat for common file stats
+	stat, err := os.Stat(fullPath)
+	if err != nil {
+		errorHandlerAPI(err, w)
+		return
+	}
+	// Get hashes for linking
+	hashes, err := hash.HashesForFile(fullPath)
+	if err != nil {
+		errorHandlerAPI(err, w)
+		return
+	}
+	response := schema.MetaResponse{
+		GenericResponse: schema.GenericResponse{
+			Successful: true,
+		},
+		CreationDate: stat.ModTime(),
+		Size:         stat.Size(),
+		Mime:         magic.MimeFromFile(fullPath),
+		Hashes:       hashes.Map(),
 	}
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(response)
