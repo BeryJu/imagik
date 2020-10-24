@@ -7,18 +7,10 @@ import (
 	"os"
 	"path"
 
-	"github.com/BeryJu/gopyazo/pkg/hash"
+	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/schema"
 	"github.com/vimeo/go-magic/magic"
 )
-
-func errorHandlerAPI(err error, w http.ResponseWriter) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(schema.GenericResponse{
-		Successful: false,
-		Error:      err.Error(),
-	})
-}
 
 func getElementsForDirectory(path string) int {
 	files, err := ioutil.ReadDir(path)
@@ -30,10 +22,10 @@ func getElementsForDirectory(path string) int {
 
 func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
 	offset := r.URL.Query().Get("pathOffset")
-	fullDir := s.cleanURL(offset)
+	fullDir := config.CleanURL(offset)
 	files, err := ioutil.ReadDir(fullDir)
 	if err != nil {
-		errorHandlerAPI(err, w)
+		schema.ErrorHandlerAPI(err, w)
 		return
 	}
 	response := schema.ListResponse{
@@ -62,53 +54,21 @@ func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(response)
 	if err != nil {
-		errorHandlerAPI(err, w)
-		return
-	}
-}
-
-func (s *Server) APIMetaHandler(w http.ResponseWriter, r *http.Request) {
-	path := r.URL.Query().Get("path")
-	fullPath := s.cleanURL(path)
-	// Get stat for common file stats
-	stat, err := os.Stat(fullPath)
-	if err != nil {
-		errorHandlerAPI(err, w)
-		return
-	}
-	// Get hashes for linking
-	hashes, err := hash.HashesForFile(fullPath)
-	if err != nil {
-		errorHandlerAPI(err, w)
-		return
-	}
-	response := schema.MetaResponse{
-		GenericResponse: schema.GenericResponse{
-			Successful: true,
-		},
-		CreationDate: stat.ModTime(),
-		Size:         stat.Size(),
-		Mime:         magic.MimeFromFile(fullPath),
-		Hashes:       hashes.Map(),
-	}
-	w.Header().Set("Content-Type", "application/json")
-	err = json.NewEncoder(w).Encode(response)
-	if err != nil {
-		errorHandlerAPI(err, w)
+		schema.ErrorHandlerAPI(err, w)
 		return
 	}
 }
 
 func (s *Server) APIMoveHandler(w http.ResponseWriter, r *http.Request) {
-	fromFull := s.cleanURL(r.URL.Query().Get("from"))
-	toFull := s.cleanURL(r.URL.Query().Get("to"))
+	fromFull := config.CleanURL(r.URL.Query().Get("from"))
+	toFull := config.CleanURL(r.URL.Query().Get("to"))
 	if _, err := os.Stat(fromFull); err != nil {
-		errorHandlerAPI(err, w)
+		schema.ErrorHandlerAPI(err, w)
 		return
 	}
 	err := os.Rename(fromFull, toFull)
 	if err != nil {
-		errorHandlerAPI(err, w)
+		schema.ErrorHandlerAPI(err, w)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")

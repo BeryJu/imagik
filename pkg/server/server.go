@@ -3,12 +3,10 @@ package server
 import (
 	"fmt"
 	"net/http"
-	"path"
-	"path/filepath"
-	"strings"
 
 	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/hash"
+	"github.com/BeryJu/gopyazo/pkg/transform"
 	sentryhttp "github.com/getsentry/sentry-go/http"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -21,6 +19,7 @@ type Server struct {
 	handler  *mux.Router
 	logger   *log.Entry
 	HashMap  *hash.HashMap
+	tm       *transform.TransformerManager
 	sessions *sessions.CookieStore
 }
 
@@ -32,6 +31,7 @@ func New() *Server {
 		rootDir:  config.C.RootDir,
 		handler:  mainHandler,
 		logger:   log.WithField("component", "server"),
+		tm:       transform.New(),
 		sessions: store,
 	}
 	mainHandler.Use(recoveryMiddleware())
@@ -49,7 +49,6 @@ func New() *Server {
 	mainHandler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
 	authHandler.PathPrefix("/").Methods(http.MethodPut).HandlerFunc(server.PutHandler)
 	apiPrivHandler.Path("/list").Methods(http.MethodGet).HandlerFunc(server.APIListHandler)
-	apiPrivHandler.Path("/meta").Methods(http.MethodGet).HandlerFunc(server.APIMetaHandler)
 	apiPrivHandler.Path("/move").Methods(http.MethodPost).HandlerFunc(server.APIMoveHandler)
 	apiPrivHandler.Path("/upload").Methods(http.MethodPost).HandlerFunc(server.UploadFormHandler)
 	apiPubHandler.Path("/health/liveness").Methods(http.MethodGet).HandlerFunc(server.HealthLiveness)
@@ -63,13 +62,6 @@ func New() *Server {
 		return nil
 	})
 	return server
-}
-
-func (s *Server) cleanURL(raw string) string {
-	if !strings.HasPrefix(raw, "/") {
-		raw = "/" + raw
-	}
-	return filepath.Join(s.rootDir, filepath.FromSlash(path.Clean("/"+raw)))
 }
 
 func errorHandler(err error, w http.ResponseWriter) {

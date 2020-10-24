@@ -4,6 +4,9 @@ import (
 	"encoding/base64"
 	"io/ioutil"
 	"os"
+	"path"
+	"path/filepath"
+	"strings"
 
 	"github.com/gorilla/securecookie"
 	log "github.com/sirupsen/logrus"
@@ -71,3 +74,10 @@ func LoadConfig(path string) error {
 }
 
 var C Config
+
+func CleanURL(raw string) string {
+	if !strings.HasPrefix(raw, "/") {
+		raw = "/" + raw
+	}
+	return filepath.Join(C.RootDir, filepath.FromSlash(path.Clean("/"+raw)))
+}

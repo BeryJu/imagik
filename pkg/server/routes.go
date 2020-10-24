@@ -7,24 +7,28 @@ import (
 	"os"
 	"path"
 
+	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/schema"
 	"github.com/pkg/errors"
 )
 
 // GetHandler Handle GET Requests
 func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
-	filePath := s.cleanURL(r.URL.Path)
-	_, err := os.Stat(filePath)
-	if err == nil {
-		s.logger.Debug("Handling normal serve")
-		http.ServeFile(w, r, filePath)
+	if s.tm.Transform(w, r) == true {
 		return
 	}
+	filePath := config.CleanURL(r.URL.Path)
 	// Since we only store the hash, we need to get rid of the leading slash
 	path, exists := s.HashMap.Get(r.URL.Path[1:])
 	if exists {
 		s.logger.WithField("path", path).Debug("Found path in hashmap")
 		http.ServeFile(w, r, path)
+		return
+	}
+	_, err := os.Stat(filePath)
+	if err == nil {
+		s.logger.Debug("Handling normal serve")
+		http.ServeFile(w, r, filePath)
 		return
 	}
 	s.logger.Debug("Not found in hashmap")
@@ -73,7 +77,7 @@ func (s *Server) PutHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) doUpload(src io.Reader, p string) error {
-	filePath := s.cleanURL(p)
+	filePath := config.CleanURL(p)
 	err := os.MkdirAll(path.Dir(filePath), os.ModePerm)
 	if err != nil {
 		s.logger.Warning(err)
