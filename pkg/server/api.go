@@ -19,6 +19,14 @@ func errorHandlerAPI(err error, w http.ResponseWriter) {
 	})
 }
 
+func getElementsForDirectory(path string) int {
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		return 0
+	}
+	return len(files)
+}
+
 func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
 	offset := r.URL.Query().Get("pathOffset")
 	fullDir := s.cleanURL(offset)
@@ -35,13 +43,17 @@ func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
 		Files:       make([]schema.ListFile, 0),
 	}
 	for _, f := range files {
+		fullName := path.Join(fullDir, f.Name())
 		if f.IsDir() {
-			dir := schema.ListDirectory{Name: f.Name()}
+			dir := schema.ListDirectory{
+				Name:          f.Name(),
+				ChildElements: getElementsForDirectory(fullName),
+			}
 			response.Directories = append(response.Directories, dir)
 		} else {
 			file := schema.ListFile{
 				Name: f.Name(),
-				Mime: magic.MimeFromFile(path.Join(fullDir, f.Name())),
+				Mime: magic.MimeFromFile(fullName),
 			}
 			response.Files = append(response.Files, file)
 		}

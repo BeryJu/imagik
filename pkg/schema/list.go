@@ -10,6 +10,8 @@ type ListFile struct {
 	Name string `json:"name"`
 	Mime string `json:"mime"`
 }
+
 type ListDirectory struct {
-	Name string `json:"name"`
+	Name          string `json:"name"`
+	ChildElements int    `json:"childElements"`
 }
