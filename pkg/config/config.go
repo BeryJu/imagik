@@ -3,6 +3,7 @@ package config
 import (
 	"encoding/base64"
 	"io/ioutil"
+	"os"
 
 	"github.com/gorilla/securecookie"
 	log "github.com/sirupsen/logrus"
@@ -49,8 +50,8 @@ func LoadConfig(path string) error {
 	if err != nil {
 		return errors.Wrap(err, "Failed to load config file")
 	}
-	// rawExpanded := os.ExpandEnv(string(raw))
-	err = yaml.Unmarshal([]byte(raw), &C)
+	rawExpanded := os.ExpandEnv(string(raw))
+	err = yaml.Unmarshal([]byte(rawExpanded), &C)
 	if err != nil {
 		return errors.Wrap(err, "Failed to parse YAML")
 	}

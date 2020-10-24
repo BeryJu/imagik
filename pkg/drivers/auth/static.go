@@ -2,6 +2,7 @@ package auth
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/gorilla/mux"
@@ -15,7 +16,11 @@ type StaticAuth struct {
 }
 
 func (sa *StaticAuth) Init() {
-	sa.staticTokens = config.C.AuthStaticConfig.Tokens
+	sa.staticTokens = make(map[string]string, len(config.C.AuthStaticConfig.Tokens))
+	for user, pass := range config.C.AuthStaticConfig.Tokens {
+		sa.staticTokens[user] = strings.ReplaceAll(pass, "|", "$")
+	}
+
 	sa.logger = log.WithField("component", "static-auth")
 }
 
@@ -24,7 +29,8 @@ func (sa *StaticAuth) InitRoutes(r *mux.Router) {
 
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	return string(bytes), err
+	hash := string(bytes)
+	return strings.ReplaceAll(hash, "$", "|"), err
 }
 
 func (sa *StaticAuth) AuthenticateRequest(w http.ResponseWriter, r *http.Request, next http.Handler) {
