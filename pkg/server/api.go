@@ -32,24 +32,22 @@ func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
 		GenericResponse: schema.GenericResponse{
 			Successful: true,
 		},
-		Directories: make([]schema.ListDirectory, 0),
-		Files:       make([]schema.ListFile, 0),
+		Files: make([]schema.ListFile, 0),
 	}
 	for _, f := range files {
 		fullName := path.Join(fullDir, f.Name())
-		if f.IsDir() {
-			dir := schema.ListDirectory{
-				Name:          f.Name(),
-				ChildElements: getElementsForDirectory(fullName),
-			}
-			response.Directories = append(response.Directories, dir)
-		} else {
-			file := schema.ListFile{
-				Name: f.Name(),
-				Mime: magic.MimeFromFile(fullName),
-			}
-			response.Files = append(response.Files, file)
+		file := schema.ListFile{
+			Name:     f.Name(),
+			FullPath: fullName,
 		}
+		if f.IsDir() {
+			file.Type = "directory"
+			file.ChildElements = getElementsForDirectory(fullName)
+		} else {
+			file.Type = "file"
+			file.Mime = magic.MimeFromFile(fullName)
+		}
+		response.Files = append(response.Files, file)
 	}
 	w.Header().Set("Content-Type", "application/json")
 	err = json.NewEncoder(w).Encode(response)
