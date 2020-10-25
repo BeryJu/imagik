@@ -43,7 +43,7 @@ class PathHandler extends EventTarget {
     }
 }
 
-export const path = new PathHandler('/demo');
+export const path = new PathHandler('/');
 export default path;
 
 export const relate = (a, b) => {

@@ -47,7 +47,7 @@ class GpApp extends LitElement {
             this.handleDrop(ev);
         });
 
-        this.path = window.location.hash.slice(1, Infinity) || '/demo';
+        this.path = window.location.hash.slice(1, Infinity) || '/';
     }
 
     connectedCallback() {
