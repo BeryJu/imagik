@@ -8,7 +8,7 @@ import (
 	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/hash"
 	"github.com/BeryJu/gopyazo/pkg/schema"
-	"github.com/vimeo/go-magic/magic"
+	"github.com/gabriel-vasile/mimetype"
 )
 
 type MetaTransformer struct {
@@ -28,13 +28,18 @@ func (mt *MetaTransformer) Handle(w http.ResponseWriter, r *http.Request) {
 		schema.ErrorHandlerAPI(err, w)
 		return
 	}
+	mime, err := mimetype.DetectFile(fullPath)
+	if err != nil {
+		schema.ErrorHandlerAPI(err, w)
+		return
+	}
 	response := schema.MetaResponse{
 		GenericResponse: schema.GenericResponse{
 			Successful: true,
 		},
 		CreationDate: stat.ModTime(),
 		Size:         stat.Size(),
-		Mime:         magic.MimeFromFile(fullPath),
+		Mime:         mime.String(),
 		Hashes:       hashes.Map(),
 	}
 	w.Header().Set("Content-Type", "application/json")

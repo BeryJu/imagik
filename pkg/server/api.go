@@ -10,7 +10,7 @@ import (
 
 	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/schema"
-	"github.com/vimeo/go-magic/magic"
+	"github.com/gabriel-vasile/mimetype"
 )
 
 func getElementsForDirectory(path string) int {
@@ -46,7 +46,10 @@ func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
 			file.ChildElements = getElementsForDirectory(fullName)
 		} else {
 			file.Type = "file"
-			file.Mime = magic.MimeFromFile(fullName)
+			mime, err := mimetype.DetectFile(fullName)
+			if err == nil {
+				file.Mime = mime.String()
+			}
 		}
 		response.Files = append(response.Files, file)
 	}
