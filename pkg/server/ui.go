@@ -1,6 +1,7 @@
 package server
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -8,10 +9,17 @@ import (
 	"github.com/gobuffalo/packr/v2"
 )
 
+func (s *Server) UIRedirect(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/ui/", http.StatusFound)
+}
+
 func (s *Server) UIHandler() func(w http.ResponseWriter, r *http.Request) {
 	uiBox := packr.New("webui", "../../root")
 	return func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println(r.URL.Path)
+		fmt.Println(uiBox.List())
 		relativePath := strings.Replace(r.URL.Path, "/ui/", "", 1)
+		fmt.Println(relativePath)
 		if relativePath == "" {
 			relativePath = "index.html"
 		}

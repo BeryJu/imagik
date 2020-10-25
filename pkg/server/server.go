@@ -46,6 +46,7 @@ func New() *Server {
 	apiPrivHandler.Use(csrfMiddleware(apiPrivHandler))
 
 	mainHandler.PathPrefix("/ui").HandlerFunc(server.UIHandler())
+	mainHandler.Path("/").HandlerFunc(server.UIRedirect)
 	// General Get Requests don't need authentication
 	mainHandler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
 	authHandler.PathPrefix("/").Methods(http.MethodPut).HandlerFunc(server.PutHandler)
