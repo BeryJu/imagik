@@ -1,16 +1,25 @@
+# Build WebUI First
+FROM node as npm-builder
+
+COPY ./web/ /build/web
+
+RUN cd /build/web && npm i && npm run build
+
+# Build application second
 FROM golang:latest AS builder
 
-WORKDIR /go/src/app
-COPY . /go/src/app
+WORKDIR /usr/local/go/src/gopyazo
+
+COPY . /usr/local/go/src/gopyazo
+COPY --from=npm-builder /build/root /usr/local/go/src/gopyazo/root
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libmagic-dev && \
     rm -rf /var/lib/apt/lists/*
 
-RUN go get -d -v ./...
+RUN make build
 
-RUN go build -v -o /go/bin/gopyazo
-
+# Final container
 FROM debian
 
 RUN apt-get update && \

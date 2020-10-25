@@ -45,6 +45,7 @@ func New() *Server {
 	apiPrivHandler := authHandler.PathPrefix("/api/priv").Subrouter()
 	apiPrivHandler.Use(csrfMiddleware(apiPrivHandler))
 
+	mainHandler.PathPrefix("/ui").HandlerFunc(server.UIHandler())
 	// General Get Requests don't need authentication
 	mainHandler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
 	authHandler.PathPrefix("/").Methods(http.MethodPut).HandlerFunc(server.PutHandler)
