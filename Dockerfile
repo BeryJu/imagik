@@ -6,25 +6,15 @@ COPY ./web/ /build/web
 RUN cd /build/web && npm i && npm run build
 
 # Build application second
-FROM golang:latest AS builder
+FROM golang:1.15 AS builder
 
-WORKDIR /usr/local/go/src/gopyazo
+COPY . /go/src/github.com/BeryJu/gopyazo
+COPY --from=npm-builder /build/root /go/src/github.com/BeryJu/gopyazo/root
 
-COPY . /usr/local/go/src/gopyazo
-COPY --from=npm-builder /build/root /usr/local/go/src/gopyazo/root
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends libmagic-dev && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN make build
+RUN cd /go/src/github.com/BeryJu/gopyazo && make docker-build
 
 # Final container
 FROM debian
-
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends libmagic-dev && \
-    rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /go/bin/gopyazo /gopyazo
 COPY ./config.docker.yml /config.yml

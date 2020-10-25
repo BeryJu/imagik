@@ -6,10 +6,11 @@ endif
 	go run -v . server -c config.local.yml
 
 docker:
-	docker build -t beryju/gopyazo .
-	docker run -it --rm beryju/gopyazo server
+	packr2 clean
+	docker build -t beryju/gopyazo:latest .
+	docker run -p 8000:8000 -it --rm beryju/gopyazo:latest server
 
-build:
+docker-build:
 	go get -u github.com/gobuffalo/packr/v2/packr2
 	packr2
 	go build -v -o /go/bin/gopyazo

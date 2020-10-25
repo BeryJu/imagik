@@ -1,7 +1,6 @@
 package server
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -16,10 +15,7 @@ func (s *Server) UIRedirect(w http.ResponseWriter, r *http.Request) {
 func (s *Server) UIHandler() func(w http.ResponseWriter, r *http.Request) {
 	uiBox := packr.New("webui", "../../root")
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Println(r.URL.Path)
-		fmt.Println(uiBox.List())
 		relativePath := strings.Replace(r.URL.Path, "/ui/", "", 1)
-		fmt.Println(relativePath)
 		if relativePath == "" {
 			relativePath = "index.html"
 		}
