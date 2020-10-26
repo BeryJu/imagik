@@ -21,11 +21,13 @@ spec:
             claimName: minio-pv-claim
       containers:
         - command:
-            - server
+          - /gopyazo
+          - -c=/config.yml
+          - server
           envFrom:
           - configMapRef:
               name: gopyazo-config
-          image: beryju/gopyazo:sentry
+          image: beryju/gopyazo:latest
           imagePullPolicy: Always
           name: gopyazo
           ports:
