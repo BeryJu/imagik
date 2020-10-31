@@ -39,6 +39,14 @@ class GpApp extends LitElement {
         }));
     }
 
+    headerPath() {
+        if (this.path === "/") {
+            return "gopyazo";
+        } else {
+            return decodeURIComponent(this.path)
+        }
+    }
+
     render() {
         return html`
             <img
@@ -46,7 +54,7 @@ class GpApp extends LitElement {
                 src="assets/logo.svg"
                 @click=${()=>this.logoClick()}
             ></img>
-            <h1>${this.path !== '/' ? this.path || 'gopyazo' : 'gopyazo'}</h1>
+            <h1>${this.headerPath()}</h1>
             <div class="spacer"></div>
             <slot></slot>
         `;
