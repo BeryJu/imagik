@@ -45,11 +45,11 @@ class GpFile extends LitElement {
     constructor() {
         super();
         this.addEventListener('click',
-            ()=>this.isFolder() ? this.dispatchEvent(new CustomEvent('navigate', {
+            ()=>this.dispatchEvent(new CustomEvent('navigate', {
                 detail: this.path,
                 composed: true,
                 bubbles: true,
-            })):'',
+            })),
         );
     }
 

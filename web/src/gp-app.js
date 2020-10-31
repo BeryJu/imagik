@@ -9,7 +9,6 @@ class GpApp extends LitElement {
         return css`
             :host {
                 display: block;
-                min-height: 100vh;
             }
             gp-header a, gp-header a:visited {
                 color: var(--color-primary);

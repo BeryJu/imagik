@@ -4,6 +4,7 @@ import {get} from './services/api.js';
 
 import './gp-file.js';
 import './gp-directory.js';
+import './gp-detail.js';
 
 class GpList extends LitElement {
     static get styles() {
@@ -35,10 +36,14 @@ class GpList extends LitElement {
                 } else {
                     return a.name.localeCompare(b.name);
                 }
-            }).map((f)=>html`
+            })
+            .map((f) => html`
                 <gp-file path=${f.fullPath} mime=${f.mime} name=${f.name}>
                 </gp-file>
-            `));
+            `))
+            .catch(e => {
+                return html`<gp-detail path=${path}></gp-detail>`;
+            });
     }
 
     render() {

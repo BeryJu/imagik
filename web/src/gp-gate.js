@@ -8,7 +8,6 @@ class GpGate extends LitElement {
         return css`
             :host {
                 display: block;
-                min-height: 100vh;
             }
             div {
                 display: flex;
