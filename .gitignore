@@ -18,3 +18,4 @@ root/
 *.local.yml
 
 packrd/**
+*-packr.go

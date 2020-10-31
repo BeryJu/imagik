@@ -19,6 +19,7 @@ type Config struct {
 	Listen    string `yaml:"listen"`
 	LogFormat string `yaml:"logFormat"`
 	RootDir   string `yaml:"rootDir"`
+	Debug     bool   `yaml:"debug"`
 
 	SecretKeyString string `yaml:"secretKey"`
 	SecretKey       []byte
@@ -45,6 +46,7 @@ func DefaultConfig() {
 		RootDir:         "./root",
 		AuthDriver:      "null",
 		SecretKeyString: "",
+		Debug:           false,
 	}
 }
 

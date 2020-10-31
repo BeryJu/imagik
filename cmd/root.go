@@ -7,7 +7,6 @@ import (
 	"github.com/BeryJu/gopyazo/pkg/config"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 )
 
 var cfgFile string
@@ -32,7 +31,6 @@ func init() {
 
 // onInit reads in config file and ENV variables if set.
 func onInit() {
-	log.SetLevel(log.DebugLevel)
 	config.DefaultConfig()
 	err := config.LoadConfig(cfgFile)
 
@@ -42,7 +40,10 @@ func onInit() {
 		log.WithField("config-file", cfgFile).WithError(err).Warning("Failed to read config")
 	}
 
-	if viper.GetString(config.C.LogFormat) == "json" {
+	if config.C.LogFormat == "json" {
 		log.SetFormatter(&log.JSONFormatter{})
+	}
+	if config.C.Debug {
+		log.SetLevel(log.DebugLevel)
 	}
 }
