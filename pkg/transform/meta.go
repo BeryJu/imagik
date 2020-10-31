@@ -37,6 +37,7 @@ func (mt *MetaTransformer) Handle(w http.ResponseWriter, r *http.Request) {
 		GenericResponse: schema.GenericResponse{
 			Successful: true,
 		},
+		Name:         stat.Name(),
 		CreationDate: stat.ModTime(),
 		Size:         stat.Size(),
 		Mime:         mime.String(),
