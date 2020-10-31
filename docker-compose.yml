@@ -12,6 +12,7 @@ services:
 
       # Run `docker run -it --rm beryju/gopyazo hash-password` to get a password hash
       # if you want to use the webinterface
+      # GOPYAZO_AUTH_DRIVER: static
       # GOPYAZO_USER: "username"
       # GOPYAZO_PASSWORD: "output"
     volumes:
