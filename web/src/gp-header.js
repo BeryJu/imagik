@@ -32,8 +32,10 @@ class GpApp extends LitElement {
     }
 
     logoClick() {
+        const url = new URL(this.path + "/", window.location);
+        const destUrl = new URL("..", url).pathname.slice(0, -1)
         this.dispatchEvent(new CustomEvent('navigate', {
-            detail: '/', composed: true, bubbles: true,
+            detail: destUrl, composed: true, bubbles: true,
         }));
     }
 
