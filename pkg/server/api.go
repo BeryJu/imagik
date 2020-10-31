@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -62,8 +63,17 @@ func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) APIMoveHandler(w http.ResponseWriter, r *http.Request) {
-	fromFull := config.CleanURL(r.URL.Query().Get("from"))
-	toFull := config.CleanURL(r.URL.Query().Get("to"))
+	var from, to string
+	if from = r.URL.Query().Get("from"); from == "" {
+		schema.ErrorHandlerAPI(errors.New("Missing from path"), w)
+		return
+	}
+	if to = r.URL.Query().Get("to"); to == "" {
+		schema.ErrorHandlerAPI(errors.New("Missing to path"), w)
+		return
+	}
+	fromFull := config.CleanURL(from)
+	toFull := config.CleanURL(to)
 	if _, err := os.Stat(fromFull); err != nil {
 		schema.ErrorHandlerAPI(err, w)
 		return

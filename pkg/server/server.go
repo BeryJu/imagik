@@ -40,12 +40,13 @@ func New() *Server {
 	mainHandler.Use(recoveryMiddleware())
 	mainHandler.Use(handlers.ProxyHeaders)
 	mainHandler.Use(handlers.CompressHandler)
+	mainHandler.Use(loggingMiddleware)
 
 	apiPubHandler := mainHandler.PathPrefix("/api/pub").Subrouter()
 	authHandler := mainHandler.NewRoute().Subrouter()
 	authHandler.Use(auth.FromConfig(store, apiPubHandler))
 	apiPrivHandler := authHandler.PathPrefix("/api/priv").Subrouter()
-	apiPrivHandler.Use(csrfMiddleware(apiPrivHandler))
+	// apiPrivHandler.Use(csrfMiddleware(apiPrivHandler))
 
 	server.md = metrics.FromConfig(authHandler)
 
@@ -56,7 +57,6 @@ func New() *Server {
 	// General Get Requests don't need authentication
 	mainHandler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
 	// Only enable logging middleware after we've added general serving
-	mainHandler.Use(loggingMiddleware)
 	authHandler.PathPrefix("/").Methods(http.MethodPut).HandlerFunc(server.PutHandler)
 	apiPrivHandler.Path("/list").Methods(http.MethodGet).HandlerFunc(server.APIListHandler)
 	apiPrivHandler.Path("/move").Methods(http.MethodPost).HandlerFunc(server.APIMoveHandler)
