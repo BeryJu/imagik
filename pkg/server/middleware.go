@@ -2,18 +2,14 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/BeryJu/gopyazo/pkg/config"
-	"github.com/BeryJu/gopyazo/pkg/drivers/auth"
 	"github.com/BeryJu/gopyazo/pkg/schema"
 	sentryhttp "github.com/getsentry/sentry-go/http"
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/mux"
-	"github.com/gorilla/sessions"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -30,31 +26,6 @@ func loggingMiddleware(next http.Handler) http.Handler {
 			"took":   after.Sub(before),
 		}).Info(r.RequestURI)
 	})
-}
-
-func configAuthMiddleware(store *sessions.CookieStore, r *mux.Router) func(next http.Handler) http.Handler {
-	authDriverType := config.C.AuthDriver
-	var authDriver auth.AuthDriver
-	switch authDriverType {
-	case "null":
-		authDriver = &auth.NullAuth{}
-	case "static":
-		authDriver = &auth.StaticAuth{}
-	case "oidc":
-		authDriver = &auth.OIDCAuth{Store: store}
-	}
-	if authDriver == nil {
-		fmt.Printf("Could not configure AuthDriver '%s'", authDriverType)
-		os.Exit(1)
-	}
-	authDriver.Init()
-	authDriver.InitRoutes(r)
-	return func(next http.Handler) http.Handler {
-
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			authDriver.AuthenticateRequest(w, r, next)
-		})
-	}
 }
 
 func csrfMiddleware(r *mux.Router) func(next http.Handler) http.Handler {

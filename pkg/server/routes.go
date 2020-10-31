@@ -8,6 +8,7 @@ import (
 	"path"
 
 	"github.com/BeryJu/gopyazo/pkg/config"
+	"github.com/BeryJu/gopyazo/pkg/drivers/metrics"
 	"github.com/BeryJu/gopyazo/pkg/schema"
 	"github.com/pkg/errors"
 )
@@ -18,20 +19,23 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	filePath := config.CleanURL(r.URL.Path)
+	mr := metrics.NewServeRequest(r)
 	// Since we only store the hash, we need to get rid of the leading slash
 	path, exists := s.HashMap.Get(r.URL.Path[1:])
 	if exists {
-		s.logger.WithField("path", path).Debug("Found path in hashmap")
+		mr.Hash = r.URL.Path[1:]
+		mr.ResolvedPath = path
+		s.md.ServeRequest(mr)
 		http.ServeFile(w, r, path)
 		return
 	}
 	_, err := os.Stat(filePath)
 	if err == nil {
-		s.logger.Debug("Handling normal serve")
+		mr.ResolvedPath = filePath
+		s.md.ServeRequest(mr)
 		http.ServeFile(w, r, filePath)
 		return
 	}
-	s.logger.Debug("Not found in hashmap")
 	notFoundHandler("File not found.", w)
 }
 

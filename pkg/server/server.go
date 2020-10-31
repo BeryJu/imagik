@@ -5,6 +5,8 @@ import (
 	"net/http"
 
 	"github.com/BeryJu/gopyazo/pkg/config"
+	"github.com/BeryJu/gopyazo/pkg/drivers/auth"
+	"github.com/BeryJu/gopyazo/pkg/drivers/metrics"
 	"github.com/BeryJu/gopyazo/pkg/hash"
 	"github.com/BeryJu/gopyazo/pkg/transform"
 	sentryhttp "github.com/getsentry/sentry-go/http"
@@ -21,6 +23,7 @@ type Server struct {
 	HashMap  *hash.HashMap
 	tm       *transform.TransformerManager
 	sessions *sessions.CookieStore
+	md       metrics.MetricsDriver
 }
 
 func New() *Server {
@@ -36,14 +39,15 @@ func New() *Server {
 	}
 	mainHandler.Use(recoveryMiddleware())
 	mainHandler.Use(handlers.ProxyHeaders)
-	mainHandler.Use(loggingMiddleware)
 	mainHandler.Use(handlers.CompressHandler)
 
 	apiPubHandler := mainHandler.PathPrefix("/api/pub").Subrouter()
 	authHandler := mainHandler.NewRoute().Subrouter()
-	authHandler.Use(configAuthMiddleware(store, apiPubHandler))
+	authHandler.Use(auth.FromConfig(store, apiPubHandler))
 	apiPrivHandler := authHandler.PathPrefix("/api/priv").Subrouter()
 	apiPrivHandler.Use(csrfMiddleware(apiPrivHandler))
+
+	server.md = metrics.FromConfig(authHandler)
 
 	mainHandler.PathPrefix("/ui").HandlerFunc(server.UIHandler())
 	if !config.C.Debug {
@@ -51,6 +55,8 @@ func New() *Server {
 	}
 	// General Get Requests don't need authentication
 	mainHandler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
+	// Only enable logging middleware after we've added general serving
+	mainHandler.Use(loggingMiddleware)
 	authHandler.PathPrefix("/").Methods(http.MethodPut).HandlerFunc(server.PutHandler)
 	apiPrivHandler.Path("/list").Methods(http.MethodGet).HandlerFunc(server.APIListHandler)
 	apiPrivHandler.Path("/move").Methods(http.MethodPost).HandlerFunc(server.APIMoveHandler)

@@ -27,6 +27,9 @@ type Config struct {
 	AuthDriver       string                      `yaml:"authDriver"`
 	AuthStaticConfig *AuthenticationStaticConfig `yaml:"authStaticConfig"`
 	AuthOIDCConfig   *AuthenticationOIDCConfig   `yaml:"authOIDCConfig"`
+
+	MetricsDriver         string                `yaml:"metricsDriver"`
+	MetricsInfluxDBConfig MetricsInfluxDBConfig `yaml:"metricsInfluxDBConfig"`
 }
 
 type AuthenticationStaticConfig struct {
@@ -39,12 +42,20 @@ type AuthenticationOIDCConfig struct {
 	Redirect     string `yaml:"redirect"`
 }
 
+type MetricsInfluxDBConfig struct {
+	URL    string `yaml:"url"`
+	Token  string `yaml:"token"`
+	Org    string `yaml:"org"`
+	Bucket string `yaml:"bucket"`
+}
+
 func DefaultConfig() {
 	C = Config{
 		Listen:          "localhost:8000",
 		LogFormat:       "plain",
 		RootDir:         "./root",
 		AuthDriver:      "null",
+		MetricsDriver:   "null",
 		SecretKeyString: "",
 		Debug:           false,
 	}
