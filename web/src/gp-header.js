@@ -9,7 +9,7 @@ class GpApp extends LitElement {
                 align-items: center;
                 background-color: var(--color-primary-background-dark);
                 color: var(--color-primary-text);
-                box-shadow: 3px 2px 3px 0px #0008;
+                box-shadow: 0px 2px 3px 0px #0008;
                 padding: 0 1rem;
                 gap: 1rem;
             }

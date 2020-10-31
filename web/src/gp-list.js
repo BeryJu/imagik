@@ -29,7 +29,13 @@ class GpList extends LitElement {
 
     async listFiles(path) {
         return get(`./list?pathOffset=${encodeURIComponent(path)}`)
-            .then(({files})=>files.map((f)=>html`
+            .then(({ files }) => files.sort((a, b) => {
+                if (a.type !== b.type) {
+                    return a.type.localeCompare(b.type);
+                } else {
+                    return a.name.localeCompare(b.name);
+                }
+            }).map((f)=>html`
                 <gp-file path=${f.fullPath} mime=${f.mime} name=${f.name}>
                 </gp-file>
             `));
