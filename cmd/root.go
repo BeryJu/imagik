@@ -31,6 +31,7 @@ func init() {
 
 // onInit reads in config file and ENV variables if set.
 func onInit() {
+	log.SetFormatter(&log.JSONFormatter{})
 	config.DefaultConfig()
 	err := config.LoadConfig(cfgFile)
 
@@ -40,8 +41,8 @@ func onInit() {
 		log.WithField("config-file", cfgFile).WithError(err).Warning("Failed to read config")
 	}
 
-	if config.C.LogFormat == "json" {
-		log.SetFormatter(&log.JSONFormatter{})
+	if config.C.LogFormat != "json" {
+		log.SetFormatter(&log.TextFormatter{})
 	}
 	if config.C.Debug {
 		log.SetLevel(log.DebugLevel)
