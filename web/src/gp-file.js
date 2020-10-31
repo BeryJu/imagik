@@ -14,7 +14,6 @@ class GpFile extends LitElement {
             img {
                 width: 5rem;
                 height: 5rem;
-                background-color: #111;
                 border-radius: 3px;
             }
             span {
@@ -59,14 +58,19 @@ class GpFile extends LitElement {
     }
 
     getPreview() {
-        if (this.mime && this.mime.startsWith('image')) return this.path;
-        return 'assets/preview/unknown.svg';
+        if (this.mime && this.mime.startsWith('image')) {
+            return this.path
+        } else if (this.isFolder()) {
+            return "assets/icons/folder-line.svg";
+        } else {
+            return 'assets/preview/unknown.svg';
+        }
     };
 
     render() {
         return html`
             <img src=${this.getPreview()}></img>
-            <span>${this.name}</span>
+            <span title=${this.name}>${this.name}</span>
         `;
     }
 }

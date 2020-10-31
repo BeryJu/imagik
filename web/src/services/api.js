@@ -55,10 +55,13 @@ export const request = async (url, body, options = {}) => {
                 throw new Error(error);
             });
         }
+        if (res.status == 201) {
+            return res;
+        }
         return res.json();
     }, (e) => {
         console.error(e);
-        alert('network unrechable: ' + e.message);
+        alert('network unreachable: ' + e.message);
         throw e;
     });
 };

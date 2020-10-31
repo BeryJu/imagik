@@ -2,7 +2,7 @@ import {LitElement, html, css} from 'lit-element';
 import './gp-header.js';
 import './gp-drop.js';
 import './gp-list.js';
-import {logout} from './services/api.js';
+import {logout, request} from './services/api.js';
 
 class GpApp extends LitElement {
     static get styles() {
@@ -45,6 +45,10 @@ class GpApp extends LitElement {
             ev.preventDefault();
             this.dragover = false;
             this.handleDrop(ev);
+        });
+        this.addEventListener('update', (ev)=>{
+            ev.preventDefault();
+            this.shadowRoot.querySelector("gp-list").requestUpdate();
         });
 
         this.path = window.location.hash.slice(1, Infinity) || '/';
@@ -90,7 +94,20 @@ class GpApp extends LitElement {
     }
 
     uploadFile(file) {
-        console.log(file.name, URL.createObjectURL(file));
+        request(`${this.path}/${file.name}`, file, {
+            method: "PUT"
+        }).catch(e => {
+            console.error(e);
+        }).then(r => {
+            this.triggerUpdate()
+        });
+    }
+
+    triggerUpdate() {
+        this.dispatchEvent(new CustomEvent('update', {
+            composed: true,
+            bubbles: true,
+        }));
     }
 
     navigate({detail}) {
@@ -103,9 +120,9 @@ class GpApp extends LitElement {
 
         return html`
             <gp-header path=${this.path} @navigate=${(e)=>this.navigate(e)}>
-                <a @click=${()=>this.uploadSelect()}>upload</a>
+                <a @click=${() => this.uploadSelect()}>upload</a>
                 |
-                <a @click=${()=>window.location.reload()}>refresh</a>
+                <a @click=${() => this.triggerUpdate()}>refresh</a>
                 |
                 <a @click=${logout}>logout</a>
             </gp-header>
