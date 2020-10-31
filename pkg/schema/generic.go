@@ -12,6 +12,7 @@ type GenericResponse struct {
 
 func ErrorHandlerAPI(err error, w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusBadRequest)
 	json.NewEncoder(w).Encode(GenericResponse{
 		Successful: false,
 		Error:      err.Error(),
