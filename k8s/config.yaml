@@ -6,3 +6,10 @@ data:
   GOPYAZO_ROOT: /data/images
   # Sentry configuration
   SENTRY_ENVIRONMENT: beryjuorg-prod
+  # Run `docker run -it --rm beryju/gopyazo generate-key` to get a secret key for session
+  # GOPYAZO_SECRET: "output"
+
+  # Run `docker run -it --rm beryju/gopyazo hash-password` to get a password hash
+  # if you want to use the webinterface
+  # GOPYAZO_USER: "username"
+  # GOPYAZO_PASSWORD: "output"

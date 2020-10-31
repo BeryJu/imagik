@@ -1,6 +1,7 @@
 ---
 secretKey: "${GOPYAZO_SECRET}"
 listen: 0.0.0.0:8000
+logFormat: json
 rootDir: "${GOPYAZO_ROOT}"
 authDriver: "${GOPYAZO_AUTH_DRIVER}" # or null for no authentication or oidc
 authStaticConfig:
