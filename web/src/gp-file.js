@@ -7,14 +7,21 @@ class GpFile extends LitElement {
                 display: flex;
                 background-color: var(--color-primary-background-light);
                 padding: 1rem;
-                border-radius: 5px;
                 gap: 1rem;
+                flex-direction: column;
+                border-radius: 3px;
             }
             img {
                 width: 5rem;
                 height: 5rem;
                 background-color: #111;
-                border-radius: 1rem;
+                border-radius: 3px;
+            }
+            span {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 5rem;
             }
         `;
     }
@@ -26,6 +33,10 @@ class GpFile extends LitElement {
                 type: String,
             },
             mime: {
+                attribute: true,
+                type: String,
+            },
+            name: {
                 attribute: true,
                 type: String,
             },
@@ -55,7 +66,7 @@ class GpFile extends LitElement {
     render() {
         return html`
             <img src=${this.getPreview()}></img>
-            <slot></slot>
+            <span>${this.name}</span>
         `;
     }
 }

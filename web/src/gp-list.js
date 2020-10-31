@@ -12,7 +12,6 @@ class GpList extends LitElement {
                 display: flex;
                 flex-direction: row;
                 flex-wrap: wrap;
-                justify-content: space-evenly;
                 padding: 1rem;
                 gap: 1rem;
             }
@@ -31,8 +30,7 @@ class GpList extends LitElement {
     async listFiles(path) {
         return get(`./list?pathOffset=${encodeURIComponent(path)}`)
             .then(({files})=>files.map((f)=>html`
-                <gp-file path=${f.fullPath} mime=${f.mime}>
-                    ${f.name}
+                <gp-file path=${f.fullPath} mime=${f.mime} name=${f.name}>
                 </gp-file>
             `));
     }
