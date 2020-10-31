@@ -51,7 +51,7 @@ class GpApp extends LitElement {
             this.shadowRoot.querySelector("gp-list").requestUpdate();
         });
 
-        this.path = window.location.hash.slice(1, Infinity) || '/';
+        this.navigate({ detail: window.location.hash.slice(1, Infinity) || '/'});
     }
 
     connectedCallback() {
@@ -112,6 +112,11 @@ class GpApp extends LitElement {
 
     navigate({detail}) {
         this.path = detail;
+        if (detail == "/") {
+            document.title = "gopyazo";
+        } else {
+            document.title = `gopyazo - ${detail}`;
+        }
     }
 
     render() {
