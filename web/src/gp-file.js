@@ -69,7 +69,7 @@ class GpFile extends LitElement {
 
     render() {
         return html`
-            <img src=${this.getPreview()} lazy></img>
+            <img src=${this.getPreview()} loading=lazy></img>
             <span title=${this.name}>${this.name}</span>
         `;
     }
