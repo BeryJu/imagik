@@ -18,6 +18,7 @@ class GpDetail extends LitElement {
                 padding: 1rem;
                 display: flex;
                 flex-direction: column;
+                margin-right: 1rem;
             }
             div.sidebar > div.group {
                 display: flex;
@@ -41,10 +42,6 @@ class GpDetail extends LitElement {
             }
             button:hover, input[type=submit]:hover {
                 background-color: var(--color-primary);
-            }
-            div.preview {
-                display: flex;
-
             }
         `;
     }
