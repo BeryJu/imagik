@@ -73,3 +73,23 @@ Move a file. Requires two query parameters, `from` and `to`, which are relative 
 **Requires authentication**
 
 Accepts Multipart-Form Encoded files and uploads them to the respective path from the form relative to the root directory.
+
+## Migrating from pyazo
+
+If you didn't use Collections in pyazo, you can simple re-use the same Media folder for gopyazo, and all URLs will continue to work.
+
+If you did use Collections, use the script below, to mirror your Collection Structure into Filesystem folders, which are used by gopyazo.
+
+```python
+# Execute this in your pyazo installation directory
+# docker-compose exec server ./manage.py shell
+# Then paste the contents below into the shell.
+# This will output the commands required to move the files
+# into folders.
+from pyazo.core.models import *
+for c in Collection.objects.all():
+    print(f"mkdir {c.name}")
+    for o in c.object_set.all():
+        rel_path = o.file.path.replace('/app/media/', '')
+        print(f"mv {rel_path} {c.name}/{rel_path}")
+```
