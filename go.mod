@@ -28,5 +28,5 @@ require (
 	golang.org/x/sys v0.0.0-20201024232916-9f70ab9862d5 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/square/go-jose.v2 v2.5.1 // indirect
-	gopkg.in/yaml.v2 v2.3.0
+	gopkg.in/yaml.v2 v2.4.0
 )
