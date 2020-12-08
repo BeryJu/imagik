@@ -13,6 +13,7 @@ func main() {
 		sentry.Init(sentry.ClientOptions{
 			Dsn:              dsn,
 			AttachStacktrace: true,
+			TracesSampleRate: 1,
 		})
 		defer sentry.Flush(time.Second * 5)
 		defer sentry.Recover()

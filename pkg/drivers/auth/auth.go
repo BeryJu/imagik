@@ -7,6 +7,7 @@ import (
 
 	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/drivers"
+	"github.com/getsentry/sentry-go"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 )
@@ -36,7 +37,9 @@ func FromConfig(store *sessions.CookieStore, r *mux.Router) func(next http.Handl
 	return func(next http.Handler) http.Handler {
 
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			span := sentry.StartSpan(r.Context(), "request.authHandler")
 			authDriver.AuthenticateRequest(w, r, next)
+			span.Finish()
 		})
 	}
 }

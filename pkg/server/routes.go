@@ -10,11 +10,15 @@ import (
 	"github.com/BeryJu/gopyazo/pkg/config"
 	"github.com/BeryJu/gopyazo/pkg/drivers/metrics"
 	"github.com/BeryJu/gopyazo/pkg/schema"
+	"github.com/getsentry/sentry-go"
 	"github.com/pkg/errors"
 )
 
 // GetHandler Handle GET Requests
 func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
+	span := sentry.StartSpan(r.Context(), "request.GetFile")
+	defer span.Finish()
+
 	if s.tm.Transform(w, r) == true {
 		return
 	}
@@ -72,6 +76,8 @@ func (s *Server) UploadFormHandler(w http.ResponseWriter, r *http.Request) {
 
 // PutHandler Upload handler used frm CLI
 func (s *Server) PutHandler(w http.ResponseWriter, r *http.Request) {
+	span := sentry.StartSpan(r.Context(), "request.PutFile")
+	defer span.Finish()
 	err := s.doUpload(r.Body, r.URL.Path)
 	if err != nil {
 		errorHandler(err, w)
