@@ -51,7 +51,11 @@ func recoveryMiddleware() func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			next.ServeHTTP(w, r)
 			defer func() {
-				err := recover().(error)
+				re := recover()
+				if re == nil {
+					return
+				}
+				err := re.(error)
 				if err != nil {
 					jsonBody, _ := json.Marshal(schema.GenericResponse{
 						Successful: false,
