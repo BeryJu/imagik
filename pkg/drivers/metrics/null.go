@@ -17,10 +17,4 @@ func (nmd *NullMetricsDriver) Init() {
 func (nmd *NullMetricsDriver) InitRoutes(r *mux.Router) {}
 
 func (nmd *NullMetricsDriver) ServeRequest(r *ServeRequest) {
-	nmd.logger.WithFields(log.Fields{
-		"Path":      r.ResolvedPath,
-		"Hash":      r.Hash,
-		"Client":    r.RemoteAddr,
-		"UserAgent": r.UserAgent(),
-	}).Info(r.URL.Path)
 }
