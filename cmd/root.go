@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/BeryJu/gopyazo/pkg/config"
+	"github.com/BeryJu/imagik/pkg/config"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -13,7 +13,7 @@ var cfgFile string
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use:   "gopyazo",
+	Use:   "imagik",
 	Short: "A small Fileserver",
 }
 

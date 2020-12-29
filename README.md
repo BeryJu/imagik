@@ -1,6 +1,6 @@
-# GoPyazo
+# Imagik
 
-Pyazo, but fast. GoPyazo is a fast and lightweight fileserver, that
+Pyazo, but fast. Imagik is a fast and lightweight fileserver, that
 
 - lets you access files by path
 - lets you access files by their Hash (MD5/SHA1/SHA2/SHA512)
@@ -13,20 +13,20 @@ Pyazo, but fast. GoPyazo is a fast and lightweight fileserver, that
 Run the container like this:
 
 ```
-docker run -p 8000:8000 -v "whatever directory you want to share":/share beryju/gopyazo server
+docker run -p 8000:8000 -v "whatever directory you want to share":/share beryju/imagik server
 ```
 
-Now you can access gopyazo on http://localhost:8000
+Now you can access imagik on http://localhost:8000
 
 ### Binary
 
-Download a binary from [GitHub](https://github.com/BeryJu/gopyazo/releases) and run it:
+Download a binary from [GitHub](https://github.com/BeryJu/imagik/releases) and run it:
 
 ```
-./gopyazo server
+./imagik server
 ```
 
-Now you can access gopyazo on http://localhost:8000
+Now you can access imagik on http://localhost:8000
 
 ## Configuration
 
@@ -50,7 +50,7 @@ Accepts file uploads from the HTTP Request body, like using `curl --data "@/path
 
 ### GET `/api/pub/health/liveness`
 
-Healthcheck endpoint, which returns a 201 Response as soon as gopyazo is running.
+Healthcheck endpoint, which returns a 201 Response as soon as imagik is running.
 
 ### GET `/api/pub/health/readiness`
 
@@ -76,9 +76,9 @@ Accepts Multipart-Form Encoded files and uploads them to the respective path fro
 
 ## Migrating from pyazo
 
-If you didn't use Collections in pyazo, you can simple re-use the same Media folder for gopyazo, and all URLs will continue to work.
+If you didn't use Collections in pyazo, you can simple re-use the same Media folder for imagik, and all URLs will continue to work.
 
-If you did use Collections, use the script below, to mirror your Collection Structure into Filesystem folders, which are used by gopyazo.
+If you did use Collections, use the script below, to mirror your Collection Structure into Filesystem folders, which are used by imagik.
 
 ```python
 # Execute this in your pyazo installation directory

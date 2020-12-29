@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/BeryJu/gopyazo/pkg/config"
-	"github.com/BeryJu/gopyazo/pkg/drivers"
+	"github.com/BeryJu/imagik/pkg/config"
+	"github.com/BeryJu/imagik/pkg/drivers"
 	"github.com/getsentry/sentry-go"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"

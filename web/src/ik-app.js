@@ -1,16 +1,16 @@
 import {LitElement, html, css} from 'lit-element';
-import './gp-header.js';
-import './gp-drop.js';
-import './gp-list.js';
+import './ik-header.js';
+import './ik-drop.js';
+import './ik-list.js';
 import {logout, request} from './services/api.js';
 
-class GpApp extends LitElement {
+class App extends LitElement {
     static get styles() {
         return css`
             :host {
                 display: block;
             }
-            gp-header a, gp-header a:visited {
+            ik-header a, ik-header a:visited {
                 color: var(--color-primary);
             }
         `;
@@ -47,7 +47,7 @@ class GpApp extends LitElement {
         });
         this.addEventListener('update', (ev)=>{
             ev.preventDefault();
-            this.shadowRoot.querySelector("gp-list").requestUpdate();
+            this.shadowRoot.querySelector("ik-list").requestUpdate();
         });
 
         this.navigate({ detail: window.location.hash.slice(1, Infinity) || '/'});
@@ -55,9 +55,9 @@ class GpApp extends LitElement {
 
     connectedCallback() {
         super.connectedCallback();
-        window.addEventListener('hashchange',
-            ()=>this.path=window.location.hash.slice(1, Infinity),
-        );
+        window.addEventListener('hashchange', () => {
+            this.path = window.location.hash.slice(1, Infinity);
+        });
     }
 
     handleDrop(ev) {
@@ -112,29 +112,28 @@ class GpApp extends LitElement {
     navigate({detail}) {
         this.path = detail;
         if (detail == "/") {
-            document.title = "gopyazo";
+            document.title = "imagik";
         } else {
-            document.title = `gopyazo - ${detail}`;
+            document.title = `imagik - ${detail}`;
         }
     }
 
     render() {
-        console.log(this.path);
         if (window.location.hash !== '#'+this.path) window.location.hash='#'+this.path;
 
         return html`
-            <gp-header path=${this.path} @navigate=${(e)=>this.navigate(e)}>
+            <ik-header path=${this.path} @navigate=${(e)=>this.navigate(e)}>
                 <a @click=${() => this.uploadSelect()}>upload</a>
                 |
                 <a @click=${() => this.triggerUpdate()}>refresh</a>
                 |
                 <a @click=${logout}>logout</a>
-            </gp-header>
+            </ik-header>
 
-            <gp-list path=${this.path} @navigate=${(e)=>this.navigate(e)}></gp-list>
+            <ik-list path=${this.path} @navigate=${(e)=>this.navigate(e)}></ik-list>
 
-            <gp-drop ?show=${this.dragover}></gp-drop>
+            <ik-drop ?show=${this.dragover}></ik-drop>
         `;
     }
 }
-customElements.define('gp-app', GpApp);
+customElements.define('ik-app', App);

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/BeryJu/gopyazo/pkg/config"
+	"github.com/BeryJu/imagik/pkg/config"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
@@ -44,7 +44,7 @@ func (sa *StaticAuth) AuthenticateRequest(w http.ResponseWriter, r *http.Request
 			}
 		}
 	}
-	w.Header().Set("WWW-Authenticate", `Basic realm="gopyazo"`)
+	w.Header().Set("WWW-Authenticate", `Basic realm="imagik"`)
 	sa.logger.Info("Permission denied")
 	w.WriteHeader(401)
 }

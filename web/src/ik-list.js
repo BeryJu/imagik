@@ -2,11 +2,11 @@ import {LitElement, html, css} from 'lit-element';
 import {until} from 'lit-html/directives/until.js';
 import {get} from './services/api.js';
 
-import './gp-file.js';
-import './gp-directory.js';
-import './gp-detail.js';
+import './ik-file.js';
+import './ik-directory.js';
+import './ik-detail.js';
 
-class GpList extends LitElement {
+class List extends LitElement {
     static get styles() {
         return css`
             :host {
@@ -38,11 +38,11 @@ class GpList extends LitElement {
                 }
             })
             .map((f) => html`
-                <gp-file path=${f.fullPath} mime=${f.mime} name=${f.name}>
-                </gp-file>
+                <ik-file path=${f.fullPath} mime=${f.mime} name=${f.name}>
+                </ik-file>
             `))
             .catch(e => {
-                return html`<gp-detail path=${path}></gp-detail>`;
+                return html`<ik-detail path=${path}></ik-detail>`;
             });
     }
 
@@ -52,4 +52,4 @@ class GpList extends LitElement {
         `;
     }
 }
-customElements.define('gp-list', GpList);
+customElements.define('ik-list', List);

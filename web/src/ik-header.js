@@ -1,6 +1,6 @@
 import {LitElement, html, css} from 'lit-element';
 
-class GpApp extends LitElement {
+class App extends LitElement {
     static get styles() {
         return css`
             :host {
@@ -43,10 +43,10 @@ class GpApp extends LitElement {
     }
 
     headerPath() {
-        if (this.path === "/") {
-            return "gopyazo";
+        if (!this.path) {
+            return "imagik";
         } else {
-            return decodeURIComponent(this.path)
+            return decodeURIComponent(this.path);
         }
     }
 
@@ -63,4 +63,4 @@ class GpApp extends LitElement {
         `;
     }
 }
-customElements.define('gp-header', GpApp);
+customElements.define('ik-header', App);

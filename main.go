@@ -4,7 +4,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/BeryJu/gopyazo/cmd"
+	"github.com/BeryJu/imagik/cmd"
 	"github.com/getsentry/sentry-go"
 )
 

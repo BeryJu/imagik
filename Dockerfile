@@ -8,22 +8,22 @@ RUN cd /build/web && npm i && npm run build
 # Build application second
 FROM golang:1.15 AS builder
 
-COPY . /go/src/github.com/BeryJu/gopyazo
-COPY --from=npm-builder /build/root /go/src/github.com/BeryJu/gopyazo/root
+COPY . /go/src/github.com/BeryJu/imagik
+COPY --from=npm-builder /build/root /go/src/github.com/BeryJu/imagik/root
 
-RUN cd /go/src/github.com/BeryJu/gopyazo && make docker-build
+RUN cd /go/src/github.com/BeryJu/imagik && make docker-build
 
 # Final container
 FROM debian
 
-COPY --from=builder /go/bin/gopyazo /gopyazo
+COPY --from=builder /go/bin/imagik /imagik
 COPY ./config.docker.yml /config.yml
 
 EXPOSE 8000
 
 WORKDIR /share
 
-ENV GOPYAZO_ROOT=/share
-ENV GOPYAZO_AUTH_DRIVER=null
+ENV IMAGIK_ROOT=/share
+ENV IMAGIK_AUTH_DRIVER=null
 
-ENTRYPOINT [ "/gopyazo", "-c=/config.yml" ]
+ENTRYPOINT [ "/imagik", "-c=/config.yml" ]

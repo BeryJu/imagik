@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/BeryJu/gopyazo/pkg/config"
-	"github.com/BeryJu/gopyazo/pkg/hash"
-	"github.com/BeryJu/gopyazo/pkg/schema"
+	"github.com/BeryJu/imagik/pkg/config"
+	"github.com/BeryJu/imagik/pkg/hash"
+	"github.com/BeryJu/imagik/pkg/schema"
 	"github.com/gabriel-vasile/mimetype"
 )
 

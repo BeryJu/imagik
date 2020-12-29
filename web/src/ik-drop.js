@@ -1,6 +1,6 @@
 import {LitElement, html, css} from 'lit-element';
 
-class GpDrop extends LitElement {
+class Drop extends LitElement {
     static get styles() {
         return css`
             :host {
@@ -55,4 +55,4 @@ class GpDrop extends LitElement {
         `;
     }
 }
-customElements.define('gp-drop', GpDrop);
+customElements.define('ik-drop', Drop);

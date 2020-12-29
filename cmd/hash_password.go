@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"syscall"
 
-	"github.com/BeryJu/gopyazo/pkg/drivers/auth"
+	"github.com/BeryJu/imagik/pkg/drivers/auth"
 	"github.com/spf13/cobra"
 	"golang.org/x/crypto/ssh/terminal"
 )

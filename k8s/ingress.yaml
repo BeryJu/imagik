@@ -5,19 +5,19 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     kubernetes.io/tls-acme: "true"
   labels:
-    app.kubernetes.io/name: gopyazo
-  name: gopyazo
+    app.kubernetes.io/name: imagik
+  name: imagik
 spec:
   rules:
   - host: i.beryju.org
     http:
       paths:
       - backend:
-          serviceName: gopyazo
+          serviceName: imagik
           servicePort: http
         path: /
         pathType: Prefix
   tls:
   - hosts:
     - i.beryju.org
-    secretName: gopyazo-acme
+    secretName: imagik-acme

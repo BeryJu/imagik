@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/BeryJu/gopyazo/pkg/config"
+	"github.com/BeryJu/imagik/pkg/config"
 	"github.com/gorilla/mux"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/influxdata/influxdb-client-go/v2/api"
@@ -23,7 +23,7 @@ func (imd *InfluxDBMetricsDriver) Init() {
 func (imd *InfluxDBMetricsDriver) InitRoutes(r *mux.Router) {}
 
 func (imd *InfluxDBMetricsDriver) ServeRequest(r *ServeRequest) {
-	p := influxdb2.NewPointWithMeasurement("gopyazo_serve").
+	p := influxdb2.NewPointWithMeasurement("imagik_serve").
 		AddTag("path", r.ResolvedPath).
 		AddTag("hash", r.Hash).
 		AddTag("client", r.RemoteAddr).

@@ -1,4 +1,4 @@
-module github.com/BeryJu/gopyazo
+module github.com/BeryJu/imagik
 
 go 1.15
 

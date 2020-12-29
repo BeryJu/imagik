@@ -1,6 +1,6 @@
 import {LitElement, html, css} from 'lit-element';
 
-class GpDirectory extends LitElement {
+class Directory extends LitElement {
     static get styles() {
         return css`
             :host {
@@ -36,4 +36,4 @@ class GpDirectory extends LitElement {
         `;
     }
 }
-customElements.define('gp-directory', GpDirectory);
+customElements.define('ik-directory', Directory);

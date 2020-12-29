@@ -1,8 +1,8 @@
 package cmd
 
 import (
-	"github.com/BeryJu/gopyazo/pkg/hash"
-	"github.com/BeryJu/gopyazo/pkg/server"
+	"github.com/BeryJu/imagik/pkg/hash"
+	"github.com/BeryJu/imagik/pkg/server"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -10,7 +10,7 @@ import (
 // serverCmd represents the server command
 var serverCmd = &cobra.Command{
 	Use:   "server",
-	Short: "Run gopyazo Server",
+	Short: "Run imagik Server",
 	Run: func(cmd *cobra.Command, args []string) {
 		server := server.New()
 		server.HashMap = hash.New()

@@ -7,9 +7,9 @@ import (
 	"os"
 	"path"
 
-	"github.com/BeryJu/gopyazo/pkg/config"
-	"github.com/BeryJu/gopyazo/pkg/drivers/metrics"
-	"github.com/BeryJu/gopyazo/pkg/schema"
+	"github.com/BeryJu/imagik/pkg/config"
+	"github.com/BeryJu/imagik/pkg/drivers/metrics"
+	"github.com/BeryJu/imagik/pkg/schema"
 	"github.com/getsentry/sentry-go"
 	"github.com/pkg/errors"
 )

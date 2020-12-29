@@ -3,7 +3,7 @@ import { until } from 'lit-html/directives/until.js';
 import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { get } from './services/api.js';
 
-class GpDetail extends LitElement {
+class Detail extends LitElement {
     static get styles() {
         return css`
             :host {
@@ -107,4 +107,4 @@ class GpDetail extends LitElement {
         `;
     }
 }
-customElements.define('gp-detail', GpDetail);
+customElements.define('ik-detail', Detail);

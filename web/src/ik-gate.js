@@ -1,9 +1,9 @@
 import {LitElement, html, css} from 'lit-element';
-import './gp-header.js';
-import './gp-app.js';
+import './ik-header.js';
+import './ik-app.js';
 import {getAuthorization, setAuthorization} from './services/api.js';
 
-class GpGate extends LitElement {
+class Gate extends LitElement {
     static get styles() {
         return css`
             :host {
@@ -60,11 +60,11 @@ class GpGate extends LitElement {
     render() {
         if (getAuthorization()) {
             return html`
-                <gp-app></gp-app>
+                <ik-app></ik-app>
             `;
         } else {
             return html`
-                <gp-header></gp-header>
+                <ik-header></ik-header>
                 <div>
                     <form @submit=${this.submitLogin}>
                         <input type="text" placeholder="username" name="username" required/>
@@ -76,4 +76,4 @@ class GpGate extends LitElement {
         }
     }
 }
-customElements.define('gp-gate', GpGate);
+customElements.define('ik-gate', Gate);

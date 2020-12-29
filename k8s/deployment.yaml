@@ -3,17 +3,17 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: gopyazo
-  name: gopyazo
+    app.kubernetes.io/name: imagik
+  name: imagik
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: gopyazo
+      app.kubernetes.io/name: imagik
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: gopyazo
+        app.kubernetes.io/name: imagik
     spec:
       volumes:
         - name: storage
@@ -21,15 +21,15 @@ spec:
             claimName: minio-pv-claim
       containers:
         - command:
-          - /gopyazo
+          - /imagik
           - -c=/config.yml
           - server
           envFrom:
           - configMapRef:
-              name: gopyazo-config
-          image: beryju/gopyazo:latest
+              name: imagik-config
+          image: beryju/imagik:latest
           imagePullPolicy: Always
-          name: gopyazo
+          name: imagik
           ports:
             - containerPort: 8000
               name: http

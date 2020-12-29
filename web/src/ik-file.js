@@ -1,6 +1,6 @@
 import {LitElement, html, css} from 'lit-element';
 
-class GpFile extends LitElement {
+class File extends LitElement {
     static get styles() {
         return css`
             :host {
@@ -74,4 +74,4 @@ class GpFile extends LitElement {
         `;
     }
 }
-customElements.define('gp-file', GpFile);
+customElements.define('ik-file', File);

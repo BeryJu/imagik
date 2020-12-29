@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/BeryJu/gopyazo/pkg/config"
-	"github.com/BeryJu/gopyazo/pkg/schema"
+	"github.com/BeryJu/imagik/pkg/config"
+	"github.com/BeryJu/imagik/pkg/schema"
 	"github.com/getsentry/sentry-go"
 	sentryhttp "github.com/getsentry/sentry-go/http"
 	"github.com/gorilla/csrf"

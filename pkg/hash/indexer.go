@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"sync"
 
-	"github.com/BeryJu/gopyazo/pkg/config"
+	"github.com/BeryJu/imagik/pkg/config"
 	"github.com/cornelk/hashmap"
 
 	log "github.com/sirupsen/logrus"

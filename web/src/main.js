@@ -1,2 +1,2 @@
 import 'construct-style-sheets-polyfill';
-import './gp-gate.js';
+import './ik-gate.js';

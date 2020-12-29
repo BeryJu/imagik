@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/BeryJu/gopyazo/pkg/config"
+	"github.com/BeryJu/imagik/pkg/config"
 	"github.com/coreos/go-oidc"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
