@@ -23,7 +23,6 @@ spec:
         - command:
           - /imagik
           - -c=/config.yml
-          - server
           envFrom:
           - configMapRef:
               name: imagik-config

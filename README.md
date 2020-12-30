@@ -13,7 +13,7 @@ Pyazo, but fast. Imagik is a fast and lightweight fileserver, that
 Run the container like this:
 
 ```
-docker run -p 8000:8000 -v "whatever directory you want to share":/share beryju/imagik server
+docker run -p 8000:8000 -v "whatever directory you want to share":/share beryju/imagik
 ```
 
 Now you can access imagik on http://localhost:8000
@@ -23,7 +23,7 @@ Now you can access imagik on http://localhost:8000
 Download a binary from [GitHub](https://github.com/BeryJu/imagik/releases) and run it:
 
 ```
-./imagik server
+./imagik
 ```
 
 Now you can access imagik on http://localhost:8000

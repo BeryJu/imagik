@@ -5,6 +5,8 @@ import (
 	"os"
 
 	"github.com/BeryJu/imagik/pkg/config"
+	"github.com/BeryJu/imagik/pkg/hash"
+	"github.com/BeryJu/imagik/pkg/server"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
@@ -15,6 +17,16 @@ var cfgFile string
 var rootCmd = &cobra.Command{
 	Use:   "imagik",
 	Short: "A small Fileserver",
+	Run: func(cmd *cobra.Command, args []string) {
+		server := server.New()
+		server.HashMap = hash.New()
+		go server.HashMap.RunIndexer()
+
+		err := server.Run()
+		if err != nil {
+			log.Error(err)
+		}
+	},
 }
 
 func Execute() {
