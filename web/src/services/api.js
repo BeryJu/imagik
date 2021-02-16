@@ -51,7 +51,7 @@ export const request = async (url, body, options = {}) => {
 
             return res.json().then(({error}) => {
                 console.error(e);
-                alert('api error: ' + error);
+                console.error('api error: ' + error);
                 throw new Error(error);
             });
         }
@@ -61,7 +61,7 @@ export const request = async (url, body, options = {}) => {
         return res.json();
     }, (e) => {
         console.error(e);
-        alert('network unreachable: ' + e.message);
+        console.error('network unreachable: ' + e.message);
         throw e;
     });
 };
