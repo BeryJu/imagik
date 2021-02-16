@@ -81,7 +81,6 @@ class App extends LitElement {
     uploadSelect(ev) {
         const input = document.createElement('input');
         input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'image/*');
         input.setAttribute('multiple', 'true');
         input.addEventListener('change', (ev)=>{
             const files = ev.target.files;
