@@ -9,6 +9,7 @@ import (
 
 	"github.com/BeryJu/imagik/pkg/config"
 	"github.com/BeryJu/imagik/pkg/drivers/metrics"
+	"github.com/BeryJu/imagik/pkg/hash"
 	"github.com/BeryJu/imagik/pkg/schema"
 	"github.com/getsentry/sentry-go"
 	"github.com/pkg/errors"
@@ -56,7 +57,7 @@ func (s *Server) UploadFormHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fileResultMap[key] = errors.Wrap(err, "failed to open multipart file").Error()
 		} else {
-			err := s.doUpload(mf, key)
+			_, err := s.doUpload(mf, key)
 			if err != nil {
 				fileResultMap[key] = err.Error()
 			} else {
@@ -78,33 +79,37 @@ func (s *Server) UploadFormHandler(w http.ResponseWriter, r *http.Request) {
 func (s *Server) PutHandler(w http.ResponseWriter, r *http.Request) {
 	span := sentry.StartSpan(r.Context(), "request.PutFile")
 	defer span.Finish()
-	err := s.doUpload(r.Body, r.URL.Path)
+	hashes, err := s.doUpload(r.Body, r.URL.Path)
 	if err != nil {
 		errorHandler(err, w)
 		return
 	}
-	w.WriteHeader(201)
+	w.WriteHeader(200)
+	err = json.NewEncoder(w).Encode(hashes)
+	if err != nil {
+		schema.ErrorHandlerAPI(err, w)
+		return
+	}
 }
 
-func (s *Server) doUpload(src io.Reader, p string) error {
+func (s *Server) doUpload(src io.Reader, p string) (*hash.FileHash, error) {
 	filePath := config.CleanURL(p)
 	err := os.MkdirAll(path.Dir(filePath), os.ModePerm)
 	if err != nil {
 		s.logger.Warning(err)
-		return err
+		return nil, err
 	}
 
 	f, err := os.OpenFile(filePath, os.O_CREATE|os.O_RDWR, 0644)
 	if err != nil {
 		s.logger.Warning(err)
-		return err
+		return nil, err
 	}
 	n, err := io.Copy(f, src)
 	if err != nil {
 		s.logger.Warning(err)
-		return err
+		return nil, err
 	}
 	s.logger.WithField("n", n).WithField("path", filePath).Debug("Successfully wrote file.")
-	s.HashMap.UpdateSingle(filePath)
-	return nil
+	return s.HashMap.UpdateSingle(filePath), nil
 }

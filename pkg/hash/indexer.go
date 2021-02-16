@@ -38,7 +38,8 @@ func (hm *HashMap) RunIndexer() {
 		if err != nil {
 			return err
 		}
-		return hm.walk(path, info, err)
+		hm.hashFile(path, info, err)
+		return nil
 	})
 	hm.logger.WithField("hashes", hm.hashMap.Len()).Debug("Finished indexing...")
 }
@@ -51,12 +52,12 @@ func (hm *HashMap) Get(hash string) (string, bool) {
 	return val.(string), exists
 }
 
-func (hm *HashMap) UpdateSingle(path string) error {
+func (hm *HashMap) UpdateSingle(path string) *FileHash {
 	stat, err := os.Stat(path)
-	return hm.walk(path, stat, err)
+	return hm.hashFile(path, stat, err)
 }
 
-func (hm *HashMap) walk(path string, info os.FileInfo, err error) error {
+func (hm *HashMap) hashFile(path string, info os.FileInfo, err error) *FileHash {
 	if info.IsDir() {
 		return nil
 	}
@@ -77,5 +78,5 @@ func (hm *HashMap) walk(path string, info os.FileInfo, err error) error {
 	if err != nil {
 		hm.logger.Warning(err)
 	}
-	return nil
+	return hashes
 }

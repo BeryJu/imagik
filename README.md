@@ -46,7 +46,17 @@ Retrieve metadata for file stored at `path`.
 
 **Requires authentication**
 
-Accepts file uploads from the HTTP Request body, like using `curl --data "@/path/to/filename"`
+Accepts file uploads from the HTTP Request body, like using `curl --data "@/path/to/filename"`.
+Returns a JSON object with all the hashes,
+```json
+{
+    "SHA128":"acd5aeeb3c8d1cf580a59bc3e125d249ecdd0eda",
+    "SHA256":"e6b104c1420af07013b4378ddacaaa3938259422f07d5d47f7ea114cf9de80cf",
+    "SHA512":"10c08e2134fb953f891c2a3655f3744c0321fa72aefdf6bff000eff0a3f7882a008fff477dfec9aa22519ad17fb0fafd602caf3773cb848a5250131fdf8559ab",
+    "SHA512Short":"10c08e2134fb953f",
+    "MD5":"7e97fa079923fcdb39eb39b480729f36"
+}
+```
 
 ### GET `/api/pub/health/liveness`
 
