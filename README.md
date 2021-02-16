@@ -103,3 +103,22 @@ for c in Collection.objects.all():
         rel_path = o.file.path.replace('/app/media/', '')
         print(f"mv {rel_path} {c.name}/{rel_path}")
 ```
+
+## ShareX
+
+Use this custom uploader
+
+```json
+{
+  "Version": "13.4.0",
+  "Name": "imagik",
+  "DestinationType": "ImageUploader",
+  "RequestMethod": "PUT",
+  "RequestURL": "https://YOUR_IMAGIK_DOMAIN/$filename$",
+  "Headers": {
+    "Authorization": "Basic $base64:YOUR_USERNAME_HERE:YOUR_TOKEN_HERE$"
+  },
+  "Body": "Binary",
+  "URL": "https://YOUR_IMAGIK_DOMAIN/$json:SHA512Short$"
+}
+```
