@@ -27,7 +27,7 @@
     "karma-junit-reporter": "^2.0.1",
     "karma-rollup-preprocessor": "^7.0.5",
     "rollup": "^2.39.0",
-    "rollup-plugin-copy": "^3.3.0",
+    "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-cssimport": "git+https://github.com/lucaelin/rollup-plugin-cssimport.git",
     "rollup-plugin-minify-html-literals": "^1.2.5",
     "rollup-plugin-sourcemaps": "^0.6.3",
