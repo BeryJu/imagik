@@ -25,7 +25,7 @@
     "fetch-mock": "^9.11.0",
     "karma-firefox-launcher": "^2.1.0",
     "karma-junit-reporter": "^2.0.1",
-    "karma-rollup-preprocessor": "^7.0.5",
+    "karma-rollup-preprocessor": "^7.0.6",
     "rollup": "^2.39.1",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-cssimport": "git+https://github.com/lucaelin/rollup-plugin-cssimport.git",
