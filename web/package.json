@@ -20,7 +20,7 @@
     "@rollup/plugin-node-resolve": "^11.2.0",
     "concurrently": "^6.0.0",
     "deepmerge": "^4.2.2",
-    "eslint": "^7.22.0",
+    "eslint": "^7.23.0",
     "eslint-config-google": "^0.14.0",
     "fetch-mock": "^9.11.0",
     "karma-firefox-launcher": "^2.1.0",
