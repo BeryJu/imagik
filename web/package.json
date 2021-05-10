@@ -16,7 +16,7 @@
   "devDependencies": {
     "@open-wc/testing": "^2.5.33",
     "@open-wc/testing-karma": "^4.0.9",
-    "@rollup/plugin-commonjs": "^18.1.0",
+    "@rollup/plugin-commonjs": "^19.0.0",
     "@rollup/plugin-node-resolve": "^13.0.0",
     "concurrently": "^6.0.2",
     "deepmerge": "^4.2.2",
