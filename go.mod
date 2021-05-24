@@ -6,7 +6,7 @@ require (
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/cornelk/hashmap v1.0.1
 	github.com/gabriel-vasile/mimetype v1.3.0
-	github.com/getsentry/sentry-go v0.10.0
+	github.com/getsentry/sentry-go v0.11.0
 	github.com/gobuffalo/packr/v2 v2.8.1
 	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/gorilla/csrf v1.7.0
