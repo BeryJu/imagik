@@ -17,7 +17,7 @@
     "@open-wc/testing": "^2.5.33",
     "@open-wc/testing-karma": "^4.0.9",
     "@rollup/plugin-commonjs": "^19.0.1",
-    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.2",
     "concurrently": "^6.2.0",
     "deepmerge": "^4.2.2",
     "eslint": "^7.30.0",
