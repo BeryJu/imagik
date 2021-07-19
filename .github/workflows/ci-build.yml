@@ -33,4 +33,4 @@ jobs:
       with:
         tags: ghcr.io/beryju/imagik:latest
         push: ${{ github.ref == 'refs/heads/master' }}
-        platforms: linux/386,linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64
+        platforms: linux/amd64,linux/arm64
