@@ -37,7 +37,6 @@ func New() *Server {
 		tm:       transform.New(),
 		sessions: store,
 	}
-	mainHandler.Use(recoveryMiddleware())
 	mainHandler.Use(handlers.ProxyHeaders)
 	mainHandler.Use(handlers.CompressHandler)
 	mainHandler.Use(loggingMiddleware)
