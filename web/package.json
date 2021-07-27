@@ -35,7 +35,7 @@
     "sinon": "^11.1.1"
   },
   "dependencies": {
-    "@rollup/plugin-image": "^2.0.6",
+    "@rollup/plugin-image": "^2.1.0",
     "construct-style-sheets-polyfill": "^2.4.16",
     "lit-element": "^2.5.1",
     "lit-html": "^1.4.1"
