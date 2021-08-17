@@ -6,7 +6,7 @@ COPY ./web/ /build/web
 RUN cd /build/web && npm i && npm run build
 
 # Build application second
-FROM golang:1.17rc2 AS builder
+FROM golang:1.17.0 AS builder
 
 COPY . /go/src/github.com/BeryJu/imagik
 COPY --from=npm-builder /build/root /go/src/github.com/BeryJu/imagik/root
