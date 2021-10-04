@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@rollup/plugin-image": "^2.1.1",
-    "construct-style-sheets-polyfill": "^3.0.1",
+    "construct-style-sheets-polyfill": "^3.0.3",
     "lit-element": "^3.0.0",
     "lit-html": "^2.0.0"
   }
