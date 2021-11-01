@@ -14,7 +14,7 @@
   "author": "Luca Elin Haneklau",
   "license": "MIT",
   "devDependencies": {
-    "@open-wc/testing": "^3.0.1",
+    "@open-wc/testing": "^3.0.2",
     "@open-wc/testing-karma": "^4.0.9",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
