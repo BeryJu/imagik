@@ -38,6 +38,6 @@
     "@rollup/plugin-image": "^2.1.1",
     "construct-style-sheets-polyfill": "^3.0.4",
     "lit-element": "^3.0.2",
-    "lit-html": "^2.0.1"
+    "lit-html": "^2.0.2"
   }
 }
