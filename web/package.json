@@ -18,7 +18,7 @@
     "@open-wc/testing-karma": "^4.0.9",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
-    "concurrently": "^6.3.0",
+    "concurrently": "^6.4.0",
     "deepmerge": "^4.2.2",
     "eslint": "^8.2.0",
     "eslint-config-google": "^0.14.0",
