@@ -6,7 +6,7 @@ require (
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/cornelk/hashmap v1.0.1
 	github.com/gabriel-vasile/mimetype v1.4.0
-	github.com/getsentry/sentry-go v0.11.0
+	github.com/getsentry/sentry-go v0.12.0
 	github.com/gobuffalo/packr/v2 v2.8.3
 	github.com/gorilla/csrf v1.7.1
 	github.com/gorilla/handlers v1.5.1
@@ -18,7 +18,7 @@ require (
 	github.com/pquerna/cachecontrol v0.0.0-20200921180117-858c6e7e6b7e // indirect
 	github.com/sirupsen/logrus v1.8.1
 	github.com/spf13/cobra v1.3.0
-	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
+	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519
 	golang.org/x/oauth2 v0.0.0-20211104180415-d3ed0bb246c8
 	gopkg.in/square/go-jose.v2 v2.5.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0
