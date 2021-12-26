@@ -42,6 +42,12 @@ func New() *Server {
 	mainHandler.Use(handlers.CompressHandler)
 	mainHandler.Use(loggingMiddleware)
 	mainHandler.Use(sentryhttp.New(sentryhttp.Options{}).Handle)
+	mainHandler.Use(func(inner http.Handler) http.Handler {
+		return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+			rw.Header().Set("Server", "github.com/beryju/imagik")
+			inner.ServeHTTP(rw, r)
+		})
+	})
 
 	apiPubHandler := mainHandler.PathPrefix("/api/pub").Subrouter()
 	authHandler := mainHandler.NewRoute().Subrouter()
