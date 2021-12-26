@@ -14,7 +14,7 @@ COPY --from=npm-builder /build/root /go/src/github.com/BeryJu/imagik/root
 RUN cd /go/src/github.com/BeryJu/imagik && make docker-build
 
 # Final container
-FROM docker.io/debian
+FROM gcr.io/distroless/static-debian11:debug
 
 COPY --from=builder /go/bin/imagik /imagik
 COPY ./config.docker.yml /config.yml
