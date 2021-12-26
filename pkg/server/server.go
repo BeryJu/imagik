@@ -41,6 +41,7 @@ func New() *Server {
 	mainHandler.Use(handlers.ProxyHeaders)
 	mainHandler.Use(handlers.CompressHandler)
 	mainHandler.Use(loggingMiddleware)
+	mainHandler.Use(sentryhttp.New(sentryhttp.Options{}).Handle)
 
 	apiPubHandler := mainHandler.PathPrefix("/api/pub").Subrouter()
 	authHandler := mainHandler.NewRoute().Subrouter()
@@ -85,6 +86,5 @@ func notFoundHandler(msg string, w http.ResponseWriter) {
 
 func (s *Server) Run() error {
 	log.WithField("listen", config.C.Listen).Info("Server running")
-	sentryHandler := sentryhttp.New(sentryhttp.Options{})
-	return http.ListenAndServe(config.C.Listen, sentryHandler.Handle(s.handler))
+	return http.ListenAndServe(config.C.Listen, s.handler)
 }

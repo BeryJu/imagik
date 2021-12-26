@@ -35,7 +35,7 @@ func (hm *HashMap) Populated() bool {
 // RunIndexer Run full indexing
 func (hm *HashMap) RunIndexer() {
 	dir := config.C.RootDir
-	hm.logger.WithField("dir", dir).Debug("Started indexing...")
+	hm.logger.WithField("dir", dir).Info("Started indexing...")
 	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
@@ -43,7 +43,7 @@ func (hm *HashMap) RunIndexer() {
 		hm.hashFile(path, info, err)
 		return nil
 	})
-	hm.logger.WithField("hashes", hm.hashMap.Len()).Debug("Finished indexing...")
+	hm.logger.WithField("hashes", hm.hashMap.Len()).Info("Finished indexing...")
 }
 
 func (hm *HashMap) Get(hash string) (string, bool) {
