@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -8,6 +9,8 @@ import (
 	"github.com/getsentry/sentry-go"
 	log "github.com/sirupsen/logrus"
 )
+
+var buildCommit string
 
 func main() {
 	dsn := "https://759fc52c64334ea0a2978460a6469fd0@sentry.beryju.org/15"
@@ -26,6 +29,7 @@ func main() {
 		Environment:      env,
 		Debug:            true,
 		DebugWriter:      l.Writer(),
+		Release:          fmt.Sprintf("imagik@%s", buildCommit),
 	})
 	if err != nil {
 		log.WithError(err).Warning("failed to init sentry")
