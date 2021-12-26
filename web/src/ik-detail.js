@@ -1,6 +1,6 @@
-import {LitElement, html, css} from 'lit-element';
-import { until } from 'lit-html/directives/until.js';
-import { get } from './services/api.js';
+import { LitElement, html, css } from "lit-element";
+import { until } from "lit-html/directives/until.js";
+import { get } from "./services/api.js";
 
 class Detail extends LitElement {
     static get styles() {
@@ -23,7 +23,8 @@ class Detail extends LitElement {
                 display: flex;
                 flex-direction: column;
             }
-            input, button {
+            input,
+            button {
                 margin: 1rem 0;
                 padding: 0 1rem;
                 line-height: 3rem;
@@ -33,13 +34,16 @@ class Detail extends LitElement {
                 color: var(--color-primary-text);
                 transition: 0.25s border-bottom;
                 transition: 0.25s background-color;
-                border-bottom: 1px solid rgba(0,0,0,0);
+                border-bottom: 1px solid rgba(0, 0, 0, 0);
             }
-            input:focus, textarea:focus, select:focus{
+            input:focus,
+            textarea:focus,
+            select:focus {
                 outline: none;
                 border-bottom: 1px solid var(--color-primary);
             }
-            button:hover, input[type=submit]:hover {
+            button:hover,
+            input[type="submit"]:hover {
                 background-color: var(--color-primary);
             }
         `;
@@ -52,30 +56,35 @@ class Detail extends LitElement {
                 type: String,
             },
             meta: {
-                type: Object
-            }
+                type: Object,
+            },
         };
     }
 
     getPreview(meta) {
-        if (meta.mime && meta.mime.startsWith('image')) {
-            return this.path
+        if (meta.mime && meta.mime.startsWith("image")) {
+            return this.path;
         } else {
-            return 'assets/preview/unknown.svg';
+            return "assets/preview/unknown.svg";
         }
     }
 
     hashField([hashName, hashValue]) {
         const baseLoc = window.location.protocol + "//" + window.location.host;
-        const fullLink = `${baseLoc}/${hashValue}`
+        const fullLink = `${baseLoc}/${hashValue}`;
         return html`<div class="group">
-                <label>${hashName}</label>
-                <input type="text" @click=${() => navigator.clipboard.writeText(fullLink)} value="${hashValue}" readonly>
-            </div>`;
+            <label>${hashName}</label>
+            <input
+                type="text"
+                @click=${() => navigator.clipboard.writeText(fullLink)}
+                value="${hashValue}"
+                readonly
+            />
+        </div>`;
     }
 
     async loadData() {
-        return get(`${this.path}?meta`).then(r => {
+        return get(`${this.path}?meta`).then((r) => {
             return html`
                 <div class="sidebar">
                     <div class="group">
@@ -97,13 +106,11 @@ class Detail extends LitElement {
                     <img src=${this.getPreview(r)}></img>
                 </div>
             `;
-        })
+        });
     }
 
     render() {
-        return html`
-            ${until(this.loadData(), html`loading...`)}
-        `;
+        return html` ${until(this.loadData(), html`loading...`)} `;
     }
 }
-customElements.define('ik-detail', Detail);
+customElements.define("ik-detail", Detail);

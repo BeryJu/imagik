@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/BeryJu/imagik/pkg/config"
+	"beryju.org/imagik/pkg/config"
 	"github.com/getsentry/sentry-go"
 	"github.com/gorilla/csrf"
 	"github.com/gorilla/mux"

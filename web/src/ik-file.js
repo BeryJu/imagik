@@ -1,4 +1,4 @@
-import {LitElement, html, css} from 'lit-element';
+import { LitElement, html, css } from "lit-element";
 
 class File extends LitElement {
     static get styles() {
@@ -44,12 +44,14 @@ class File extends LitElement {
 
     constructor() {
         super();
-        this.addEventListener('click',
-            ()=>this.dispatchEvent(new CustomEvent('navigate', {
-                detail: this.path,
-                composed: true,
-                bubbles: true,
-            })),
+        this.addEventListener("click", () =>
+            this.dispatchEvent(
+                new CustomEvent("navigate", {
+                    detail: this.path,
+                    composed: true,
+                    bubbles: true,
+                }),
+            ),
         );
     }
 
@@ -58,14 +60,14 @@ class File extends LitElement {
     }
 
     getPreview() {
-        if (this.mime && this.mime.startsWith('image')) {
-            return this.path
+        if (this.mime && this.mime.startsWith("image")) {
+            return this.path;
         } else if (this.isFolder()) {
             return "assets/icons/folder-line.svg";
         } else {
-            return 'assets/preview/unknown.svg';
+            return "assets/preview/unknown.svg";
         }
-    };
+    }
 
     render() {
         return html`
@@ -74,4 +76,4 @@ class File extends LitElement {
         `;
     }
 }
-customElements.define('ik-file', File);
+customElements.define("ik-file", File);

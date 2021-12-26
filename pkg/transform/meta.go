@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/BeryJu/imagik/pkg/config"
-	"github.com/BeryJu/imagik/pkg/hash"
-	"github.com/BeryJu/imagik/pkg/schema"
+	"beryju.org/imagik/pkg/config"
+	"beryju.org/imagik/pkg/hash"
+	"beryju.org/imagik/pkg/schema"
 	"github.com/gabriel-vasile/mimetype"
 )
 

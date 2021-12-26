@@ -7,10 +7,10 @@ import (
 	"os"
 	"path"
 
-	"github.com/BeryJu/imagik/pkg/config"
-	"github.com/BeryJu/imagik/pkg/drivers/metrics"
-	"github.com/BeryJu/imagik/pkg/hash"
-	"github.com/BeryJu/imagik/pkg/schema"
+	"beryju.org/imagik/pkg/config"
+	"beryju.org/imagik/pkg/drivers/metrics"
+	"beryju.org/imagik/pkg/hash"
+	"beryju.org/imagik/pkg/schema"
 	"github.com/getsentry/sentry-go"
 	"github.com/pkg/errors"
 )

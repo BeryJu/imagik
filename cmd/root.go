@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/BeryJu/imagik/pkg/config"
-	"github.com/BeryJu/imagik/pkg/hash"
-	"github.com/BeryJu/imagik/pkg/server"
+	"beryju.org/imagik/pkg/config"
+	"beryju.org/imagik/pkg/hash"
+	"beryju.org/imagik/pkg/server"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

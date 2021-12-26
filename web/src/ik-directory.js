@@ -1,4 +1,4 @@
-import {LitElement, html, css} from 'lit-element';
+import { LitElement, html, css } from "lit-element";
 
 class Directory extends LitElement {
     static get styles() {
@@ -21,19 +21,19 @@ class Directory extends LitElement {
 
     constructor() {
         super();
-        this.addEventListener('click',
-            ()=>this.dispatchEvent(new CustomEvent('navigate', {
-                detail: this.path,
-                composed: true,
-                bubbles: true,
-            })),
+        this.addEventListener("click", () =>
+            this.dispatchEvent(
+                new CustomEvent("navigate", {
+                    detail: this.path,
+                    composed: true,
+                    bubbles: true,
+                }),
+            ),
         );
     }
 
     render() {
-        return html`
-            <slot></slot>
-        `;
+        return html` <slot></slot> `;
     }
 }
-customElements.define('ik-directory', Directory);
+customElements.define("ik-directory", Directory);

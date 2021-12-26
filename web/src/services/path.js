@@ -2,7 +2,7 @@ class PathHandler extends EventTarget {
     constructor() {
         super();
 
-        this.url = new URL('/', window.location);
+        this.url = new URL("/", window.location);
     }
 
     get path() {
@@ -18,7 +18,7 @@ class PathHandler extends EventTarget {
     }
 
     emit() {
-        this.dispatchEvent(new CustomEvent('change', {detail: this.path}));
+        this.dispatchEvent(new CustomEvent("change", { detail: this.path }));
     }
 
     get() {
@@ -29,24 +29,24 @@ class PathHandler extends EventTarget {
     }
 
     getAbsolute(v) {
-        return new URL(v.startsWith('./') ? v : './' + v, this.url).pathname;
+        return new URL(v.startsWith("./") ? v : "./" + v, this.url).pathname;
     }
 
     navigate(v) {
         this.url = new URL(v, this.url);
     }
     up() {
-        this.navigate('..');
+        this.navigate("..");
     }
     into(v) {
-        this.navigate(v.startsWith('./') ? v : './' + v);
+        this.navigate(v.startsWith("./") ? v : "./" + v);
     }
 }
 
-export const path = new PathHandler('/');
+export const path = new PathHandler("/");
 export default path;
 
 export const relate = (a, b) => {
     const url = new URL(a, window.location);
-    return new URL('./' + b, url).pathname;
+    return new URL("./" + b, url).pathname;
 };

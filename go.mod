@@ -1,4 +1,4 @@
-module github.com/BeryJu/imagik
+module beryju.org/imagik
 
 go 1.17
 

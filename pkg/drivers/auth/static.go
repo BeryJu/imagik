@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/BeryJu/imagik/pkg/config"
+	"beryju.org/imagik/pkg/config"
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"

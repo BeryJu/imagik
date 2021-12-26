@@ -1,4 +1,4 @@
-import {LitElement, html, css} from 'lit-element';
+import { LitElement, html, css } from "lit-element";
 
 class App extends LitElement {
     static get styles() {
@@ -35,11 +35,15 @@ class App extends LitElement {
         const url = new URL(this.path + "/", window.location);
         let destUrl = new URL("..", url).pathname;
         if (destUrl.length > 1) {
-            destUrl = destUrl.slice(0, -1)
+            destUrl = destUrl.slice(0, -1);
         }
-        this.dispatchEvent(new CustomEvent('navigate', {
-            detail: destUrl, composed: true, bubbles: true,
-        }));
+        this.dispatchEvent(
+            new CustomEvent("navigate", {
+                detail: destUrl,
+                composed: true,
+                bubbles: true,
+            }),
+        );
     }
 
     headerPath() {
@@ -55,7 +59,7 @@ class App extends LitElement {
             <img
                 id="logo"
                 src="assets/logo.svg"
-                @click=${()=>this.logoClick()}
+                @click=${() => this.logoClick()}
             ></img>
             <h1>${this.headerPath()}</h1>
             <div class="spacer"></div>
@@ -63,4 +67,4 @@ class App extends LitElement {
         `;
     }
 }
-customElements.define('ik-header', App);
+customElements.define("ik-header", App);

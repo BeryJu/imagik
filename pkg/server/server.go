@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/BeryJu/imagik/pkg/config"
-	"github.com/BeryJu/imagik/pkg/drivers/auth"
-	"github.com/BeryJu/imagik/pkg/drivers/metrics"
-	"github.com/BeryJu/imagik/pkg/hash"
-	"github.com/BeryJu/imagik/pkg/transform"
+	"beryju.org/imagik/pkg/config"
+	"beryju.org/imagik/pkg/drivers/auth"
+	"beryju.org/imagik/pkg/drivers/metrics"
+	"beryju.org/imagik/pkg/hash"
+	"beryju.org/imagik/pkg/transform"
+	"beryju.org/imagik/root"
 	sentryhttp "github.com/getsentry/sentry-go/http"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -49,7 +50,7 @@ func New() *Server {
 
 	server.md = metrics.FromConfig(authHandler)
 
-	mainHandler.PathPrefix("/ui").HandlerFunc(server.UIHandler())
+	mainHandler.PathPrefix("/ui").Handler(http.StripPrefix("/ui", http.FileServer(http.FS(root.Static))))
 	if !config.C.Debug {
 		mainHandler.Path("/").HandlerFunc(server.UIRedirect)
 	}

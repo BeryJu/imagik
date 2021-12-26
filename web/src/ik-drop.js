@@ -1,4 +1,4 @@
-import {LitElement, html, css} from 'lit-element';
+import { LitElement, html, css } from "lit-element";
 
 class Drop extends LitElement {
     static get styles() {
@@ -43,16 +43,24 @@ class Drop extends LitElement {
             <div>
                 <svg width="1em" height="1em" viewbox="0 0 100 100">
                     <line
-                        x1="50" y1="12" x2="50" y2="88"
-                        stroke="currentColor" stroke-width="16px"
+                        x1="50"
+                        y1="12"
+                        x2="50"
+                        y2="88"
+                        stroke="currentColor"
+                        stroke-width="16px"
                     />
                     <line
-                        x1="88" y1="50" x2="12" y2="50"
-                        stroke="currentColor" stroke-width="16px"
+                        x1="88"
+                        y1="50"
+                        x2="12"
+                        y2="50"
+                        stroke="currentColor"
+                        stroke-width="16px"
                     />
                 </svg>
             </div>
         `;
     }
 }
-customElements.define('ik-drop', Drop);
+customElements.define("ik-drop", Drop);

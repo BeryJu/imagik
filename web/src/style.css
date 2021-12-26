@@ -13,7 +13,7 @@ body {
     background-color: var(--color-primary-background);
     color: var(--color-primary-text);
 
-    font-family: Roboto, 'Courier New', Courier, monospace;
+    font-family: Roboto, "Courier New", Courier, monospace;
 
     min-height: 100vh;
 }

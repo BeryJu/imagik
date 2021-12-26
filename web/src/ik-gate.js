@@ -1,7 +1,7 @@
-import {LitElement, html, css} from 'lit-element';
-import './ik-header.js';
-import './ik-app.js';
-import {getAuthorization, setAuthorization} from './services/api.js';
+import { LitElement, html, css } from "lit-element";
+import "./ik-header.js";
+import "./ik-app.js";
+import { getAuthorization, setAuthorization } from "./services/api.js";
 
 class Gate extends LitElement {
     static get styles() {
@@ -25,7 +25,8 @@ class Gate extends LitElement {
                 background-color: var(--color-primary-background-dark);
                 box-shadow: 0px 2px 3px 0px #0008;
             }
-            form > input, form > button {
+            form > input,
+            form > button {
                 margin: 1rem 0;
                 padding: 0 1rem;
                 line-height: 3rem;
@@ -35,13 +36,16 @@ class Gate extends LitElement {
                 color: var(--color-primary-text);
                 transition: 0.25s border-bottom;
                 transition: 0.25s background-color;
-                border-bottom: 1px solid rgba(0,0,0,0);
+                border-bottom: 1px solid rgba(0, 0, 0, 0);
             }
-            input:focus, textarea:focus, select:focus{
+            input:focus,
+            textarea:focus,
+            select:focus {
                 outline: none;
                 border-bottom: 1px solid var(--color-primary);
             }
-            button:hover, input[type=submit]:hover {
+            button:hover,
+            input[type="submit"]:hover {
                 background-color: var(--color-primary);
             }
         `;
@@ -51,24 +55,22 @@ class Gate extends LitElement {
         ev.preventDefault();
         const elements = ev.submitter.form.elements;
         setAuthorization(
-            elements.namedItem('username').value,
-            elements.namedItem('password').value,
+            elements.namedItem("username").value,
+            elements.namedItem("password").value,
         );
         this.requestUpdate();
     }
 
     render() {
         if (getAuthorization()) {
-            return html`
-                <ik-app></ik-app>
-            `;
+            return html` <ik-app></ik-app> `;
         } else {
             return html`
                 <ik-header></ik-header>
                 <div>
                     <form @submit=${this.submitLogin}>
-                        <input type="text" placeholder="username" name="username" required/>
-                        <input type="password" placeholder="password" name="password" required/>
+                        <input type="text" placeholder="username" name="username" required />
+                        <input type="password" placeholder="password" name="password" required />
                         <input type="submit" value="login" />
                     </form>
                 </div>
@@ -76,4 +78,4 @@ class Gate extends LitElement {
         }
     }
 }
-customElements.define('ik-gate', Gate);
+customElements.define("ik-gate", Gate);
