@@ -2,14 +2,14 @@ version: '3.7'
 
 services:
   imagik:
-    image: beryju/imagik
+    image: ghcr.io/beryju/imagik
     ports:
       - 8000:8000
     environment:
-      # Run `docker run -it --rm beryju/imagik generate-key` to get a secret key for session
+      # Run `docker run -it --rm ghcr.io/beryju/imagik generate-key` to get a secret key for session
       # IMAGIK_SECRET: "output"
 
-      # Run `docker run -it --rm beryju/imagik hash-password` to get a password hash
+      # Run `docker run -it --rm ghcr.io/beryju/imagik hash-password` to get a password hash
       # if you want to use the webinterface
       # IMAGIK_AUTH_DRIVER: static
       # IMAGIK_USER: "username"

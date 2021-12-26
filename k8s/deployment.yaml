@@ -26,7 +26,7 @@ spec:
           envFrom:
           - configMapRef:
               name: imagik-config
-          image: beryju/imagik:2020.12.1
+          image: ghcr.io/beryju/imagik:2020.12.1
           name: imagik
           ports:
             - containerPort: 8000

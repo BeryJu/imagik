@@ -7,8 +7,8 @@ endif
 
 docker:
 	packr2 clean
-	docker build -t beryju/imagik:latest .
-	docker run -p 8000:8000 -it --rm beryju/imagik:latest
+	docker build -t ghcr.io/beryju/imagik:latest .
+	docker run -p 8000:8000 -it --rm ghcr.io/beryju/imagik:latest
 
 docker-build:
 	go get -u github.com/gobuffalo/packr/v2/packr2
