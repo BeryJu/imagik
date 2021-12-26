@@ -8,10 +8,13 @@ RUN cd /build/web && npm i && npm run build
 # Build application second
 FROM docker.io/golang:1.17.5 AS builder
 
-COPY . /go/src/github.com/BeryJu/imagik
-COPY --from=npm-builder /build/root /go/src/github.com/BeryJu/imagik/root
+ENV CGO_ENABLED=0
 
-RUN cd /go/src/github.com/BeryJu/imagik && make docker-build
+COPY . /go/src/beryju.org/imagik
+COPY --from=npm-builder /build/root /go/src/beryju.org/imagik/root
+
+RUN cd /go/src/beryju.org/imagik && \
+    go build -v -o /go/bin/imagik
 
 # Final container
 FROM gcr.io/distroless/static-debian11:debug

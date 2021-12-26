@@ -7,6 +7,3 @@ endif
 docker:
 	docker build -t ghcr.io/beryju/imagik:latest .
 	docker run -p 8000:8000 -it --rm ghcr.io/beryju/imagik:latest
-
-docker-build:
-	go build -v -o /go/bin/imagik
