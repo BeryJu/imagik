@@ -6,6 +6,7 @@ import (
 
 	"beryju.org/imagik/cmd"
 	"github.com/getsentry/sentry-go"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -17,11 +18,14 @@ func main() {
 	if eenv, enabled := os.LookupEnv("SENTRY_ENVIRONMENT"); enabled {
 		env = eenv
 	}
+	l := log.WithField("component", "sentry")
 	sentry.Init(sentry.ClientOptions{
 		Dsn:              dsn,
 		AttachStacktrace: true,
 		TracesSampleRate: 1,
 		Environment:      env,
+		Debug:            true,
+		DebugWriter:      l.Writer(),
 	})
 	defer sentry.Flush(time.Second * 5)
 	defer sentry.Recover()
