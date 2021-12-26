@@ -16,7 +16,7 @@ COPY . /go/src/beryju.org/imagik
 COPY --from=npm-builder /build/root /go/src/beryju.org/imagik/root
 
 RUN cd /go/src/beryju.org/imagik && \
-    go build -X main.buildCommit=$GIT_BUILD_HASH -v -o /go/bin/imagik
+    go build -ldflags "-X main.buildCommit=$GIT_BUILD_HASH" -v -o /go/bin/imagik
 
 # Final container
 FROM gcr.io/distroless/static-debian11:debug
