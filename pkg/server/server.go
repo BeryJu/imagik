@@ -71,13 +71,16 @@ func New() *Server {
 	apiPubHandler.Path("/health/liveness").Methods(http.MethodGet).HandlerFunc(server.HealthLiveness)
 	apiPubHandler.Path("/health/readiness").Methods(http.MethodGet).HandlerFunc(server.HealthReadiness)
 
-	mainHandler.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
+	err := mainHandler.Walk(func(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 		pathTemplate, err := route.GetPathTemplate()
 		if err == nil {
 			server.logger.Debugf("Registered route '%s'", pathTemplate)
 		}
 		return nil
 	})
+	if err != nil {
+		server.logger.WithError(err).Warning("failed to walk storage")
+	}
 	return server
 }
 

@@ -29,7 +29,10 @@ func (oa *OIDCAuth) handleRedirect(w http.ResponseWriter, r *http.Request) {
 	session, _ := oa.Store.Get(r, "session-name")
 	state := base64.StdEncoding.EncodeToString(securecookie.GenerateRandomKey(32))
 	session.Values["oidc_state"] = state
-	oa.Store.Save(r, w, session)
+	err := oa.Store.Save(r, w, session)
+	if err != nil {
+		oa.logger.WithError(err).Warning("failed to save state")
+	}
 	http.Redirect(w, r, oa.config.AuthCodeURL(state), http.StatusFound)
 }
 
@@ -105,7 +108,10 @@ func (oa *OIDCAuth) AuthenticateRequest(w http.ResponseWriter, r *http.Request, 
 	session, _ := oa.Store.Get(r, "session-name")
 	if _, ok := session.Values["oidc_state"]; !ok {
 		session.Values["oidc_redirect"] = r.URL.Path
-		oa.Store.Save(r, w, session)
+		err := oa.Store.Save(r, w, session)
+		if err != nil {
+			oa.logger.WithError(err).Warning("failed to save state")
+		}
 		http.Redirect(w, r, "/api/pub/oidc/redirect", http.StatusFound)
 	}
 }

@@ -21,7 +21,7 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 	span := sentry.StartSpan(r.Context(), "request.GetFile")
 	defer span.Finish()
 
-	if s.tm.Transform(w, r) == true {
+	if s.tm.Transform(w, r) {
 		return
 	}
 	filePath := config.CleanURL(r.URL.Path)
@@ -60,7 +60,12 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 
 // UploadFormHandler Upload handler used by HTML Forms
 func (s *Server) UploadFormHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseMultipartForm(10 << 20)
+	err := r.ParseMultipartForm(10 << 20)
+	if err != nil {
+		s.logger.WithError(err).Warning("failed to parse multipart form")
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 	fileResultMap := make(map[string]string, len(r.MultipartForm.File))
 	for key, files := range r.MultipartForm.File {
 		if len(files) < 1 {
@@ -86,7 +91,10 @@ func (s *Server) UploadFormHandler(w http.ResponseWriter, r *http.Request) {
 		FileResults: fileResultMap,
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	err = json.NewEncoder(w).Encode(response)
+	if err != nil {
+		s.logger.WithError(err).Warning("failed to write json response")
+	}
 }
 
 // PutHandler Upload handler used frm CLI

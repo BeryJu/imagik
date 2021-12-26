@@ -65,11 +65,11 @@ func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
 func (s *Server) APIMoveHandler(w http.ResponseWriter, r *http.Request) {
 	var from, to string
 	if from = r.URL.Query().Get("from"); from == "" {
-		schema.ErrorHandlerAPI(errors.New("Missing from path"), w)
+		schema.ErrorHandlerAPI(errors.New("missing from path"), w)
 		return
 	}
 	if to = r.URL.Query().Get("to"); to == "" {
-		schema.ErrorHandlerAPI(errors.New("Missing to path"), w)
+		schema.ErrorHandlerAPI(errors.New("missing to path"), w)
 		return
 	}
 	fromFull := config.CleanURL(from)
@@ -84,7 +84,10 @@ func (s *Server) APIMoveHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(&schema.GenericResponse{
+	err = json.NewEncoder(w).Encode(&schema.GenericResponse{
 		Successful: true,
 	})
+	if err != nil {
+		s.logger.WithError(err).Warning("failed to write json response")
+	}
 }

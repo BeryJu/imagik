@@ -19,7 +19,7 @@ func main() {
 		env = eenv
 	}
 	l := log.WithField("component", "sentry")
-	sentry.Init(sentry.ClientOptions{
+	err := sentry.Init(sentry.ClientOptions{
 		Dsn:              dsn,
 		AttachStacktrace: true,
 		TracesSampleRate: 1,
@@ -27,6 +27,9 @@ func main() {
 		Debug:            true,
 		DebugWriter:      l.Writer(),
 	})
+	if err != nil {
+		log.WithError(err).Warning("failed to init sentry")
+	}
 	defer sentry.Flush(time.Second * 5)
 	defer sentry.Recover()
 	cmd.Execute()

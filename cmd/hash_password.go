@@ -6,7 +6,7 @@ import (
 
 	"beryju.org/imagik/pkg/drivers/auth"
 	"github.com/spf13/cobra"
-	"golang.org/x/crypto/ssh/terminal"
+	"golang.org/x/term"
 )
 
 // hashPasswordCmd represents the hashPassword command
@@ -15,7 +15,10 @@ var hashPasswordCmd = &cobra.Command{
 	Short: "Hash password for usage with static Authentication",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("Enter password to hash")
-		bytePassword, err := terminal.ReadPassword(int(syscall.Stdin))
+		bytePassword, err := term.ReadPassword(int(syscall.Stdin))
+		if err != nil {
+			panic(err)
+		}
 		hash, err := auth.HashPassword(string(bytePassword))
 		if err != nil {
 			panic(err)

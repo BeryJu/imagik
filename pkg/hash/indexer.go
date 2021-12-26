@@ -36,13 +36,16 @@ func (hm *HashMap) Populated() bool {
 func (hm *HashMap) RunIndexer() {
 	dir := config.C.RootDir
 	hm.logger.WithField("dir", dir).Info("Started indexing...")
-	filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 		hm.hashFile(path, info, err)
 		return nil
 	})
+	if err != nil {
+		hm.logger.WithError(err).Warning("failed to walk storage")
+	}
 	hm.logger.WithField("hashes", hm.hashMap.Len()).Info("Finished indexing...")
 }
 
