@@ -34,6 +34,7 @@ func main() {
 	if err != nil {
 		log.WithError(err).Warning("failed to init sentry")
 	}
+	log.WithField("commit", buildCommit).Info("imagik starting.")
 	defer sentry.Flush(time.Second * 5)
 	defer sentry.Recover()
 	cmd.Execute()
