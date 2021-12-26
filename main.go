@@ -13,10 +13,15 @@ func main() {
 	if edsn, enabled := os.LookupEnv("SENTRY_DSN"); enabled {
 		dsn = edsn
 	}
+	env := "default-env"
+	if eenv, enabled := os.LookupEnv("SENTRY_ENVIRONMENT"); enabled {
+		env = eenv
+	}
 	sentry.Init(sentry.ClientOptions{
 		Dsn:              dsn,
 		AttachStacktrace: true,
 		TracesSampleRate: 1,
+		Environment:      env,
 	})
 	defer sentry.Flush(time.Second * 5)
 	defer sentry.Recover()
