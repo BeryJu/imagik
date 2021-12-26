@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"strings"
 
 	"beryju.org/imagik/pkg/config"
 	"beryju.org/imagik/pkg/drivers/metrics"
@@ -26,14 +27,27 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 	filePath := config.CleanURL(r.URL.Path)
 	mr := metrics.NewServeRequest(r)
 	// Since we only store the hash, we need to get rid of the leading slash
-	path, exists := s.HashMap.Get(r.URL.Path[1:])
+	p, exists := s.HashMap.Get(r.URL.Path[1:])
 	if exists {
 		mr.Hash = r.URL.Path[1:]
-		mr.ResolvedPath = path
+		mr.ResolvedPath = p
 		s.md.ServeRequest(mr)
-		http.ServeFile(w, r, path)
+		http.ServeFile(w, r, p)
 		return
 	}
+	// Check if we have the file without extension
+	base := path.Base(r.URL.Path[1:])
+	ext := path.Ext(base)
+	filename := strings.Replace(base, ext, "", 1)
+	p, exists = s.HashMap.Get(filename)
+	if exists {
+		mr.Hash = r.URL.Path[1:]
+		mr.ResolvedPath = p
+		s.md.ServeRequest(mr)
+		http.ServeFile(w, r, p)
+		return
+	}
+
 	_, err := os.Stat(filePath)
 	if err == nil {
 		mr.ResolvedPath = filePath
