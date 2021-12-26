@@ -1,6 +1,5 @@
 import {LitElement, html, css} from 'lit-element';
 import { until } from 'lit-html/directives/until.js';
-import { unsafeHTML } from 'lit-html/directives/unsafe-html';
 import { get } from './services/api.js';
 
 class Detail extends LitElement {
