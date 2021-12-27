@@ -108,7 +108,9 @@ class Gate extends LitElement {
                         if (res.type === "oidc") {
                             return html`<div>
                                 <form>
-                                    <a href="/api/pub/auth/oidc/redirect">Login with ${res.args.provider}</a>
+                                    <a href="/api/pub/auth/oidc/redirect"
+                                        >Login with ${res.args.provider}</a
+                                    >
                                 </form>
                             </div>`;
                         }
