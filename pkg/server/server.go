@@ -9,7 +9,6 @@ import (
 	"beryju.org/imagik/pkg/drivers/metrics"
 	"beryju.org/imagik/pkg/hash"
 	"beryju.org/imagik/pkg/transform"
-	"beryju.org/imagik/web/dist"
 	sentryhttp "github.com/getsentry/sentry-go/http"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
@@ -56,8 +55,8 @@ func New() *Server {
 
 	server.md = metrics.FromConfig(authHandler)
 
-	mainHandler.PathPrefix("/ui").Handler(http.StripPrefix("/ui", http.FileServer(http.FS(dist.Static))))
-	mainHandler.Path("/").HandlerFunc(server.UIRedirect)
+	server.configureUI()
+
 	// General Get Requests don't need authentication
 	mainHandler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
 	// Only enable logging middleware after we've added general serving
