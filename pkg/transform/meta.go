@@ -23,7 +23,7 @@ func (mt *MetaTransformer) Handle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Get hashes for linking
-	hashes, err := hash.HashesForFile(fullPath)
+	hashes, err := hash.HashesForFile(fullPath, r.Context())
 	if err != nil {
 		schema.ErrorHandlerAPI(err, w)
 		return

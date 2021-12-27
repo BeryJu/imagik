@@ -1,6 +1,7 @@
 package hash
 
 import (
+	"context"
 	"os"
 	"path"
 	"path/filepath"
@@ -9,6 +10,7 @@ import (
 
 	"beryju.org/imagik/pkg/config"
 	"github.com/cornelk/hashmap"
+	"github.com/getsentry/sentry-go"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -17,6 +19,7 @@ type HashMap struct {
 	logger  *log.Entry
 	hashMap hashmap.HashMap
 	writeM  sync.Mutex
+	ctx     context.Context
 }
 
 func New() *HashMap {
@@ -24,6 +27,7 @@ func New() *HashMap {
 		logger:  log.WithField("component", "imagik.hash-map"),
 		hashMap: hashmap.HashMap{},
 		writeM:  sync.Mutex{},
+		ctx:     context.Background(),
 	}
 	return m
 }
@@ -36,11 +40,14 @@ func (hm *HashMap) Populated() bool {
 func (hm *HashMap) RunIndexer() {
 	dir := config.C.RootDir
 	hm.logger.WithField("dir", dir).Info("Started indexing...")
+	span := sentry.StartSpan(hm.ctx, "imagik.hash.indexer", sentry.TransactionName("File Hasher"))
+	span.Description = dir
+	defer span.Finish()
 	err := filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
-		hm.hashFile(path, info, err)
+		hm.hashFile(path, info, err, span.Context())
 		return nil
 	})
 	if err != nil {
@@ -49,7 +56,11 @@ func (hm *HashMap) RunIndexer() {
 	hm.logger.WithField("hashes", hm.hashMap.Len()).Info("Finished indexing...")
 }
 
-func (hm *HashMap) Get(hash string) (string, bool) {
+func (hm *HashMap) Get(hash string, ctx context.Context) (string, bool) {
+	span := sentry.StartSpan(ctx, "imagik.hashmap.lookup")
+	span.Description = hash
+	span.SetTag("imagik.hash", hash)
+	defer span.Finish()
 	val, exists := hm.hashMap.Get(hash)
 	if val == nil {
 		return "", exists
@@ -59,10 +70,10 @@ func (hm *HashMap) Get(hash string) (string, bool) {
 
 func (hm *HashMap) UpdateSingle(path string) *FileHash {
 	stat, err := os.Stat(path)
-	return hm.hashFile(path, stat, err)
+	return hm.hashFile(path, stat, err, hm.ctx)
 }
 
-func (hm *HashMap) hashFile(p string, info os.FileInfo, err error) *FileHash {
+func (hm *HashMap) hashFile(p string, info os.FileInfo, err error, ctx context.Context) *FileHash {
 	if err != nil {
 		hm.logger.Warning(err)
 	}
@@ -71,7 +82,7 @@ func (hm *HashMap) hashFile(p string, info os.FileInfo, err error) *FileHash {
 		return nil
 	}
 
-	hashes, err := HashesForFile(p)
+	hashes, err := HashesForFile(p, ctx)
 	if err != nil {
 		// Don't return the error to not stop the walking
 		hm.logger.Warning(err)

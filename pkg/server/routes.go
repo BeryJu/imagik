@@ -31,6 +31,7 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 	defer func() {
 		mr.Duration = time.Since(start)
 	}()
+	// Ensure the tags are only set before returning
 	defer func() {
 		hub.Scope().SetTags(map[string]string{
 			"imagik.url":  mr.ResolvedPath,
@@ -38,24 +39,24 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 		})
 	}()
 	// Since we only store the hash, we need to get rid of the leading slash
-	p, exists := s.HashMap.Get(r.URL.Path[1:])
+	p, exists := s.HashMap.Get(r.URL.Path[1:], r.Context())
 	if exists {
 		mr.Hash = r.URL.Path[1:]
 		mr.ResolvedPath = p
 		s.md.ServeRequest(mr)
-		http.ServeFile(w, r, p)
+		s.ServerFile(w, r, p)
 		return
 	}
 	// Check if we have the file without extension
 	base := path.Base(r.URL.Path[1:])
 	ext := path.Ext(base)
 	filename := strings.Replace(base, ext, "", 1)
-	p, exists = s.HashMap.Get(filename)
+	p, exists = s.HashMap.Get(filename, r.Context())
 	if exists {
 		mr.Hash = r.URL.Path[1:]
 		mr.ResolvedPath = p
 		s.md.ServeRequest(mr)
-		http.ServeFile(w, r, p)
+		s.ServerFile(w, r, p)
 		return
 	}
 
@@ -63,10 +64,18 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 	if err == nil && !st.IsDir() {
 		mr.ResolvedPath = filePath
 		s.md.ServeRequest(mr)
-		http.ServeFile(w, r, filePath)
+		s.ServerFile(w, r, filePath)
 		return
 	}
 	notFoundHandler("File not found.", w)
+}
+
+func (s *Server) ServerFile(rw http.ResponseWriter, r *http.Request, path string) {
+	span := sentry.StartSpan(r.Context(), "imagik.server.serve_file")
+	span.Description = path
+	span.SetTag("imagik.path", path)
+	defer span.Finish()
+	http.ServeFile(rw, r, path)
 }
 
 // UploadFormHandler Upload handler used by HTML Forms

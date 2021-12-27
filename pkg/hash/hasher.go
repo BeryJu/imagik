@@ -1,6 +1,7 @@
 package hash
 
 import (
+	"context"
 	"crypto/md5"
 	"crypto/sha1"
 	"crypto/sha256"
@@ -9,6 +10,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/getsentry/sentry-go"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
@@ -31,7 +33,11 @@ func (fh *FileHash) Map() map[string]string {
 	return m
 }
 
-func HashesForFile(path string) (*FileHash, error) {
+func HashesForFile(path string, ctx context.Context) (*FileHash, error) {
+	span := sentry.StartSpan(ctx, "imagik.hash.file_hashes")
+	span.Description = path
+	span.SetTag("imagik.path", path)
+	defer span.Finish()
 	stat, err := os.Stat(path)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to stat path")
@@ -43,6 +49,7 @@ func HashesForFile(path string) (*FileHash, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		log.Warning(err)
+		return nil, err
 	}
 	defer f.Close()
 	sha512hasher := sha512.New()
@@ -53,6 +60,7 @@ func HashesForFile(path string) (*FileHash, error) {
 
 	if _, err := io.Copy(mw, f); err != nil {
 		log.Warning(err)
+		return nil, err
 	}
 	sha512sum := hex.EncodeToString(sha512hasher.Sum(nil))
 	return &FileHash{

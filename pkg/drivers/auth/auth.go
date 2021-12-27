@@ -47,7 +47,7 @@ func FromConfig(store *sessions.CookieStore, r *mux.Router) func(next http.Handl
 	authDriver.InitRoutes(r)
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			span := sentry.StartSpan(r.Context(), "request.authHandler")
+			span := sentry.StartSpan(r.Context(), "imagik.drivers.auth.handler")
 			authDriver.AuthenticateRequest(w, r, next)
 			span.Finish()
 		})
