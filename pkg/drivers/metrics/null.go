@@ -16,5 +16,4 @@ func (nmd *NullMetricsDriver) Init() {
 
 func (nmd *NullMetricsDriver) InitRoutes(r *mux.Router) {}
 
-func (nmd *NullMetricsDriver) ServeRequest(r *ServeRequest) {
-}
+func (nmd *NullMetricsDriver) ServeRequest(r *ServeRequest) {}

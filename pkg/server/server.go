@@ -53,7 +53,6 @@ func New() *Server {
 	authHandler := mainHandler.NewRoute().Subrouter()
 	authHandler.Use(auth.FromConfig(store, apiPubHandler))
 	apiPrivHandler := authHandler.PathPrefix("/api/priv").Subrouter()
-	// apiPrivHandler.Use(csrfMiddleware(apiPrivHandler))
 
 	server.md = metrics.FromConfig(authHandler)
 
