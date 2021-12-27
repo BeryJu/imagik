@@ -39,6 +39,12 @@ class Gate extends LitElement {
                 transition: 0.25s border-bottom;
                 transition: 0.25s background-color;
                 border-bottom: 1px solid rgba(0, 0, 0, 0);
+                text-decoration: none;
+                font-size: 13px;
+                font-family: Roboto, "Courier New", Courier, monospace;
+            }
+            form > a {
+                text-align: center;
             }
             input:focus,
             textarea:focus,
@@ -47,6 +53,7 @@ class Gate extends LitElement {
                 border-bottom: 1px solid var(--color-primary);
             }
             button:hover,
+            a:hover,
             input[type="submit"]:hover {
                 background-color: var(--color-primary);
             }
@@ -94,7 +101,7 @@ class Gate extends LitElement {
                                         name="password"
                                         required
                                     />
-                                    <input type="submit" value="login" />
+                                    <input type="submit" value="Login" />
                                 </form>
                             </div>`;
                         }
