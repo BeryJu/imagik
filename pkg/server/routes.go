@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -19,9 +20,8 @@ import (
 
 // GetHandler Handle GET Requests
 func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
-	span := sentry.StartSpan(r.Context(), "request.GetFile")
-	defer span.Finish()
-
+	hub := sentry.GetHubFromContext(r.Context())
+	hub.Scope().SetTransaction(fmt.Sprintf("%s FileHandler", r.Method))
 	if s.tm.Transform(w, r) {
 		return
 	}
@@ -30,6 +30,12 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 	defer func() {
 		mr.Duration = time.Since(start)
+	}()
+	defer func() {
+		hub.Scope().SetTags(map[string]string{
+			"imagik.url":  mr.ResolvedPath,
+			"imagik.hash": mr.Hash,
+		})
 	}()
 	// Since we only store the hash, we need to get rid of the leading slash
 	p, exists := s.HashMap.Get(r.URL.Path[1:])
@@ -65,6 +71,8 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 
 // UploadFormHandler Upload handler used by HTML Forms
 func (s *Server) UploadFormHandler(w http.ResponseWriter, r *http.Request) {
+	hub := sentry.GetHubFromContext(r.Context())
+	hub.Scope().SetTransaction(fmt.Sprintf("%s FileHandler", r.Method))
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
 		s.logger.WithError(err).Warning("failed to parse multipart form")
@@ -104,8 +112,8 @@ func (s *Server) UploadFormHandler(w http.ResponseWriter, r *http.Request) {
 
 // PutHandler Upload handler used frm CLI
 func (s *Server) PutHandler(w http.ResponseWriter, r *http.Request) {
-	span := sentry.StartSpan(r.Context(), "request.PutFile")
-	defer span.Finish()
+	hub := sentry.GetHubFromContext(r.Context())
+	hub.Scope().SetTransaction(fmt.Sprintf("%s FileHandler", r.Method))
 	hashes, err := s.doUpload(r.Body, r.URL.Path)
 	if err != nil {
 		errorHandler(err, w)

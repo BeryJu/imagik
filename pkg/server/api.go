@@ -3,6 +3,7 @@ package server
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -12,6 +13,7 @@ import (
 	"beryju.org/imagik/pkg/config"
 	"beryju.org/imagik/pkg/schema"
 	"github.com/gabriel-vasile/mimetype"
+	"github.com/getsentry/sentry-go"
 )
 
 func getElementsForDirectory(path string) int {
@@ -23,6 +25,8 @@ func getElementsForDirectory(path string) int {
 }
 
 func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
+	hub := sentry.GetHubFromContext(r.Context())
+	hub.Scope().SetTransaction(fmt.Sprintf("%s APIList", r.Method))
 	offset := r.URL.Query().Get("pathOffset")
 	fullDir := config.CleanURL(offset)
 	files, err := ioutil.ReadDir(fullDir)
@@ -63,6 +67,8 @@ func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) APIMoveHandler(w http.ResponseWriter, r *http.Request) {
+	hub := sentry.GetHubFromContext(r.Context())
+	hub.Scope().SetTransaction(fmt.Sprintf("%s APIMove", r.Method))
 	var from, to string
 	if from = r.URL.Query().Get("from"); from == "" {
 		schema.ErrorHandlerAPI(errors.New("missing from path"), w)

@@ -9,6 +9,7 @@ import (
 
 	"beryju.org/imagik/pkg/config"
 	"github.com/coreos/go-oidc"
+	"github.com/getsentry/sentry-go"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
@@ -127,6 +128,10 @@ func (oa *OIDCAuth) AuthenticateRequest(w http.ResponseWriter, r *http.Request, 
 	session, _ := oa.Store.Get(r, SessionName)
 	if username, ok := session.Values[OIDCAuthUser]; ok {
 		oa.logger.WithField("user", username).Info("Authenticated as user")
+		hub := sentry.GetHubFromContext(r.Context())
+		hub.Scope().SetUser(sentry.User{
+			Username: username.(string),
+		})
 		next.ServeHTTP(w, r)
 		return
 	}

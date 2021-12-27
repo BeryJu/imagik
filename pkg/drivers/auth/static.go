@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"beryju.org/imagik/pkg/config"
+	"github.com/getsentry/sentry-go"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"
 	log "github.com/sirupsen/logrus"
@@ -74,6 +75,10 @@ func (sa *StaticAuth) AuthenticateRequest(w http.ResponseWriter, r *http.Request
 	session, _ := sa.Store.Get(r, SessionName)
 	if username, ok := session.Values[StaticAuthUser]; ok {
 		sa.logger.WithField("user", username).Info("Authenticated as user")
+		hub := sentry.GetHubFromContext(r.Context())
+		hub.Scope().SetUser(sentry.User{
+			Username: username.(string),
+		})
 		next.ServeHTTP(w, r)
 		return
 	}
