@@ -27,7 +27,8 @@ class Gate extends LitElement {
                 box-shadow: 0px 2px 3px 0px #0008;
             }
             form > input,
-            form > button {
+            form > button,
+            form > a {
                 margin: 1rem 0;
                 padding: 0 1rem;
                 line-height: 3rem;
@@ -94,6 +95,13 @@ class Gate extends LitElement {
                                         required
                                     />
                                     <input type="submit" value="login" />
+                                </form>
+                            </div>`;
+                        }
+                        if (res.type === "oidc") {
+                            return html`<div>
+                                <form>
+                                    <a href="/api/pub/auth/oidc/redirect">Login with ${res.args.provider}</a>
                                 </form>
                             </div>`;
                         }

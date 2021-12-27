@@ -19,6 +19,10 @@ type AuthType struct {
 	Args map[string]string `json:"args"`
 }
 
+type IsLoggedInResponse struct {
+	Successful bool
+}
+
 type AuthDriver interface {
 	drivers.HTTPDriver
 	AuthenticateRequest(w http.ResponseWriter, r *http.Request, next http.Handler)

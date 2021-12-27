@@ -14,10 +14,6 @@ import (
 
 const StaticAuthUser = "imagik_static_user"
 
-type StaticLoginResponse struct {
-	Successful bool
-}
-
 type StaticAuth struct {
 	Store *sessions.CookieStore
 
@@ -43,7 +39,7 @@ func (sa *StaticAuth) InitRoutes(r *mux.Router) {
 	r.Path("/auth/is_authenticated").Methods("GET").HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		session, _ := sa.Store.Get(r, SessionName)
 		_, ok := session.Values[StaticAuthUser]
-		json.NewEncoder(rw).Encode(StaticLoginResponse{
+		json.NewEncoder(rw).Encode(IsLoggedInResponse{
 			Successful: ok,
 		})
 	})
@@ -55,14 +51,14 @@ func (sa *StaticAuth) InitRoutes(r *mux.Router) {
 				if err == nil {
 					session.Values[StaticAuthUser] = username
 					sa.Store.Save(r, rw, session)
-					json.NewEncoder(rw).Encode(StaticLoginResponse{
+					json.NewEncoder(rw).Encode(IsLoggedInResponse{
 						Successful: true,
 					})
 					return
 				}
 			}
 		}
-		json.NewEncoder(rw).Encode(StaticLoginResponse{
+		json.NewEncoder(rw).Encode(IsLoggedInResponse{
 			Successful: false,
 		})
 	})

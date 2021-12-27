@@ -40,6 +40,7 @@ type AuthenticationOIDCConfig struct {
 	ClientID     string `yaml:"clientID"`
 	ClientSecret string `yaml:"clientSecret"`
 	Redirect     string `yaml:"redirect"`
+	Provider     string `yaml:"provider"`
 }
 
 type MetricsInfluxDBConfig struct {

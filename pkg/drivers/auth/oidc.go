@@ -17,6 +17,7 @@ import (
 )
 
 const OIDCAuthState = "imagik_oidc_state"
+const OIDCAuthUser = "imagik_oidc_user"
 
 type OIDCAuth struct {
 	Store *sessions.CookieStore
@@ -79,9 +80,9 @@ func (oa *OIDCAuth) handleOAuth2Callback(w http.ResponseWriter, r *http.Request)
 		fmt.Fprintf(w, "Error: %s", err)
 		return
 	}
-	// TODO: Write user info to session
-	oa.logger.WithField("redirect", session.Values["oidc_redirect"]).Debug("Redirecting")
-	http.Redirect(w, r, session.Values["oidc_redirect"].(string), http.StatusFound)
+	session.Values[OIDCAuthUser] = claims.Email
+	session.Save(r, w)
+	http.Redirect(w, r, "/ui/", http.StatusFound)
 }
 
 func (oa *OIDCAuth) Init() {
@@ -106,7 +107,16 @@ func (oa *OIDCAuth) InitRoutes(r *mux.Router) {
 	r.Path("/auth/driver").HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		json.NewEncoder(rw).Encode(AuthType{
 			Type: "oidc",
-			Args: map[string]string{},
+			Args: map[string]string{
+				"provider": config.C.AuthOIDCConfig.Provider,
+			},
+		})
+	})
+	r.Path("/auth/is_authenticated").Methods("GET").HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		session, _ := oa.Store.Get(r, SessionName)
+		_, ok := session.Values[OIDCAuthUser]
+		json.NewEncoder(rw).Encode(IsLoggedInResponse{
+			Successful: ok,
 		})
 	})
 	r.Path("/auth/oidc/redirect").HandlerFunc(oa.handleRedirect)
@@ -115,12 +125,11 @@ func (oa *OIDCAuth) InitRoutes(r *mux.Router) {
 
 func (oa *OIDCAuth) AuthenticateRequest(w http.ResponseWriter, r *http.Request, next http.Handler) {
 	session, _ := oa.Store.Get(r, SessionName)
-	if _, ok := session.Values[OIDCAuthState]; !ok {
-		session.Values["oidc_redirect"] = r.URL.Path
-		err := oa.Store.Save(r, w, session)
-		if err != nil {
-			oa.logger.WithError(err).Warning("failed to save state")
-		}
-		http.Redirect(w, r, "/api/pub/oidc/redirect", http.StatusFound)
+	if username, ok := session.Values[OIDCAuthUser]; ok {
+		oa.logger.WithField("user", username).Info("Authenticated as user")
+		next.ServeHTTP(w, r)
+		return
 	}
+	oa.logger.Info("Permission denied")
+	w.WriteHeader(401)
 }

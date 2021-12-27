@@ -13,3 +13,4 @@ authStaticConfig:
 #   clientID: some-client-id
 #   clientSecret: some-client-secret
 #   redirect: URL which should be sent as redirect, /api/pub/oidc/callback
+#   provider: Name of the login button
