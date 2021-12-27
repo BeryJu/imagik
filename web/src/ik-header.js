@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html, css } from "lit";
 
 class App extends LitElement {
     static get styles() {
@@ -56,11 +56,7 @@ class App extends LitElement {
 
     render() {
         return html`
-            <img
-                id="logo"
-                src="assets/logo.svg"
-                @click=${() => this.logoClick()}
-            ></img>
+            <img id="logo" src="assets/logo.svg" @click=${() => this.logoClick()} />
             <h1>${this.headerPath()}</h1>
             <div class="spacer"></div>
             <slot></slot>

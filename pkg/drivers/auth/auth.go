@@ -12,6 +12,13 @@ import (
 	"github.com/gorilla/sessions"
 )
 
+const SessionName = "imagik_session"
+
+type AuthType struct {
+	Type string            `json:"type"`
+	Args map[string]string `json:"args"`
+}
+
 type AuthDriver interface {
 	drivers.HTTPDriver
 	AuthenticateRequest(w http.ResponseWriter, r *http.Request, next http.Handler)
@@ -24,7 +31,7 @@ func FromConfig(store *sessions.CookieStore, r *mux.Router) func(next http.Handl
 	case "null":
 		authDriver = &NullAuth{}
 	case "static":
-		authDriver = &StaticAuth{}
+		authDriver = &StaticAuth{Store: store}
 	case "oidc":
 		authDriver = &OIDCAuth{Store: store}
 	}

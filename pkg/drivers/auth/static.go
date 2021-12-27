@@ -1,16 +1,26 @@
 package auth
 
 import (
+	"encoding/json"
 	"net/http"
 	"strings"
 
 	"beryju.org/imagik/pkg/config"
 	"github.com/gorilla/mux"
+	"github.com/gorilla/sessions"
 	log "github.com/sirupsen/logrus"
 	"golang.org/x/crypto/bcrypt"
 )
 
+const StaticAuthUser = "imagik_static_user"
+
+type StaticLoginResponse struct {
+	Successful bool
+}
+
 type StaticAuth struct {
+	Store *sessions.CookieStore
+
 	staticTokens map[string]string
 	logger       *log.Entry
 }
@@ -25,6 +35,37 @@ func (sa *StaticAuth) Init() {
 }
 
 func (sa *StaticAuth) InitRoutes(r *mux.Router) {
+	r.Path("/auth/driver").HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(rw).Encode(AuthType{
+			Type: "static",
+		})
+	})
+	r.Path("/auth/is_authenticated").Methods("GET").HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		session, _ := sa.Store.Get(r, SessionName)
+		_, ok := session.Values[StaticAuthUser]
+		json.NewEncoder(rw).Encode(StaticLoginResponse{
+			Successful: ok,
+		})
+	})
+	r.Path("/auth/login").Methods("POST").HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		session, _ := sa.Store.Get(r, SessionName)
+		if username, password, found := r.BasicAuth(); found {
+			if expectedHash, found := sa.staticTokens[username]; found {
+				err := bcrypt.CompareHashAndPassword([]byte(expectedHash), []byte(password))
+				if err == nil {
+					session.Values[StaticAuthUser] = username
+					sa.Store.Save(r, rw, session)
+					json.NewEncoder(rw).Encode(StaticLoginResponse{
+						Successful: true,
+					})
+					return
+				}
+			}
+		}
+		json.NewEncoder(rw).Encode(StaticLoginResponse{
+			Successful: false,
+		})
+	})
 }
 
 func HashPassword(password string) (string, error) {
@@ -34,17 +75,12 @@ func HashPassword(password string) (string, error) {
 }
 
 func (sa *StaticAuth) AuthenticateRequest(w http.ResponseWriter, r *http.Request, next http.Handler) {
-	if username, password, found := r.BasicAuth(); found {
-		if expectedHash, found := sa.staticTokens[username]; found {
-			err := bcrypt.CompareHashAndPassword([]byte(expectedHash), []byte(password))
-			if err == nil {
-				sa.logger.WithField("user", username).Info("Authenticated as user")
-				next.ServeHTTP(w, r)
-				return
-			}
-		}
+	session, _ := sa.Store.Get(r, SessionName)
+	if username, ok := session.Values[StaticAuthUser]; ok {
+		sa.logger.WithField("user", username).Info("Authenticated as user")
+		next.ServeHTTP(w, r)
+		return
 	}
-	w.Header().Set("WWW-Authenticate", `Basic realm="imagik"`)
 	sa.logger.Info("Permission denied")
 	w.WriteHeader(401)
 }

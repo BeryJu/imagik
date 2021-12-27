@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html, css } from "lit";
 import { until } from "lit-html/directives/until.js";
 import { get } from "./services/api.js";
 

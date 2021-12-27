@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"net/http"
 
@@ -15,6 +16,8 @@ import (
 	"golang.org/x/oauth2"
 )
 
+const OIDCAuthState = "imagik_oidc_state"
+
 type OIDCAuth struct {
 	Store *sessions.CookieStore
 
@@ -26,9 +29,9 @@ type OIDCAuth struct {
 }
 
 func (oa *OIDCAuth) handleRedirect(w http.ResponseWriter, r *http.Request) {
-	session, _ := oa.Store.Get(r, "session-name")
+	session, _ := oa.Store.Get(r, SessionName)
 	state := base64.StdEncoding.EncodeToString(securecookie.GenerateRandomKey(32))
-	session.Values["oidc_state"] = state
+	session.Values[OIDCAuthState] = state
 	err := oa.Store.Save(r, w, session)
 	if err != nil {
 		oa.logger.WithError(err).Warning("failed to save state")
@@ -70,7 +73,7 @@ func (oa *OIDCAuth) handleOAuth2Callback(w http.ResponseWriter, r *http.Request)
 		fmt.Fprintf(w, "Error: %s", err)
 		return
 	}
-	session, err := oa.Store.Get(r, "session-name")
+	session, err := oa.Store.Get(r, SessionName)
 	if err != nil {
 		oa.logger.Warn(err)
 		fmt.Fprintf(w, "Error: %s", err)
@@ -100,13 +103,19 @@ func (oa *OIDCAuth) Init() {
 }
 
 func (oa *OIDCAuth) InitRoutes(r *mux.Router) {
-	r.Path("/oidc/redirect").HandlerFunc(oa.handleRedirect)
-	r.Path("/oidc/callback").HandlerFunc(oa.handleOAuth2Callback)
+	r.Path("/auth/driver").HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(rw).Encode(AuthType{
+			Type: "oidc",
+			Args: map[string]string{},
+		})
+	})
+	r.Path("/auth/oidc/redirect").HandlerFunc(oa.handleRedirect)
+	r.Path("/auth/oidc/callback").HandlerFunc(oa.handleOAuth2Callback)
 }
 
 func (oa *OIDCAuth) AuthenticateRequest(w http.ResponseWriter, r *http.Request, next http.Handler) {
-	session, _ := oa.Store.Get(r, "session-name")
-	if _, ok := session.Values["oidc_state"]; !ok {
+	session, _ := oa.Store.Get(r, SessionName)
+	if _, ok := session.Values[OIDCAuthState]; !ok {
 		session.Values["oidc_redirect"] = r.URL.Path
 		err := oa.Store.Save(r, w, session)
 		if err != nil {

@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html, css } from "lit";
 import "./ik-header.js";
 import "./ik-drop.js";
 import "./ik-list.js";

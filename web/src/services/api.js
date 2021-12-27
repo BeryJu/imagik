@@ -1,18 +1,11 @@
 const baseUrl = new URL("/api/priv/", window.location);
 
-export const getAuthorization = () => {
-    const auth = window.localStorage.getItem("authorization");
-    return auth || undefined;
-};
-
-export const setAuthorization = (user, pass) => {
-    const auth = btoa(`${user}:${pass}`);
-    window.localStorage.setItem("authorization", "Basic " + auth);
+export const isLoggedIn = () => {
+    return document.cookie.includes("imagik_session");
 };
 
 export const logout = () => {
-    window.localStorage.removeItem("authorization");
-    window.location.reload();
+    document.cookie = "cookiename=imagik_session ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
 };
 
 export const get = async (url) => {
@@ -25,7 +18,6 @@ export const post = async (url, body) => {
 export const request = async (url, body, options = {}) => {
     const headers = {
         accepts: "application/json",
-        authorization: getAuthorization(),
         ...options.headers,
     };
 

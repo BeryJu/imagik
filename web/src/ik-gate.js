@@ -1,7 +1,8 @@
-import { LitElement, html, css } from "lit-element";
+import { LitElement, html, css } from "lit";
 import "./ik-header.js";
 import "./ik-app.js";
-import { getAuthorization, setAuthorization } from "./services/api.js";
+import { isLoggedIn, request, get } from "./services/api.js";
+import { until } from "lit-html/directives/until.js";
 
 class Gate extends LitElement {
     static get styles() {
@@ -54,26 +55,50 @@ class Gate extends LitElement {
     submitLogin(ev) {
         ev.preventDefault();
         const elements = ev.submitter.form.elements;
-        setAuthorization(
-            elements.namedItem("username").value,
-            elements.namedItem("password").value,
-        );
+        request("/api/pub/auth/login", null, {
+            method: "POST",
+            headers: {
+                authorization:
+                    "Basic " +
+                    btoa(
+                        `${elements.namedItem("username").value}:${
+                            elements.namedItem("password").value
+                        }`,
+                    ),
+            },
+        });
         this.requestUpdate();
     }
 
     render() {
-        if (getAuthorization()) {
-            return html` <ik-app></ik-app> `;
+        if (isLoggedIn()) {
+            return html`<ik-app></ik-app> `;
         } else {
             return html`
                 <ik-header></ik-header>
-                <div>
-                    <form @submit=${this.submitLogin}>
-                        <input type="text" placeholder="username" name="username" required />
-                        <input type="password" placeholder="password" name="password" required />
-                        <input type="submit" value="login" />
-                    </form>
-                </div>
+                ${until(
+                    get("/api/pub/auth/driver").then((res) => {
+                        if (res.type === "static") {
+                            return html`<div>
+                                <form @submit=${this.submitLogin}>
+                                    <input
+                                        type="text"
+                                        placeholder="username"
+                                        name="username"
+                                        required
+                                    />
+                                    <input
+                                        type="password"
+                                        placeholder="password"
+                                        name="password"
+                                        required
+                                    />
+                                    <input type="submit" value="login" />
+                                </form>
+                            </div>`;
+                        }
+                    }),
+                )}
             `;
         }
     }
