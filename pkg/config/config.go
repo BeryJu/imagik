@@ -55,7 +55,7 @@ func DefaultConfig() {
 		LogFormat:       "plain",
 		RootDir:         "./root",
 		AuthDriver:      "null",
-		MetricsDriver:   "null",
+		MetricsDriver:   "prometheus",
 		SecretKeyString: "",
 		Debug:           false,
 	}

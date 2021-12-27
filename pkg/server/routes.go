@@ -7,6 +7,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"time"
 
 	"beryju.org/imagik/pkg/config"
 	"beryju.org/imagik/pkg/drivers/metrics"
@@ -26,6 +27,10 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	filePath := config.CleanURL(r.URL.Path)
 	mr := metrics.NewServeRequest(r)
+	start := time.Now()
+	defer func() {
+		mr.Duration = time.Since(start)
+	}()
 	// Since we only store the hash, we need to get rid of the leading slash
 	p, exists := s.HashMap.Get(r.URL.Path[1:])
 	if exists {

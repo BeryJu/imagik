@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"beryju.org/imagik/pkg/config"
 	"beryju.org/imagik/pkg/drivers"
@@ -14,6 +15,7 @@ type ServeRequest struct {
 	http.Request
 	Hash         string
 	ResolvedPath string
+	Duration     time.Duration
 }
 
 func NewServeRequest(r *http.Request) *ServeRequest {
@@ -37,6 +39,8 @@ func FromConfig(r *mux.Router) MetricsDriver {
 		metricsDriver = &NullMetricsDriver{}
 	case "influxdb":
 		metricsDriver = &InfluxDBMetricsDriver{}
+	case "prometheus":
+		metricsDriver = &PrometheusMetricsDriver{}
 	}
 	if metricsDriver == nil {
 		fmt.Printf("Could not configure metricsDriver '%s'", metricsDriverType)
