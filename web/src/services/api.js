@@ -5,7 +5,8 @@ export const isLoggedIn = () => {
 };
 
 export const logout = () => {
-    document.cookie = "cookiename=imagik_session ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+    document.cookie = `imagik_session=; Max-Age=0; Path=/; Domain=${document.location.hostname}; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+    document.location.reload();
 };
 
 export const get = async (url) => {
@@ -40,8 +41,10 @@ export const request = async (url, body, options = {}) => {
     }).then(
         async (res) => {
             if (!res.ok) {
-                if (res.status === 401) logout();
-
+                if (res.status === 401) {
+                    logout();
+                    return {};
+                }
                 return res.json().then(({ error }) => {
                     console.error(e);
                     console.error("api error: " + error);

@@ -139,7 +139,7 @@ class App extends LitElement {
                 |
                 <a @click=${() => this.triggerUpdate()}>refresh</a>
                 |
-                <a @click=${logout}>logout</a>
+                <a @click=${() => logout()}>logout</a>
             </ik-header>
 
             <ik-list path=${this.path} @navigate=${(e) => this.navigate(e)}></ik-list>
