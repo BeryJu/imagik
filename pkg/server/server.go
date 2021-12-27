@@ -8,6 +8,7 @@ import (
 	"beryju.org/imagik/pkg/drivers/auth"
 	"beryju.org/imagik/pkg/drivers/metrics"
 	"beryju.org/imagik/pkg/hash"
+	"beryju.org/imagik/pkg/server/ui"
 	"beryju.org/imagik/pkg/transform"
 	sentryhttp "github.com/getsentry/sentry-go/http"
 	"github.com/gorilla/handlers"
@@ -55,7 +56,7 @@ func New() *Server {
 
 	server.md = metrics.FromConfig(authHandler)
 
-	server.configureUI()
+	ui.ConfigureUI(server.handler)
 
 	// General Get Requests don't need authentication
 	mainHandler.PathPrefix("/").Methods(http.MethodGet).HandlerFunc(server.GetHandler)
@@ -64,6 +65,7 @@ func New() *Server {
 	apiPrivHandler.Path("/list").Methods(http.MethodGet).HandlerFunc(server.APIListHandler)
 	apiPrivHandler.Path("/move").Methods(http.MethodPost).HandlerFunc(server.APIMoveHandler)
 	apiPrivHandler.Path("/upload").Methods(http.MethodPost).HandlerFunc(server.UploadFormHandler)
+	apiPubHandler.Path("/sentry").Methods(http.MethodPost).HandlerFunc(server.APISentryProxy)
 	apiPubHandler.Path("/health/liveness").Methods(http.MethodGet).HandlerFunc(server.HealthLiveness)
 	apiPubHandler.Path("/health/readiness").Methods(http.MethodGet).HandlerFunc(server.HealthReadiness)
 
@@ -90,6 +92,6 @@ func notFoundHandler(msg string, w http.ResponseWriter) {
 }
 
 func (s *Server) Run() error {
-	log.WithField("listen", config.C.Listen).Info("Server running")
+	s.logger.WithField("listen", config.C.Listen).Info("Server running")
 	return http.ListenAndServe(config.C.Listen, s.handler)
 }

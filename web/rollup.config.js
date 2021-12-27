@@ -8,7 +8,6 @@ import sourcemaps from "rollup-plugin-sourcemaps";
 import image from "@rollup/plugin-image";
 
 const resources = [
-    { src: "src/index.html", dest: "./dist" },
     { src: "src/style.css", dest: "./dist" },
     { src: "assets/*", dest: "./dist/assets" },
 ];
