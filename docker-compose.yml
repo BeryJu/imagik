@@ -5,6 +5,7 @@ services:
     image: ghcr.io/beryju/imagik
     ports:
       - 8000:8000
+      - 9300:9300
     environment:
       # Run `docker run -it --rm ghcr.io/beryju/imagik generate-key` to get a secret key for session
       # IMAGIK_SECRET: "output"

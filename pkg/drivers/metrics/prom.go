@@ -14,7 +14,7 @@ var (
 	Requests = promauto.NewHistogramVec(prometheus.HistogramOpts{
 		Name: "imagik_requests",
 		Help: "Total requests",
-	}, []string{"path", "hash", "client"})
+	}, []string{"host", "path", "hash", "client"})
 )
 
 type PrometheusMetricsDriver struct {
@@ -36,12 +36,13 @@ func (pmd *PrometheusMetricsDriver) Init() {
 }
 
 func (pmd *PrometheusMetricsDriver) start() {
-	pmd.logger.WithField("listen", "0.0.0.0:9300").Info("Starting Metrics server")
-	err := http.ListenAndServe("0.0.0.0:9300", pmd.m)
+	listen := "0.0.0.0:9300"
+	pmd.logger.WithField("listen", listen).Info("Starting Metrics server")
+	err := http.ListenAndServe(listen, pmd.m)
 	if err != nil {
 		pmd.logger.WithError(err).Warning("Failed to start metrics server")
 	}
-	pmd.logger.WithField("listen", "0.0.0.0:9300").Info("Stopping Metrics server")
+	pmd.logger.WithField("listen", listen).Info("Stopping Metrics server")
 }
 
 func (pmd *PrometheusMetricsDriver) InitRoutes(r *mux.Router) {}
@@ -51,5 +52,6 @@ func (pmd *PrometheusMetricsDriver) ServeRequest(r *ServeRequest) {
 		"path":   r.ResolvedPath,
 		"hash":   r.Hash,
 		"client": r.RemoteAddr,
+		"host":   r.Host,
 	}).Observe(float64(r.Duration))
 }
