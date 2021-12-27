@@ -21,7 +21,7 @@ func main() {
 	if eenv, enabled := os.LookupEnv("SENTRY_ENVIRONMENT"); enabled {
 		env = eenv
 	}
-	l := log.WithField("component", "sentry")
+	l := log.WithField("component", "imagik.root.sentry")
 	err := sentry.Init(sentry.ClientOptions{
 		Dsn:              dsn,
 		AttachStacktrace: true,

@@ -8,9 +8,9 @@ import sourcemaps from "rollup-plugin-sourcemaps";
 import image from "@rollup/plugin-image";
 
 const resources = [
-    { src: "src/index.html", dest: "../root" },
-    { src: "src/style.css", dest: "../root" },
-    { src: "assets/*", dest: "../root/assets" },
+    { src: "src/index.html", dest: "./dist" },
+    { src: "src/style.css", dest: "./dist" },
+    { src: "assets/*", dest: "./dist/assets" },
 ];
 
 module.exports = [
@@ -19,7 +19,7 @@ module.exports = [
         output: [
             {
                 format: "esm",
-                file: "../root/bundle.js",
+                file: "./dist/bundle.js",
                 sourcemap: true,
             },
         ],

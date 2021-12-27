@@ -21,7 +21,7 @@ func (sa *StaticAuth) Init() {
 		sa.staticTokens[user] = strings.ReplaceAll(pass, "|", "$")
 	}
 
-	sa.logger = log.WithField("component", "static-auth")
+	sa.logger = log.WithField("component", "imagik.drivers.auth.static")
 }
 
 func (sa *StaticAuth) InitRoutes(r *mux.Router) {

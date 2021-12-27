@@ -20,7 +20,7 @@ type InfluxDBMetricsDriver struct {
 func (imd *InfluxDBMetricsDriver) Init() {
 	imd.client = influxdb2.NewClient(config.C.MetricsInfluxDBConfig.URL, config.C.MetricsInfluxDBConfig.Token)
 	imd.api = imd.client.WriteAPIBlocking(config.C.MetricsInfluxDBConfig.Org, config.C.MetricsInfluxDBConfig.Bucket)
-	imd.logger = log.WithField("component", "metrics-influx")
+	imd.logger = log.WithField("component", "imagik.drivers.metrics.influx")
 }
 
 func (imd *InfluxDBMetricsDriver) InitRoutes(r *mux.Router) {}

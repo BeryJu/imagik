@@ -12,7 +12,7 @@ type NullAuth struct {
 }
 
 func (na *NullAuth) Init() {
-	na.logger = log.WithField("component", "null-auth")
+	na.logger = log.WithField("component", "imagik.drivers.auth.null")
 }
 
 func (na *NullAuth) InitRoutes(r *mux.Router) {

@@ -11,7 +11,7 @@ type NullMetricsDriver struct {
 }
 
 func (nmd *NullMetricsDriver) Init() {
-	nmd.logger = log.WithField("component", "metrics")
+	nmd.logger = log.WithField("component", "imagik.drivers.metrics.null")
 }
 
 func (nmd *NullMetricsDriver) InitRoutes(r *mux.Router) {}

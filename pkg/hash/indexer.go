@@ -21,7 +21,7 @@ type HashMap struct {
 
 func New() *HashMap {
 	m := &HashMap{
-		logger:  log.WithField("component", "hash-map"),
+		logger:  log.WithField("component", "imagik.hash-map"),
 		hashMap: hashmap.HashMap{},
 		writeM:  sync.Mutex{},
 	}

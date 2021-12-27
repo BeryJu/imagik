@@ -82,7 +82,7 @@ func (oa *OIDCAuth) handleOAuth2Callback(w http.ResponseWriter, r *http.Request)
 }
 
 func (oa *OIDCAuth) Init() {
-	oa.logger = log.WithField("component", "OIDC-auth")
+	oa.logger = log.WithField("component", "imagik.drivers.auth.oidc")
 	oa.context = context.Background()
 	provider, err := oidc.NewProvider(oa.context, config.C.AuthOIDCConfig.URL)
 	if err != nil {

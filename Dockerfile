@@ -13,7 +13,7 @@ ARG GIT_BUILD_HASH
 ENV GIT_BUILD_HASH=$GIT_BUILD_HASH
 
 COPY . /go/src/beryju.org/imagik
-COPY --from=npm-builder /build/root /go/src/beryju.org/imagik/root
+COPY --from=npm-builder /build/web/dist /go/src/beryju.org/imagik/web/dist
 
 RUN cd /go/src/beryju.org/imagik && \
     go build -ldflags "-X main.buildCommit=$GIT_BUILD_HASH" -v -o /go/bin/imagik
