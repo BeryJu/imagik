@@ -112,7 +112,7 @@ func (oa *OIDCAuth) InitRoutes(r *mux.Router) {
 			},
 		})
 	})
-	r.Path("/auth/is_authenticated").Methods("GET").HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+	r.Path("/auth/is_authenticated").Methods(http.MethodGet).HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		session, _ := oa.Store.Get(r, SessionName)
 		_, ok := session.Values[OIDCAuthUser]
 		json.NewEncoder(rw).Encode(IsLoggedInResponse{

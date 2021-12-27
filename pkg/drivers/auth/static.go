@@ -36,14 +36,14 @@ func (sa *StaticAuth) InitRoutes(r *mux.Router) {
 			Type: "static",
 		})
 	})
-	r.Path("/auth/is_authenticated").Methods("GET").HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+	r.Path("/auth/is_authenticated").Methods(http.MethodGet).HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		session, _ := sa.Store.Get(r, SessionName)
 		_, ok := session.Values[StaticAuthUser]
 		json.NewEncoder(rw).Encode(IsLoggedInResponse{
 			Successful: ok,
 		})
 	})
-	r.Path("/auth/login").Methods("POST").HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+	r.Path("/auth/login").Methods(http.MethodPost).HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		session, _ := sa.Store.Get(r, SessionName)
 		if username, password, found := r.BasicAuth(); found {
 			if expectedHash, found := sa.staticTokens[username]; found {

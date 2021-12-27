@@ -53,8 +53,8 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err := os.Stat(filePath)
-	if err == nil {
+	st, err := os.Stat(filePath)
+	if err == nil && !st.IsDir() {
 		mr.ResolvedPath = filePath
 		s.md.ServeRequest(mr)
 		http.ServeFile(w, r, filePath)
