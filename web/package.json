@@ -28,6 +28,6 @@
         "@sentry/browser": "^6.16.1",
         "@sentry/tracing": "^6.16.1",
         "construct-style-sheets-polyfill": "^3.0.5",
-        "lit": "^2.0.2"
+        "lit": "^2.1.0"
     }
 }
