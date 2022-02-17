@@ -25,7 +25,7 @@
     },
     "dependencies": {
         "@rollup/plugin-image": "^2.1.1",
-        "@sentry/browser": "^6.17.8",
+        "@sentry/browser": "^6.17.9",
         "@sentry/tracing": "^6.17.8",
         "construct-style-sheets-polyfill": "^3.1.0",
         "lit": "^2.1.4"
