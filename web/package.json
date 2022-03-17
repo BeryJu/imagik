@@ -15,7 +15,7 @@
         "deepmerge": "^4.2.2",
         "eslint": "^8.11.0",
         "eslint-config-google": "^0.14.0",
-        "prettier": "^2.5.1",
+        "prettier": "^2.6.0",
         "rollup": "^2.70.1",
         "rollup-plugin-copy": "^3.4.0",
         "rollup-plugin-cssimport": "git+https://github.com/lucaelin/rollup-plugin-cssimport.git",
