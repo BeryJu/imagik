@@ -38,7 +38,7 @@ func (s *Server) APISentryProxy(rw http.ResponseWriter, r *http.Request) {
 		rw.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	res, err := http.DefaultClient.Post("https://sentry.beryju.org/api/8/envelope/", "application/octet-stream", strings.NewReader(string(fullBody)))
+	res, err := http.DefaultClient.Post("https://sentry.beryju.org/api/7/envelope/", "application/octet-stream", strings.NewReader(string(fullBody)))
 	if err != nil {
 		s.logger.WithError(err).Warning("failed to proxy sentry")
 		rw.WriteHeader(http.StatusBadRequest)

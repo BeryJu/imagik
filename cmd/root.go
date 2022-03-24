@@ -3,9 +3,9 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"path"
 
 	"beryju.org/imagik/pkg/config"
-	"beryju.org/imagik/pkg/hash"
 	"beryju.org/imagik/pkg/server"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
@@ -18,8 +18,8 @@ var rootCmd = &cobra.Command{
 	Use:   "imagik",
 	Short: "A small Fileserver",
 	Run: func(cmd *cobra.Command, args []string) {
+		os.MkdirAll(path.Join(os.TempDir(), "imagik/"), 0750)
 		server := server.New()
-		server.HashMap = hash.New()
 		go server.HashMap.RunIndexer()
 
 		err := server.Run()
@@ -57,6 +57,6 @@ func onInit() {
 		log.SetFormatter(&log.TextFormatter{})
 	}
 	if config.C.Debug {
-		log.SetLevel(log.DebugLevel)
+		log.SetLevel(log.TraceLevel)
 	}
 }

@@ -7,6 +7,7 @@ import (
 	"beryju.org/imagik/pkg/config"
 	"beryju.org/imagik/pkg/drivers/auth"
 	"beryju.org/imagik/pkg/drivers/metrics"
+	"beryju.org/imagik/pkg/drivers/storage"
 	"beryju.org/imagik/pkg/hash"
 	"beryju.org/imagik/pkg/server/ui"
 	"beryju.org/imagik/pkg/transform"
@@ -18,25 +19,27 @@ import (
 )
 
 type Server struct {
-	rootDir  string
 	handler  *mux.Router
 	logger   *log.Entry
 	HashMap  *hash.HashMap
 	tm       *transform.TransformerManager
 	sessions *sessions.CookieStore
-	md       metrics.MetricsDriver
+	md       metrics.Driver
+	sd       storage.Driver
 }
 
 func New() *Server {
 	store := sessions.NewCookieStore(config.C.SecretKey)
 
 	mainHandler := mux.NewRouter()
+	sd := storage.FromConfig()
 	server := &Server{
-		rootDir:  config.C.RootDir,
 		handler:  mainHandler,
 		logger:   log.WithField("component", "imagik.server"),
-		tm:       transform.New(),
+		tm:       transform.New(sd),
 		sessions: store,
+		HashMap:  hash.New(),
+		sd:       sd,
 	}
 	mainHandler.Use(handlers.ProxyHeaders)
 	mainHandler.Use(handlers.CompressHandler)

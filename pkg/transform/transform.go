@@ -1,6 +1,10 @@
 package transform
 
-import "net/http"
+import (
+	"net/http"
+
+	"beryju.org/imagik/pkg/drivers/storage"
+)
 
 type Transformer interface {
 	Handle(w http.ResponseWriter, r *http.Request)
@@ -8,14 +12,16 @@ type Transformer interface {
 
 type TransformerManager struct {
 	transformers map[string]Transformer
+	sd           storage.Driver
 }
 
-func New() *TransformerManager {
-	return &TransformerManager{
-		transformers: map[string]Transformer{
-			"meta": &MetaTransformer{},
-		},
+func New(sd storage.Driver) *TransformerManager {
+	tm := &TransformerManager{
+		sd:           sd,
+		transformers: make(map[string]Transformer),
 	}
+	tm.transformers["meta"] = &MetaTransformer{*tm}
+	return tm
 }
 
 func (tm *TransformerManager) Transform(w http.ResponseWriter, r *http.Request) bool {

@@ -30,5 +30,6 @@ WORKDIR /share
 
 ENV IMAGIK_ROOT=/share
 ENV IMAGIK_AUTH_DRIVER=null
+ENV IMAGIK_STORAGE_DRIVER=local
 
 ENTRYPOINT [ "/imagik", "-c=/config.yml" ]

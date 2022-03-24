@@ -26,14 +26,14 @@ func NewServeRequest(r *http.Request) *ServeRequest {
 	}
 }
 
-type MetricsDriver interface {
+type Driver interface {
 	drivers.HTTPDriver
 	ServeRequest(r *ServeRequest)
 }
 
-func FromConfig(r *mux.Router) MetricsDriver {
+func FromConfig(r *mux.Router) Driver {
 	metricsDriverType := config.C.MetricsDriver
-	var metricsDriver MetricsDriver
+	var metricsDriver Driver
 	switch metricsDriverType {
 	case "null":
 		metricsDriver = &NullMetricsDriver{}

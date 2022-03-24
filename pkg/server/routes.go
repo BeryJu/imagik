@@ -3,7 +3,6 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"os"
 	"path"
@@ -12,7 +11,6 @@ import (
 
 	"beryju.org/imagik/pkg/config"
 	"beryju.org/imagik/pkg/drivers/metrics"
-	"beryju.org/imagik/pkg/hash"
 	"beryju.org/imagik/pkg/schema"
 	"github.com/getsentry/sentry-go"
 	"github.com/pkg/errors"
@@ -44,7 +42,7 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 		mr.Hash = r.URL.Path[1:]
 		mr.ResolvedPath = p
 		s.md.ServeRequest(mr)
-		s.ServerFile(w, r, p)
+		s.sd.Serve(w, r, p)
 		return
 	}
 	// Check if we have the file without extension
@@ -56,7 +54,7 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 		mr.Hash = r.URL.Path[1:]
 		mr.ResolvedPath = p
 		s.md.ServeRequest(mr)
-		s.ServerFile(w, r, p)
+		s.sd.Serve(w, r, p)
 		return
 	}
 
@@ -64,18 +62,10 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 	if err == nil && !st.IsDir() {
 		mr.ResolvedPath = filePath
 		s.md.ServeRequest(mr)
-		s.ServerFile(w, r, filePath)
+		s.sd.Serve(w, r, filePath)
 		return
 	}
 	notFoundHandler("File not found.", w)
-}
-
-func (s *Server) ServerFile(rw http.ResponseWriter, r *http.Request, path string) {
-	span := sentry.StartSpan(r.Context(), "imagik.server.serve_file")
-	span.Description = path
-	span.SetTag("imagik.path", path)
-	defer span.Finish()
-	http.ServeFile(rw, r, path)
 }
 
 // UploadFormHandler Upload handler used by HTML Forms
@@ -98,7 +88,7 @@ func (s *Server) UploadFormHandler(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			fileResultMap[key] = errors.Wrap(err, "failed to open multipart file").Error()
 		} else {
-			_, err := s.doUpload(mf, key)
+			_, err := s.sd.Upload(r.Context(), mf, key)
 			if err != nil {
 				fileResultMap[key] = err.Error()
 			} else {
@@ -123,7 +113,7 @@ func (s *Server) UploadFormHandler(w http.ResponseWriter, r *http.Request) {
 func (s *Server) PutHandler(w http.ResponseWriter, r *http.Request) {
 	hub := sentry.GetHubFromContext(r.Context())
 	hub.Scope().SetTransaction(fmt.Sprintf("%s FileHandler", r.Method))
-	hashes, err := s.doUpload(r.Body, r.URL.Path)
+	hashes, err := s.sd.Upload(r.Context(), r.Body, r.URL.Path)
 	if err != nil {
 		errorHandler(err, w)
 		return
@@ -134,26 +124,4 @@ func (s *Server) PutHandler(w http.ResponseWriter, r *http.Request) {
 		schema.ErrorHandlerAPI(err, w)
 		return
 	}
-}
-
-func (s *Server) doUpload(src io.Reader, p string) (*hash.FileHash, error) {
-	filePath := config.CleanURL(p)
-	err := os.MkdirAll(path.Dir(filePath), os.ModePerm)
-	if err != nil {
-		s.logger.Warning(err)
-		return nil, err
-	}
-
-	f, err := os.OpenFile(filePath, os.O_CREATE|os.O_RDWR, 0644)
-	if err != nil {
-		s.logger.Warning(err)
-		return nil, err
-	}
-	n, err := io.Copy(f, src)
-	if err != nil {
-		s.logger.Warning(err)
-		return nil, err
-	}
-	s.logger.WithField("n", n).WithField("path", filePath).Debug("Successfully wrote file.")
-	return s.HashMap.UpdateSingle(filePath), nil
 }

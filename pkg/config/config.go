@@ -18,7 +18,6 @@ import (
 type Config struct {
 	Listen    string `yaml:"listen"`
 	LogFormat string `yaml:"logFormat"`
-	RootDir   string `yaml:"rootDir"`
 	Debug     bool   `yaml:"debug"`
 
 	SecretKeyString string `yaml:"secretKey"`
@@ -30,6 +29,10 @@ type Config struct {
 
 	MetricsDriver         string                `yaml:"metricsDriver"`
 	MetricsInfluxDBConfig MetricsInfluxDBConfig `yaml:"metricsInfluxDBConfig"`
+
+	StorageDriver      string              `yaml:"storageDriver"`
+	StorageLocalConfig *StorageLocalConfig `yaml:"storageLocalConfig"`
+	StorageS3Config    *StorageS3Config    `yaml:"storageS3Config"`
 }
 
 type AuthenticationStaticConfig struct {
@@ -43,6 +46,18 @@ type AuthenticationOIDCConfig struct {
 	Provider     string `yaml:"provider"`
 }
 
+type StorageLocalConfig struct {
+	Root string `yaml:"root"`
+}
+type StorageS3Config struct {
+	Bucket     string `yaml:"bucket"`
+	Endpoint   string `yaml:"endpoint"`
+	AccessKey  string `yaml:"accessKey"`
+	SecretKey  string `yaml:"secretKey"`
+	Region     string `yaml:"region"`
+	UsePresign bool   `yaml:"usePresign"`
+}
+
 type MetricsInfluxDBConfig struct {
 	URL    string `yaml:"url"`
 	Token  string `yaml:"token"`
@@ -52,9 +67,15 @@ type MetricsInfluxDBConfig struct {
 
 func DefaultConfig() {
 	C = Config{
-		Listen:          "localhost:8000",
-		LogFormat:       "plain",
-		RootDir:         "./root",
+		Listen:        "localhost:8000",
+		LogFormat:     "plain",
+		StorageDriver: "local",
+		StorageLocalConfig: &StorageLocalConfig{
+			Root: "./root",
+		},
+		StorageS3Config: &StorageS3Config{
+			UsePresign: true,
+		},
 		AuthDriver:      "null",
 		MetricsDriver:   "prometheus",
 		SecretKeyString: "",
@@ -93,5 +114,5 @@ func CleanURL(raw string) string {
 	if !strings.HasPrefix(raw, "/") {
 		raw = "/" + raw
 	}
-	return filepath.Join(C.RootDir, filepath.FromSlash(path.Clean("/"+raw)))
+	return filepath.Join(C.StorageLocalConfig.Root, filepath.FromSlash(path.Clean("/"+raw)))
 }

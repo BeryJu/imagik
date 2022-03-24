@@ -6,12 +6,13 @@ import (
 	"os"
 
 	"beryju.org/imagik/pkg/config"
-	"beryju.org/imagik/pkg/hash"
+	"beryju.org/imagik/pkg/drivers/storage"
 	"beryju.org/imagik/pkg/schema"
 	"github.com/gabriel-vasile/mimetype"
 )
 
 type MetaTransformer struct {
+	TransformerManager
 }
 
 func (mt *MetaTransformer) Handle(w http.ResponseWriter, r *http.Request) {
@@ -23,7 +24,7 @@ func (mt *MetaTransformer) Handle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// Get hashes for linking
-	hashes, err := hash.HashesForFile(fullPath, r.Context())
+	hashes, err := mt.sd.HashesForFile(fullPath, storage.ObjectInfo{}, r.Context())
 	if err != nil {
 		schema.ErrorHandlerAPI(err, w)
 		return

@@ -13,7 +13,7 @@ import (
 var buildCommit string
 
 func main() {
-	dsn := "https://759fc52c64334ea0a2978460a6469fd0@sentry.beryju.org/15"
+	dsn := "https://bc5df9f742f04f62bb1e4b37b227aa62@sentry.beryju.org/7"
 	if edsn, enabled := os.LookupEnv("SENTRY_DSN"); enabled {
 		dsn = edsn
 	}

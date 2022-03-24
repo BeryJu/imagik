@@ -2,7 +2,7 @@
 secretKey: "${IMAGIK_SECRET}"
 listen: 0.0.0.0:8000
 logFormat: json
-rootDir: "${IMAGIK_ROOT}"
+
 authDriver: "${IMAGIK_AUTH_DRIVER}" # or null for no authentication or oidc
 authStaticConfig:
   tokens:
@@ -15,3 +15,14 @@ authOIDCConfig:
   clientSecret: "${IMAGIK_ODIC_SECRET}"
   redirect: "${IMAGIK_ODIC_REDIRECT}"
   provider: "${IMAGIK_ODIC_PROVIDER}"
+
+storageDriver: "${IMAGIK_STORAGE_DRIVER}"
+storageLocalConfig:
+  root: "${IMAGIK_ROOT}"
+storageS3Config:
+  bucket: "${IMAGIK_BUCKET}"
+  accessKey: "${AWS_ACCESS_KEY_ID}"
+  secretKey: "${AWS_SECRET_ACCESS_KEY}"
+  region: "${AWS_DEFAULT_REGION}"
+  endpoint: "${AWS_ENDPOINT}"
+  usePresign: false

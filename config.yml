@@ -1,7 +1,6 @@
 ---
 # secretKey: # Set this to the output of ./imagik generate-key
 listen: localhost:8000
-rootDir: ./root
 authDriver: static # or null for no authentication or oidc
 authStaticConfig:
   tokens:
@@ -14,3 +13,6 @@ authStaticConfig:
 #   clientSecret: some-client-secret
 #   redirect: URL which should be sent as redirect, /api/pub/oidc/callback
 #   provider: Name of the login button
+storageDriver: local
+storageLocalConfig:
+  root: ./root

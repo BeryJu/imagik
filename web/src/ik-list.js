@@ -30,7 +30,10 @@ class List extends LitElement {
 
     async listFiles(path) {
         return get(`./list?pathOffset=${encodeURIComponent(path)}`)
-            .then(({ files }) =>
+            .then(({ files }) => {
+                if (files.length === 0) {
+                    throw Exception("empty files");
+                }
                 files
                     .sort((a, b) => {
                         if (a.type !== b.type) {
@@ -43,8 +46,8 @@ class List extends LitElement {
                         (f) => html`
                             <ik-file path=${f.fullPath} mime=${f.mime} name=${f.name}> </ik-file>
                         `,
-                    ),
-            )
+                    );
+                    })
             .catch((e) => {
                 return html`<ik-detail path=${path}></ik-detail>`;
             });
