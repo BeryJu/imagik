@@ -43,6 +43,9 @@ spec:
             httpGet:
               path: /api/pub/health/readiness
               port: http
+            failureThreshold: 20
+            successThreshold: 1
+            initialDelaySeconds: 10
           resources:
             requests:
               cpu: 10m
