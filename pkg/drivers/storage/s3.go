@@ -61,7 +61,9 @@ func NewS3StorageDriver() (*S3StorageDriver, error) {
 	}
 
 	// Create S3 service client
-	svc := s3.NewFromConfig(awsCfg)
+	svc := s3.NewFromConfig(awsCfg, func(o *s3.Options) {
+		o.UsePathStyle = true
+	})
 	preSigned := s3.NewPresignClient(svc)
 	downloader := manager.NewDownloader(svc)
 	uploader := manager.NewUploader(svc)
