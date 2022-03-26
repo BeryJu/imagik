@@ -78,6 +78,24 @@ func NewS3StorageDriver() (*S3StorageDriver, error) {
 	}, nil
 }
 
+func (sd *S3StorageDriver) getTagsMap(ctx context.Context, key string) map[string]string {
+	tagsM := make(map[string]string, 0)
+	tags, err := sd.s3.GetObjectTagging(ctx, &s3.GetObjectTaggingInput{
+		Bucket: aws.String(sd.bucket),
+		Key:    aws.String(key),
+	})
+	if err != nil {
+		sd.log.WithError(err).WithField("key", key).Warning("failed to get tags for object")
+		return tagsM
+	}
+	for _, tag := range tags.TagSet {
+		if tag.Key != nil && tag.Value != nil {
+			tagsM[*tag.Key] = *tag.Value
+		}
+	}
+	return tagsM
+}
+
 func (sd *S3StorageDriver) Walk(ctx context.Context, handler func(path string, info ObjectInfo)) error {
 	p := s3.NewListObjectsV2Paginator(sd.s3, &s3.ListObjectsV2Input{
 		Bucket: aws.String(sd.bucket),
@@ -94,22 +112,8 @@ func (sd *S3StorageDriver) Walk(ctx context.Context, handler func(path string, i
 
 		// Log the objects found
 		for _, obj := range page.Contents {
-			tags, err := sd.s3.GetObjectTagging(ctx, &s3.GetObjectTaggingInput{
-				Bucket: aws.String(sd.bucket),
-				Key:    obj.Key,
-			})
-			if err != nil {
-				sd.log.WithError(err).WithField("key", *obj.Key).Warning("failed to get tags for object")
-				continue
-			}
-			tagsM := make(map[string]string, 0)
-			for _, tag := range tags.TagSet {
-				if tag.Key != nil && tag.Value != nil {
-					tagsM[*tag.Key] = *tag.Value
-				}
-			}
 			handler(*obj.Key, ObjectInfo{
-				Tags: tagsM,
+				Tags: sd.getTagsMap(ctx, *obj.Key),
 				ETag: *obj.ETag,
 			})
 		}
@@ -299,11 +303,12 @@ func (sd *S3StorageDriver) List(ctx context.Context, offset string) ([]schema.Li
 
 		// Log the objects found
 		for _, obj := range page.Contents {
+			tags := sd.getTagsMap(ctx, *obj.Key)
 			files = append(files, schema.ListFile{
 				Name:     strings.ReplaceAll(*obj.Key, offset, ""),
 				Type:     "file",
 				FullPath: fmt.Sprintf("/%s", *obj.Key),
-				Mime:     "-",
+				Mime:     tags[formatHashLabel("Mime")],
 			})
 		}
 	}
