@@ -15,6 +15,7 @@ import (
 	"path"
 	"strings"
 
+	"github.com/gabriel-vasile/mimetype"
 	log "github.com/sirupsen/logrus"
 
 	"beryju.org/imagik/pkg/config"
@@ -218,8 +219,15 @@ func (sd *S3StorageDriver) HashesForFile(path string, info ObjectInfo, ctx conte
 	md5hasher := md5.New()
 	mw := io.MultiWriter(sha512hasher, sha256hasher, sha128hasher, md5hasher)
 
-	if _, err := io.Copy(mw, bytes.NewReader(buffer.Bytes())); err != nil {
-		sd.log.Warning(err)
+	b := buffer.Bytes()
+	mime, err := mimetype.DetectReader(bytes.NewReader(b))
+	if err != nil {
+		sd.log.WithError(err).Warning("failed to detect mime type")
+		return nil, err
+	}
+
+	if _, err := io.Copy(mw, bytes.NewReader(b)); err != nil {
+		sd.log.WithError(err).Warning("failed to stream to hasher")
 		return nil, err
 	}
 	sha512sum := hex.EncodeToString(sha512hasher.Sum(nil))
@@ -230,6 +238,7 @@ func (sd *S3StorageDriver) HashesForFile(path string, info ObjectInfo, ctx conte
 		SHA512Short: sha512sum[:16],
 		MD5:         hex.EncodeToString(md5hasher.Sum(nil)),
 		ETag:        info.ETag,
+		Mime:        mime.String(),
 	}
 
 	tset := make([]types.Tag, 0)

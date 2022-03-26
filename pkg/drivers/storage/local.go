@@ -80,9 +80,15 @@ func (lsd *LocalStorageDriver) HashesForFile(path string, info ObjectInfo, ctx c
 	sha128hasher := sha1.New()
 	md5hasher := md5.New()
 	mw := io.MultiWriter(sha512hasher, sha256hasher, sha128hasher, md5hasher)
+	mime, err := mimetype.DetectReader(f)
+	if err != nil {
+		lsd.log.WithError(err).Warning("failed to detect mime type")
+		return nil, err
+	}
+	f.Seek(0, 0)
 
 	if _, err := io.Copy(mw, f); err != nil {
-		lsd.log.Warning(err)
+		lsd.log.WithError(err).Warning("failed to stream to hasher")
 		return nil, err
 	}
 	sha512sum := hex.EncodeToString(sha512hasher.Sum(nil))
@@ -92,6 +98,7 @@ func (lsd *LocalStorageDriver) HashesForFile(path string, info ObjectInfo, ctx c
 		SHA512:      sha512sum,
 		SHA512Short: sha512sum[:16],
 		MD5:         hex.EncodeToString(md5hasher.Sum(nil)),
+		Mime:        mime.String(),
 	}, nil
 }
 

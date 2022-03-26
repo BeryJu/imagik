@@ -8,7 +8,6 @@ import (
 	"beryju.org/imagik/pkg/config"
 	"beryju.org/imagik/pkg/drivers/storage"
 	"beryju.org/imagik/pkg/schema"
-	"github.com/gabriel-vasile/mimetype"
 )
 
 type MetaTransformer struct {
@@ -29,11 +28,6 @@ func (mt *MetaTransformer) Handle(w http.ResponseWriter, r *http.Request) {
 		schema.ErrorHandlerAPI(err, w)
 		return
 	}
-	mime, err := mimetype.DetectFile(fullPath)
-	if err != nil {
-		schema.ErrorHandlerAPI(err, w)
-		return
-	}
 	response := schema.MetaResponse{
 		GenericResponse: schema.GenericResponse{
 			Successful: true,
@@ -41,7 +35,7 @@ func (mt *MetaTransformer) Handle(w http.ResponseWriter, r *http.Request) {
 		Name:         stat.Name(),
 		CreationDate: stat.ModTime(),
 		Size:         stat.Size(),
-		Mime:         mime.String(),
+		Mime:         hashes.Mime,
 		Hashes:       hashes.Map(),
 	}
 	w.Header().Set("Content-Type", "application/json")

@@ -71,6 +71,7 @@ func (hm *HashMap) hashFile(p string, info storage.ObjectInfo, ctx context.Conte
 	if err != nil {
 		// Don't return the error to not stop the walking
 		hm.logger.Warning(err)
+		return nil
 	}
 	base := path.Base(p)
 	ext := path.Ext(base)

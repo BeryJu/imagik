@@ -26,6 +26,7 @@ func (oi *ObjectInfo) Hash() *FileHash {
 		SHA512:      oi.Tags[formatHashLabel("SHA512")],
 		SHA512Short: oi.Tags[formatHashLabel("SHA512Short")],
 		MD5:         oi.Tags[formatHashLabel("MD5")],
+		Mime:        oi.Tags[formatHashLabel("Mime")],
 		ETag:        oi.ETag,
 	}
 	return fh
@@ -38,6 +39,7 @@ type FileHash struct {
 	SHA512Short string
 	MD5         string
 	ETag        string
+	Mime        string
 }
 
 func (fh *FileHash) Map() map[string]string {
@@ -48,6 +50,7 @@ func (fh *FileHash) Map() map[string]string {
 	m["SHA512Short"] = fh.SHA512Short
 	m["MD5"] = fh.MD5
 	m["ETag"] = fh.ETag
+	m["Mime"] = fh.Mime
 	return m
 }
 
