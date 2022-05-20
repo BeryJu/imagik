@@ -1,3 +1,6 @@
+.DEFAULT_GOAL := build
+.MAIN := build
+
 run:
 ifeq (,$(wildcard ./config.local.yml))
 	cp config.yml config.local.yml
@@ -7,3 +10,6 @@ endif
 docker:
 	docker build -t ghcr.io/beryju/imagik:latest .
 	docker run -p 8000:8000 -it --rm ghcr.io/beryju/imagik:latest
+
+build:
+	go build -v .
