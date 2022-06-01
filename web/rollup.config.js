@@ -27,7 +27,11 @@ module.exports = [
             commonjs(),
             cssimport(),
             image({ dom: true }),
-            sourcemaps(),
+            sourcemaps({
+                exclude: [
+                    /@sentry/g,
+                ],
+            }),
             process.env.NODE_ENV === "production" && minifyHTML(),
             process.env.NODE_ENV === "production" && terser(),
             copy({
