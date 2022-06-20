@@ -4,7 +4,6 @@ import cssimport from "rollup-plugin-cssimport";
 import copy from "rollup-plugin-copy";
 import minifyHTML from "rollup-plugin-minify-html-literals";
 import { terser } from "rollup-plugin-terser";
-import sourcemaps from "rollup-plugin-sourcemaps";
 import image from "@rollup/plugin-image";
 
 const resources = [
@@ -27,11 +26,6 @@ module.exports = [
             commonjs(),
             cssimport(),
             image({ dom: true }),
-            sourcemaps({
-                exclude: [
-                    /@sentry/g,
-                ],
-            }),
             process.env.NODE_ENV === "production" && minifyHTML(),
             process.env.NODE_ENV === "production" && terser(),
             copy({
