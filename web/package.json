@@ -13,7 +13,7 @@
         "@rollup/plugin-commonjs": "^22.0.1",
         "@rollup/plugin-node-resolve": "^13.3.0",
         "deepmerge": "^4.2.2",
-        "eslint": "^8.19.0",
+        "eslint": "^8.20.0",
         "eslint-config-google": "^0.14.0",
         "prettier": "^2.7.1",
         "rollup": "^2.76.0",
