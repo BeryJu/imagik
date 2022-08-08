@@ -10,7 +10,7 @@
     "author": "Luca Elin Haneklau",
     "license": "MIT",
     "devDependencies": {
-        "@rollup/plugin-commonjs": "^22.0.1",
+        "@rollup/plugin-commonjs": "^22.0.2",
         "@rollup/plugin-node-resolve": "^13.3.0",
         "deepmerge": "^4.2.2",
         "eslint": "^8.21.0",
