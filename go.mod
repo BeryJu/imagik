@@ -9,7 +9,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.11.23
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.27.5
 	github.com/coreos/go-oidc v2.2.1+incompatible
-	github.com/cornelk/hashmap v1.0.3
+	github.com/cornelk/hashmap v1.0.4
 	github.com/gabriel-vasile/mimetype v1.4.1
 	github.com/getsentry/sentry-go v0.13.0
 	github.com/gorilla/handlers v1.5.1
