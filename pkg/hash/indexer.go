@@ -15,7 +15,7 @@ import (
 
 type HashMap struct {
 	logger  *log.Entry
-	hashMap hashmap.HashMap
+	hashMap hashmap.HashMap[string, string]
 	writeM  sync.Mutex
 	ctx     context.Context
 	sd      storage.Driver
@@ -24,7 +24,7 @@ type HashMap struct {
 func New() *HashMap {
 	m := &HashMap{
 		logger:  log.WithField("component", "imagik.hash-map"),
-		hashMap: hashmap.HashMap{},
+		hashMap: hashmap.HashMap[string, string]{},
 		writeM:  sync.Mutex{},
 		ctx:     context.Background(),
 		sd:      storage.FromConfig(),
@@ -56,10 +56,10 @@ func (hm *HashMap) Get(hash string, ctx context.Context) (string, bool) {
 	span.SetTag("imagik.hash", hash)
 	defer span.Finish()
 	val, exists := hm.hashMap.Get(hash)
-	if val == nil {
+	if !exists {
 		return "", exists
 	}
-	return val.(string), exists
+	return val, exists
 }
 
 func (hm *HashMap) UpdateSingle(path string) *storage.FileHash {
