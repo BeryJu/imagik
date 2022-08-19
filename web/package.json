@@ -27,6 +27,6 @@
         "@sentry/browser": "^7.10.0",
         "@sentry/tracing": "^7.10.0",
         "construct-style-sheets-polyfill": "^3.1.0",
-        "lit": "^2.3.0"
+        "lit": "^2.3.1"
     }
 }
