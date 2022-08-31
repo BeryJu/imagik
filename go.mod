@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/coreos/go-oidc v2.2.1+incompatible
-	github.com/cornelk/hashmap v1.0.5
+	github.com/cornelk/hashmap v1.0.6
 	github.com/gabriel-vasile/mimetype v1.4.1
 	github.com/getsentry/sentry-go v0.13.0
 	github.com/gorilla/handlers v1.5.1
