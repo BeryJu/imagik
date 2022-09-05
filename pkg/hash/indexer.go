@@ -15,7 +15,7 @@ import (
 
 type HashMap struct {
 	logger  *log.Entry
-	hashMap hashmap.HashMap[string, string]
+	hashMap *hashmap.Map[string, string]
 	writeM  sync.Mutex
 	ctx     context.Context
 	sd      storage.Driver
@@ -24,7 +24,7 @@ type HashMap struct {
 func New() *HashMap {
 	m := &HashMap{
 		logger:  log.WithField("component", "imagik.hash-map"),
-		hashMap: hashmap.HashMap[string, string]{},
+		hashMap: hashmap.New[string, string](),
 		writeM:  sync.Mutex{},
 		ctx:     context.Background(),
 		sd:      storage.FromConfig(),

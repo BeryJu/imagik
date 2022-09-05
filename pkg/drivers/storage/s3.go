@@ -221,9 +221,10 @@ func (sd *S3StorageDriver) HashesForFile(path string, info ObjectInfo, ctx conte
 		Mime:        mime.String(),
 	}
 
-	tset := &tags.Tags{}
-	for key, value := range fh.Map() {
-		tset.Set(formatHashLabel(key), value)
+	tset, err := tags.NewTags(fh.Map(), false)
+	if err != nil {
+		sd.log.WithError(err).WithField("key", path).Warning("failed to create tags")
+		return nil, err
 	}
 	sd.log.WithField("key", path).Trace("[hash] updating tags")
 	err = sd.s3.PutObjectTagging(ctx, sd.bucket, path, tset, minio.PutObjectTaggingOptions{})
