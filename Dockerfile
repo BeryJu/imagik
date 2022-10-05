@@ -6,7 +6,7 @@ COPY ./web/ /build/web
 RUN cd /build/web && npm i && npm run build
 
 # Build application second
-FROM docker.io/golang:1.19.1 AS builder
+FROM docker.io/golang:1.19.2 AS builder
 
 ENV CGO_ENABLED=0
 ARG GIT_BUILD_HASH
