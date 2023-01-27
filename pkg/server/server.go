@@ -68,7 +68,6 @@ func New() *Server {
 	apiPrivHandler.Path("/list").Methods(http.MethodGet).HandlerFunc(server.APIListHandler)
 	apiPrivHandler.Path("/move").Methods(http.MethodPost).HandlerFunc(server.APIMoveHandler)
 	apiPrivHandler.Path("/upload").Methods(http.MethodPost).HandlerFunc(server.UploadFormHandler)
-	apiPubHandler.Path("/sentry").Methods(http.MethodPost).HandlerFunc(server.APISentryProxy)
 	apiPubHandler.Path("/health/liveness").Methods(http.MethodGet).HandlerFunc(server.HealthLiveness)
 	apiPubHandler.Path("/health/readiness").Methods(http.MethodGet).HandlerFunc(server.HealthReadiness)
 

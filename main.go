@@ -26,9 +26,10 @@ func main() {
 		Dsn:              dsn,
 		AttachStacktrace: true,
 		TracesSampleRate: 1,
+		EnableTracing:    true,
 		Environment:      env,
 		Debug:            true,
-		DebugWriter:      l.Writer(),
+		DebugWriter:      l.WriterLevel(log.DebugLevel),
 		Release:          fmt.Sprintf("imagik@%s", buildCommit),
 	})
 	if err != nil {
