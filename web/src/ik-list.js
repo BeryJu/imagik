@@ -42,11 +42,11 @@ class List extends LitElement {
                             return a.name.localeCompare(b.name);
                         }
                     })
-                    .map(
-                        (f) => html`
-                            <ik-file path=${f.fullPath} mime=${f.mime} name=${f.name}> </ik-file>
-                        `,
-                    );
+                    .map((f) => {
+                        return html`
+                            <ik-file path=${f.fullPath} mime=${f.mime} name=${f.name} type=${f.type}></ik-file>
+                        `;
+                    });
             })
             .catch((e) => {
                 return html`<ik-detail path=${path}></ik-detail>`;

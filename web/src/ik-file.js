@@ -39,6 +39,10 @@ class File extends LitElement {
                 attribute: true,
                 type: String,
             },
+            type: {
+                attribute: true,
+                type: String,
+            },
         };
     }
 
@@ -56,7 +60,7 @@ class File extends LitElement {
     }
 
     isFolder() {
-        return !this.mime;
+        return this.type === "folder";
     }
 
     getPreview() {
@@ -71,7 +75,7 @@ class File extends LitElement {
 
     render() {
         return html`
-            <img src=${this.getPreview()} loading=lazy></img>
+            <img src=${this.getPreview()} loading="lazy" />
             <span title=${this.name}>${this.name}</span>
         `;
     }
