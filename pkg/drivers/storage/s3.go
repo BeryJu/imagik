@@ -260,9 +260,13 @@ func (sd *S3StorageDriver) List(ctx context.Context, offset string) ([]schema.Li
 
 	for obj := range objects {
 		tags := sd.getTagsMap(ctx, obj.Key)
+		ft := "file"
+		if strings.HasSuffix(obj.Key, "/") {
+			ft = "folder"
+		}
 		files = append(files, schema.ListFile{
 			Name:     strings.ReplaceAll(obj.Key, offset, ""),
-			Type:     "file",
+			Type:     ft,
 			FullPath: fmt.Sprintf("/%s", obj.Key),
 			Mime:     tags[formatHashLabel("Mime")],
 		})
