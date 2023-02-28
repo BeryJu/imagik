@@ -50,3 +50,7 @@ export const relate = (a, b) => {
     const url = new URL(a, window.location);
     return new URL("./" + b, url).pathname;
 };
+
+export function truncate(string, length = 10) {
+    return string.length > length ? `${string.substring(0, length)}...` : string;
+}

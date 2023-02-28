@@ -1,4 +1,5 @@
 import { LitElement, html, css } from "lit";
+import { truncate } from "./services/path.js";
 
 class App extends LitElement {
     static get styles() {
@@ -50,7 +51,7 @@ class App extends LitElement {
         if (!this.path) {
             return "imagik";
         } else {
-            return decodeURIComponent(this.path);
+            return truncate( decodeURIComponent(this.path), 70);
         }
     }
 

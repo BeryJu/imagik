@@ -32,9 +32,9 @@ class List extends LitElement {
         return get(`./list?pathOffset=${encodeURIComponent(path)}`)
             .then(({ files }) => {
                 if (files.length === 0) {
-                    throw Exception("empty files");
+                    throw new Exception("empty files");
                 }
-                files
+                return files
                     .sort((a, b) => {
                         if (a.type !== b.type) {
                             return a.type.localeCompare(b.type);
