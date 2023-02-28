@@ -162,12 +162,12 @@ func (sd *S3StorageDriver) needsHashUpdate(path string, info ObjectInfo) bool {
 	sd.log.WithField("tags", info.Tags).Trace("tags")
 	// Check if any tag is missing
 	for key := range fh.Map() {
-		if _, ok := info.Tags[formatHashLabel(key)]; !ok {
+		if _, ok := info.Tags[key]; !ok {
 			sd.log.WithField("key", path).WithField("tag", key).Trace("object needs updated tag")
 			return true
 		}
 	}
-	if etag, ok := info.Tags[formatHashLabel("ETag")]; !ok || etag != info.ETag {
+	if etag, ok := info.Tags["ETag"]; !ok || etag != info.ETag {
 		sd.log.WithField("key", path).WithField("etag", etag).Trace("object etag has changed")
 		return true
 	}

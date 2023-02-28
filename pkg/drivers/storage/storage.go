@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"regexp"
 
 	"beryju.io/imagik/pkg/config"
 	"beryju.io/imagik/pkg/schema"
@@ -42,6 +43,8 @@ type FileHash struct {
 	Mime        string
 }
 
+var escapedChars = regexp.MustCompile(`(\s|;|=)`)
+
 func (fh *FileHash) Map() map[string]string {
 	m := make(map[string]string, 5)
 	m["SHA128"] = fh.SHA128
@@ -50,7 +53,7 @@ func (fh *FileHash) Map() map[string]string {
 	m["SHA512Short"] = fh.SHA512Short
 	m["MD5"] = fh.MD5
 	m["ETag"] = fh.ETag
-	m["Mime"] = fh.Mime
+	m["Mime"] = escapedChars.ReplaceAllString(fh.Mime, "_")
 	return m
 }
 
