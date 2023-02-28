@@ -103,7 +103,7 @@ class Detail extends LitElement {
                     ${Object.entries(r.hashes).map(this.hashField)}
                 </div>
                 <div class="preview">
-                    <img src=${this.getPreview(r)}></img>
+                    <img src=${this.getPreview(r)} />
                 </div>
             `;
         });
