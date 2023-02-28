@@ -2,7 +2,6 @@ package storage
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"net/http"
 	"regexp"
@@ -12,7 +11,7 @@ import (
 )
 
 func formatHashLabel(val string) string {
-	return fmt.Sprintf("imagik.beryju.org/hash/%s", val)
+	return val
 }
 
 type ObjectInfo struct {
@@ -47,13 +46,13 @@ var escapedChars = regexp.MustCompile(`(\s|;|=)`)
 
 func (fh *FileHash) Map() map[string]string {
 	m := make(map[string]string, 5)
-	m["SHA128"] = fh.SHA128
-	m["SHA256"] = fh.SHA256
-	m["SHA512"] = fh.SHA512
-	m["SHA512Short"] = fh.SHA512Short
-	m["MD5"] = fh.MD5
-	m["ETag"] = fh.ETag
-	m["Mime"] = escapedChars.ReplaceAllString(fh.Mime, "_")
+	m[formatHashLabel("SHA128")] = fh.SHA128
+	m[formatHashLabel("SHA256")] = fh.SHA256
+	m[formatHashLabel("SHA512")] = fh.SHA512
+	m[formatHashLabel("SHA512Short")] = fh.SHA512Short
+	m[formatHashLabel("MD5")] = fh.MD5
+	m[formatHashLabel("ETag")] = fh.ETag
+	m[formatHashLabel("Mime")] = escapedChars.ReplaceAllString(fh.Mime, "_")
 	return m
 }
 

@@ -74,6 +74,9 @@ func NewS3StorageDriver() (*S3StorageDriver, error) {
 
 func (sd *S3StorageDriver) getTagsMap(ctx context.Context, key string) map[string]string {
 	tagsM := make(map[string]string, 0)
+	if strings.HasSuffix(key, "/") {
+		return tagsM
+	}
 	tags, err := sd.s3.GetObjectTagging(ctx, sd.bucket, key, minio.GetObjectTaggingOptions{})
 	if err != nil {
 		sd.log.WithError(err).WithField("key", key).Warning("failed to get tags for object")
@@ -162,12 +165,12 @@ func (sd *S3StorageDriver) needsHashUpdate(path string, info ObjectInfo) bool {
 	sd.log.WithField("tags", info.Tags).Trace("tags")
 	// Check if any tag is missing
 	for key := range fh.Map() {
-		if _, ok := info.Tags[key]; !ok {
-			sd.log.WithField("key", path).WithField("tag", key).Trace("object needs updated tag")
+		if _, ok := info.Tags[formatHashLabel(key)]; !ok {
+			sd.log.WithField("key", path).WithField("tag", formatHashLabel(key)).Trace("object needs updated tag")
 			return true
 		}
 	}
-	if etag, ok := info.Tags["ETag"]; !ok || etag != info.ETag {
+	if etag, ok := info.Tags[formatHashLabel("ETag")]; !ok || etag != info.ETag {
 		sd.log.WithField("key", path).WithField("etag", etag).Trace("object etag has changed")
 		return true
 	}
