@@ -2,9 +2,9 @@ name: ci-build
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
 
@@ -34,7 +34,7 @@ jobs:
         tags: |
           ghcr.io/beryju/imagik:latest
           ghcr.io/beryju/imagik:latest-${{ steps.vars.outputs.timestamp }}-${{ steps.vars.outputs.sha }}
-        push: ${{ github.ref == 'refs/heads/master' }}
+        push: ${{ github.ref == 'refs/heads/main' }}
         platforms: linux/amd64,linux/arm64
         build-args: |
           GIT_BUILD_HASH=${{ steps.vars.outputs.sha }}
