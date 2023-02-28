@@ -10,6 +10,9 @@ class File extends LitElement {
                 gap: 1rem;
                 flex-direction: column;
             }
+            :host([type=folder]) img {
+                min-height: 75%;
+            }
             .imageContainer {
                 width: 10rem;
                 height: 10rem;

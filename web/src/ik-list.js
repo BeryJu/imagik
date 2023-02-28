@@ -37,7 +37,7 @@ class List extends LitElement {
                 return files
                     .sort((a, b) => {
                         if (a.type !== b.type) {
-                            return a.type.localeCompare(b.type);
+                            return -a.type.localeCompare(b.type);
                         } else {
                             return a.name.localeCompare(b.name);
                         }
