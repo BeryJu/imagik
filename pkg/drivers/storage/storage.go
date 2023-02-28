@@ -64,6 +64,8 @@ type Driver interface {
 	Upload(ctx context.Context, src io.Reader, p string) (*FileHash, error)
 	List(ctx context.Context, offset string) ([]schema.ListFile, error)
 	Rename(ctx context.Context, from string, to string) error
+	CleanURL(raw string) string
+	Stat(path string, ctx context.Context) *schema.MetaResponse
 }
 
 func FromConfig() Driver {

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"beryju.io/imagik/pkg/config"
 	"beryju.io/imagik/pkg/schema"
 	"github.com/getsentry/sentry-go"
 )
@@ -46,8 +45,8 @@ func (s *Server) APIMoveHandler(w http.ResponseWriter, r *http.Request) {
 		schema.ErrorHandlerAPI(errors.New("missing to path"), w)
 		return
 	}
-	fromFull := config.CleanURL(from)
-	toFull := config.CleanURL(to)
+	fromFull := s.sd.CleanURL(from)
+	toFull := s.sd.CleanURL(to)
 	err := s.sd.Rename(r.Context(), fromFull, toFull)
 	if err != nil {
 		schema.ErrorHandlerAPI(err, w)

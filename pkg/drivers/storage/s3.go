@@ -287,3 +287,35 @@ func (sd *S3StorageDriver) Rename(ctx context.Context, from string, to string) e
 	}
 	return nil
 }
+
+func (sd *S3StorageDriver) CleanURL(raw string) string {
+	raw = strings.TrimPrefix(raw, "/")
+	return raw
+}
+
+func (sd *S3StorageDriver) Stat(path string, ctx context.Context) *schema.MetaResponse {
+	fullPath := sd.CleanURL(path)
+	response := schema.MetaResponse{
+		GenericResponse: schema.GenericResponse{
+			Successful: true,
+		},
+	}
+	// Get stat for common file stats
+	stat, err := sd.s3.StatObject(ctx, sd.bucket, path, minio.GetObjectOptions{})
+	if err != nil {
+		log.Warn(err)
+	} else {
+		response.Name = stat.Key
+		response.CreationDate = stat.LastModified
+		response.Size = stat.Size
+	}
+	// Get hashes for linking
+	hashes, err := sd.HashesForFile(fullPath, ObjectInfo{}, ctx)
+	if err != nil {
+		sd.log.WithError(err).Warning("failed to get hashes for file")
+		return nil
+	}
+	response.Mime = hashes.Mime
+	response.Hashes = hashes.Map()
+	return &response
+}

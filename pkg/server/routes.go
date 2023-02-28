@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"beryju.io/imagik/pkg/config"
 	"beryju.io/imagik/pkg/drivers/metrics"
 	"beryju.io/imagik/pkg/schema"
 	"github.com/getsentry/sentry-go"
@@ -23,7 +22,7 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 	if s.tm.Transform(w, r) {
 		return
 	}
-	filePath := config.CleanURL(r.URL.Path)
+	filePath := s.sd.CleanURL(r.URL.Path)
 	mr := metrics.NewServeRequest(r)
 	start := time.Now()
 	defer func() {
