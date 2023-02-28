@@ -9,18 +9,23 @@ class File extends LitElement {
                 padding: 1rem;
                 gap: 1rem;
                 flex-direction: column;
-                border-radius: 3px;
+            }
+            .imageContainer {
+                width: 10rem;
+                height: 10rem;
+                display: flex;
+                justify-content: center;
+                align-items: center;
             }
             img {
-                width: 5rem;
-                height: 5rem;
-                border-radius: 3px;
+                max-width: 100%;
+                max-height: 100%;
             }
             span {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                max-width: 5rem;
+                max-width: 10rem;
             }
         `;
     }
@@ -75,7 +80,9 @@ class File extends LitElement {
 
     render() {
         return html`
-            <img src=${this.getPreview()} loading="lazy" />
+            <div class="imageContainer">
+                <img src=${this.getPreview()} loading="lazy" />
+            </div>
             <span title=${this.name}>${this.name}</span>
         `;
     }
