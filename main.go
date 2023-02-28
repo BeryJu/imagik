@@ -5,7 +5,7 @@ import (
 	"os"
 	"time"
 
-	"beryju.org/imagik/cmd"
+	"beryju.io/imagik/cmd"
 	"github.com/getsentry/sentry-go"
 	log "github.com/sirupsen/logrus"
 )

@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"beryju.org/imagik/pkg/config"
-	"beryju.org/imagik/pkg/schema"
+	"beryju.io/imagik/pkg/config"
+	"beryju.io/imagik/pkg/schema"
 	"github.com/getsentry/sentry-go"
 )
 

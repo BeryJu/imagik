@@ -6,8 +6,8 @@ import (
 	"os"
 	"time"
 
-	"beryju.org/imagik/pkg/config"
-	"beryju.org/imagik/pkg/drivers"
+	"beryju.io/imagik/pkg/config"
+	"beryju.io/imagik/pkg/drivers"
 	"github.com/gorilla/mux"
 )
 

@@ -3,7 +3,7 @@ package transform
 import (
 	"net/http"
 
-	"beryju.org/imagik/pkg/drivers/storage"
+	"beryju.io/imagik/pkg/drivers/storage"
 )
 
 type Transformer interface {

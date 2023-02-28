@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
-	"beryju.org/imagik/pkg/config"
-	"beryju.org/imagik/pkg/drivers/metrics"
-	"beryju.org/imagik/pkg/schema"
+	"beryju.io/imagik/pkg/config"
+	"beryju.io/imagik/pkg/drivers/metrics"
+	"beryju.io/imagik/pkg/schema"
 	"github.com/getsentry/sentry-go"
 	"github.com/pkg/errors"
 )

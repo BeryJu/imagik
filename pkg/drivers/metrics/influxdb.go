@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"beryju.org/imagik/pkg/config"
+	"beryju.io/imagik/pkg/config"
 	"github.com/gorilla/mux"
 	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
 	"github.com/influxdata/influxdb-client-go/v2/api"

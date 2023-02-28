@@ -5,9 +5,9 @@ import (
 	"net/http"
 	"os"
 
-	"beryju.org/imagik/pkg/config"
-	"beryju.org/imagik/pkg/drivers/storage"
-	"beryju.org/imagik/pkg/schema"
+	"beryju.io/imagik/pkg/config"
+	"beryju.io/imagik/pkg/drivers/storage"
+	"beryju.io/imagik/pkg/schema"
 )
 
 type MetaTransformer struct {

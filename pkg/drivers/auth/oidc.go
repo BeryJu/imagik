@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"beryju.org/imagik/pkg/config"
+	"beryju.io/imagik/pkg/config"
 	"github.com/coreos/go-oidc"
 	"github.com/getsentry/sentry-go"
 	"github.com/gorilla/mux"

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"syscall"
 
-	"beryju.org/imagik/pkg/drivers/auth"
+	"beryju.io/imagik/pkg/drivers/auth"
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 )

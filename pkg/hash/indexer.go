@@ -6,7 +6,7 @@ import (
 	"strings"
 	"sync"
 
-	"beryju.org/imagik/pkg/drivers/storage"
+	"beryju.io/imagik/pkg/drivers/storage"
 	"github.com/cornelk/hashmap"
 	"github.com/getsentry/sentry-go"
 

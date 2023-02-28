@@ -5,8 +5,8 @@ import (
 	"os"
 	"path"
 
-	"beryju.org/imagik/pkg/config"
-	"beryju.org/imagik/pkg/server"
+	"beryju.io/imagik/pkg/config"
+	"beryju.io/imagik/pkg/server"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )

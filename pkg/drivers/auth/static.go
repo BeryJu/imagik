@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"beryju.org/imagik/pkg/config"
+	"beryju.io/imagik/pkg/config"
 	"github.com/getsentry/sentry-go"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/sessions"

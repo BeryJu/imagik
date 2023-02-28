@@ -7,8 +7,8 @@ import (
 	"log"
 	"net/http"
 
-	"beryju.org/imagik/pkg/config"
-	"beryju.org/imagik/web/dist"
+	"beryju.io/imagik/pkg/config"
+	"beryju.io/imagik/web/dist"
 	"github.com/getsentry/sentry-go"
 	"github.com/gorilla/mux"
 )

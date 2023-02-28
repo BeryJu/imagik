@@ -22,8 +22,8 @@ import (
 	"github.com/minio/minio-go/v7/pkg/tags"
 	log "github.com/sirupsen/logrus"
 
-	"beryju.org/imagik/pkg/config"
-	"beryju.org/imagik/pkg/schema"
+	"beryju.io/imagik/pkg/config"
+	"beryju.io/imagik/pkg/schema"
 	"github.com/getsentry/sentry-go"
 )
 
@@ -161,7 +161,7 @@ func (sd *S3StorageDriver) needsHashUpdate(path string, info ObjectInfo) bool {
 	fh := &FileHash{}
 	sd.log.WithField("tags", info.Tags).Trace("tags")
 	// Check if any tag is missing
-	for key, _ := range fh.Map() {
+	for key := range fh.Map() {
 		if _, ok := info.Tags[formatHashLabel(key)]; !ok {
 			sd.log.WithField("key", path).WithField("tag", key).Trace("object needs updated tag")
 			return true

@@ -17,8 +17,8 @@ import (
 	"github.com/gabriel-vasile/mimetype"
 	log "github.com/sirupsen/logrus"
 
-	"beryju.org/imagik/pkg/config"
-	"beryju.org/imagik/pkg/schema"
+	"beryju.io/imagik/pkg/config"
+	"beryju.io/imagik/pkg/schema"
 	"github.com/getsentry/sentry-go"
 	"github.com/pkg/errors"
 )

@@ -12,10 +12,10 @@ ENV CGO_ENABLED=0
 ARG GIT_BUILD_HASH
 ENV GIT_BUILD_HASH=$GIT_BUILD_HASH
 
-COPY . /go/src/beryju.org/imagik
-COPY --from=npm-builder /build/web/dist /go/src/beryju.org/imagik/web/dist
+COPY . /go/src/beryju.io/imagik
+COPY --from=npm-builder /build/web/dist /go/src/beryju.io/imagik/web/dist
 
-RUN cd /go/src/beryju.org/imagik && \
+RUN cd /go/src/beryju.io/imagik && \
     go build -ldflags "-X main.buildCommit=$GIT_BUILD_HASH" -v -o /go/bin/imagik
 
 # Final container
