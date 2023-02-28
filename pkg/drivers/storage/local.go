@@ -8,7 +8,6 @@ import (
 	"crypto/sha512"
 	"encoding/hex"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"os"
 	"path"
@@ -125,7 +124,7 @@ func (lsd *LocalStorageDriver) Upload(ctx context.Context, src io.Reader, p stri
 }
 
 func getElementsForDirectory(path string) int {
-	files, err := ioutil.ReadDir(path)
+	files, err := os.ReadDir(path)
 	if err != nil {
 		return 0
 	}
@@ -134,7 +133,7 @@ func getElementsForDirectory(path string) int {
 
 func (lsd *LocalStorageDriver) List(ctx context.Context, offset string) ([]schema.ListFile, error) {
 	fullDir := config.CleanURL(offset)
-	files, err := ioutil.ReadDir(fullDir)
+	files, err := os.ReadDir(fullDir)
 	if err != nil {
 		return nil, err
 	}

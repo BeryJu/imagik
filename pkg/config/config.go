@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/base64"
-	"io/ioutil"
 	"os"
 	"path"
 	"path/filepath"
@@ -84,7 +83,7 @@ func DefaultConfig() {
 }
 
 func LoadConfig(path string) error {
-	raw, err := ioutil.ReadFile(path)
+	raw, err := os.ReadFile(path)
 	if err != nil {
 		return errors.Wrap(err, "Failed to load config file")
 	}
