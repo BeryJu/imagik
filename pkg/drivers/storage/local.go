@@ -85,7 +85,11 @@ func (lsd *LocalStorageDriver) HashesForFile(path string, info ObjectInfo, ctx c
 		lsd.log.WithError(err).Warning("failed to detect mime type")
 		return nil, err
 	}
-	f.Seek(0, 0)
+	_, err = f.Seek(0, 0)
+	if err != nil {
+		lsd.log.WithError(err).Warning("failed to re-read file")
+		return nil, err
+	}
 
 	if _, err := io.Copy(mw, f); err != nil {
 		lsd.log.WithError(err).Warning("failed to stream to hasher")

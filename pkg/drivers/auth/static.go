@@ -33,14 +33,14 @@ func (sa *StaticAuth) Init() {
 
 func (sa *StaticAuth) InitRoutes(r *mux.Router) {
 	r.Path("/auth/driver").HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(rw).Encode(AuthType{
+		_ = json.NewEncoder(rw).Encode(AuthType{
 			Type: "static",
 		})
 	})
 	r.Path("/auth/is_authenticated").Methods(http.MethodGet).HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		session, _ := sa.Store.Get(r, SessionName)
 		_, ok := session.Values[StaticAuthUser]
-		json.NewEncoder(rw).Encode(IsLoggedInResponse{
+		_ = json.NewEncoder(rw).Encode(IsLoggedInResponse{
 			Successful: ok,
 		})
 	})
@@ -51,15 +51,15 @@ func (sa *StaticAuth) InitRoutes(r *mux.Router) {
 				err := bcrypt.CompareHashAndPassword([]byte(expectedHash), []byte(password))
 				if err == nil {
 					session.Values[StaticAuthUser] = username
-					sa.Store.Save(r, rw, session)
-					json.NewEncoder(rw).Encode(IsLoggedInResponse{
+					_ = sa.Store.Save(r, rw, session)
+					_ = json.NewEncoder(rw).Encode(IsLoggedInResponse{
 						Successful: true,
 					})
 					return
 				}
 			}
 		}
-		json.NewEncoder(rw).Encode(IsLoggedInResponse{
+		_ = json.NewEncoder(rw).Encode(IsLoggedInResponse{
 			Successful: false,
 		})
 	})

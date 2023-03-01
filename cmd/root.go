@@ -18,11 +18,14 @@ var rootCmd = &cobra.Command{
 	Use:   "imagik",
 	Short: "A small Fileserver",
 	Run: func(cmd *cobra.Command, args []string) {
-		os.MkdirAll(path.Join(os.TempDir(), "imagik/"), 0750)
+		err := os.MkdirAll(path.Join(os.TempDir(), "imagik/"), 0750)
+		if err != nil {
+			panic(err)
+		}
 		server := server.New()
 		go server.HashMap.RunIndexer()
 
-		err := server.Run()
+		err = server.Run()
 		if err != nil {
 			log.Error(err)
 		}

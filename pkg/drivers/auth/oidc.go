@@ -82,7 +82,7 @@ func (oa *OIDCAuth) handleOAuth2Callback(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	session.Values[OIDCAuthUser] = claims.Email
-	session.Save(r, w)
+	_ = session.Save(r, w)
 	http.Redirect(w, r, "/ui/", http.StatusFound)
 }
 
@@ -106,7 +106,7 @@ func (oa *OIDCAuth) Init() {
 
 func (oa *OIDCAuth) InitRoutes(r *mux.Router) {
 	r.Path("/auth/driver").HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-		json.NewEncoder(rw).Encode(AuthType{
+		_ = json.NewEncoder(rw).Encode(AuthType{
 			Type: "oidc",
 			Args: map[string]string{
 				"provider": config.C.AuthOIDCConfig.Provider,
@@ -116,7 +116,7 @@ func (oa *OIDCAuth) InitRoutes(r *mux.Router) {
 	r.Path("/auth/is_authenticated").Methods(http.MethodGet).HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		session, _ := oa.Store.Get(r, SessionName)
 		_, ok := session.Values[OIDCAuthUser]
-		json.NewEncoder(rw).Encode(IsLoggedInResponse{
+		_ = json.NewEncoder(rw).Encode(IsLoggedInResponse{
 			Successful: ok,
 		})
 	})
