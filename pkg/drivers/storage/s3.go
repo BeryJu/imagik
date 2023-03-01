@@ -17,6 +17,7 @@ import (
 	"time"
 
 	"github.com/gabriel-vasile/mimetype"
+	"github.com/jellydator/ttlcache/v3"
 	"github.com/minio/minio-go/v7"
 	"github.com/minio/minio-go/v7/pkg/credentials"
 	"github.com/minio/minio-go/v7/pkg/tags"
@@ -28,9 +29,10 @@ import (
 )
 
 type S3StorageDriver struct {
-	s3     *minio.Client
-	bucket string
-	log    *log.Entry
+	s3       *minio.Client
+	bucket   string
+	log      *log.Entry
+	tagCache *ttlcache.Cache[string, map[string]string]
 }
 
 func NewS3StorageDriver() (*S3StorageDriver, error) {
@@ -64,11 +66,15 @@ func NewS3StorageDriver() (*S3StorageDriver, error) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-
+	cache := ttlcache.New(
+		ttlcache.WithTTL[string, map[string]string](30 * time.Minute),
+	)
+	go cache.Start()
 	return &S3StorageDriver{
-		s3:     minioClient,
-		bucket: config.C.StorageS3Config.Bucket,
-		log:    log.WithField("component", "imagik.drivers.storage.s3"),
+		s3:       minioClient,
+		bucket:   config.C.StorageS3Config.Bucket,
+		log:      log.WithField("component", "imagik.drivers.storage.s3"),
+		tagCache: cache,
 	}, nil
 }
 
@@ -76,6 +82,9 @@ func (sd *S3StorageDriver) getTagsMap(ctx context.Context, key string) map[strin
 	tagsM := make(map[string]string, 0)
 	if strings.HasSuffix(key, "/") {
 		return tagsM
+	}
+	if ct := sd.tagCache.Get(key); ct != nil {
+		return ct.Value()
 	}
 	tags, err := sd.s3.GetObjectTagging(ctx, sd.bucket, key, minio.GetObjectTaggingOptions{})
 	if err != nil {
@@ -87,6 +96,7 @@ func (sd *S3StorageDriver) getTagsMap(ctx context.Context, key string) map[strin
 			tagsM[key] = value
 		}
 	}
+	sd.tagCache.Set(key, tagsM, 30*time.Minute)
 	return tagsM
 }
 
@@ -207,7 +217,10 @@ func (sd *S3StorageDriver) HashesForFile(path string, info ObjectInfo, ctx conte
 		sd.log.WithError(err).Warning("failed to detect mime type")
 		return nil, err
 	}
-	obj.Seek(0, io.SeekStart)
+	_, err = obj.Seek(0, io.SeekStart)
+	if err != nil {
+		return nil, err
+	}
 
 	if _, err := io.Copy(mw, obj); err != nil {
 		sd.log.WithError(err).Warning("failed to stream to hasher")
