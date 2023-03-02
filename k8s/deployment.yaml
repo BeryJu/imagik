@@ -20,13 +20,12 @@ spec:
           persistentVolumeClaim:
             claimName: minio-pv-claim
       containers:
-        - command:
-          - /imagik
-          - -c=/config.yml
+        - args:
+          - -c /config.yml
           envFrom:
           - configMapRef:
               name: imagik-config
-          image: ghcr.io/beryju/imagik:2020.12.1
+          image: ghcr.io/beryju/imagik:latest
           name: imagik
           ports:
             - containerPort: 8000
