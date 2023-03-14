@@ -44,7 +44,12 @@ class List extends LitElement {
                     })
                     .map((f) => {
                         return html`
-                            <ik-file path=${f.fullPath} mime=${f.mime} name=${f.name} type=${f.type}></ik-file>
+                            <ik-file
+                                path=${f.fullPath}
+                                mime=${f.mime}
+                                name=${f.name}
+                                type=${f.type}
+                            ></ik-file>
                         `;
                     });
             })

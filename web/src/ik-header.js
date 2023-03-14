@@ -49,9 +49,11 @@ class App extends LitElement {
 
     headerPath() {
         if (!this.path) {
+            document.title = `imagik`;
             return "imagik";
         } else {
-            return truncate( decodeURIComponent(this.path), 70);
+            document.title = `${this.path} - imagik`;
+            return truncate(decodeURIComponent(this.path), 70);
         }
     }
 

@@ -89,17 +89,17 @@ class Detail extends LitElement {
                 <div class="sidebar">
                     <div class="group">
                         <label>Name</label>
-                        <input type="text" value=${r.name} readonly>
+                        <input type="text" value=${r.name} readonly />
                     </div>
                     <div class="group">
                         <label>Creation Date</label>
-                        <input type="text" value=${r.creationDate} readonly>
+                        <input type="text" value=${r.creationDate} readonly />
                     </div>
                     <div class="group">
                         <label>Size</label>
-                        <input type="text" value=${r.size} readonly>
+                        <input type="text" value=${r.size} readonly />
                     </div>
-                    <hr>
+                    <hr />
                     ${Object.entries(r.hashes).map(this.hashField)}
                 </div>
                 <div class="preview">
