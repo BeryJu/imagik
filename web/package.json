@@ -15,7 +15,7 @@
         "deepmerge": "^4.3.1",
         "eslint": "^8.36.0",
         "eslint-config-google": "^0.14.0",
-        "prettier": "^2.8.5",
+        "prettier": "^2.8.6",
         "rollup": "^2.79.1",
         "rollup-plugin-copy": "^3.4.0",
         "rollup-plugin-cssimport": "^1.0.3",
