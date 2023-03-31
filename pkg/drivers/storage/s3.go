@@ -102,12 +102,15 @@ func (sd *S3StorageDriver) getTagsMap(ctx context.Context, key string) map[strin
 
 func (sd *S3StorageDriver) Walk(ctx context.Context, handler func(path string, info ObjectInfo)) error {
 	objects := sd.s3.ListObjects(ctx, sd.bucket, minio.ListObjectsOptions{
-		Recursive:    true,
-		WithMetadata: true,
+		Recursive: true,
+		// WithMetadata: true,
 	})
 
 	// Log the objects found
 	for obj := range objects {
+		if obj.Key == "" {
+			continue
+		}
 		handler(obj.Key, ObjectInfo{
 			Tags: sd.getTagsMap(ctx, obj.Key),
 			ETag: obj.ETag,
@@ -272,6 +275,9 @@ func (sd *S3StorageDriver) List(ctx context.Context, offset string) ([]schema.Li
 	files := make([]schema.ListFile, 0)
 
 	for obj := range objects {
+		if obj.Key == "" {
+			continue
+		}
 		tags := sd.getTagsMap(ctx, obj.Key)
 		ft := "file"
 		if strings.HasSuffix(obj.Key, "/") {
