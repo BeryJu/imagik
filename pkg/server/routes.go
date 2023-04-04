@@ -18,7 +18,10 @@ import (
 // GetHandler Handle GET Requests
 func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 	hub := sentry.GetHubFromContext(r.Context())
-	hub.Scope().SetTransaction(fmt.Sprintf("%s FileHandler", r.Method))
+	tx := sentry.TransactionFromContext(r.Context())
+	if tx != nil {
+		tx.Name = fmt.Sprintf("%s FileHandler", r.Method)
+	}
 	if s.tm.Transform(w, r) {
 		return
 	}
@@ -69,8 +72,10 @@ func (s *Server) GetHandler(w http.ResponseWriter, r *http.Request) {
 
 // UploadFormHandler Upload handler used by HTML Forms
 func (s *Server) UploadFormHandler(w http.ResponseWriter, r *http.Request) {
-	hub := sentry.GetHubFromContext(r.Context())
-	hub.Scope().SetTransaction(fmt.Sprintf("%s FileHandler", r.Method))
+	tx := sentry.TransactionFromContext(r.Context())
+	if tx != nil {
+		tx.Name = fmt.Sprintf("%s FileHandler", r.Method)
+	}
 	err := r.ParseMultipartForm(10 << 20)
 	if err != nil {
 		s.logger.WithError(err).Warning("failed to parse multipart form")
@@ -110,8 +115,10 @@ func (s *Server) UploadFormHandler(w http.ResponseWriter, r *http.Request) {
 
 // PutHandler Upload handler used frm CLI
 func (s *Server) PutHandler(w http.ResponseWriter, r *http.Request) {
-	hub := sentry.GetHubFromContext(r.Context())
-	hub.Scope().SetTransaction(fmt.Sprintf("%s FileHandler", r.Method))
+	tx := sentry.TransactionFromContext(r.Context())
+	if tx != nil {
+		tx.Name = fmt.Sprintf("%s FileHandler", r.Method)
+	}
 	hashes, err := s.sd.Upload(r.Context(), r.Body, r.URL.Path)
 	if err != nil {
 		errorHandler(err, w)

@@ -20,8 +20,10 @@ func ConfigureUI(h *mux.Router) {
 	ui := h.NewRoute().Subrouter()
 	ui.Use(func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-			hub := sentry.GetHubFromContext(r.Context())
-			hub.Scope().SetTransaction(fmt.Sprintf("%s UI", r.Method))
+			tx := sentry.TransactionFromContext(r.Context())
+			if tx != nil {
+				tx.Name = fmt.Sprintf("%s UI", r.Method)
+			}
 			h.ServeHTTP(rw, r)
 		})
 	})

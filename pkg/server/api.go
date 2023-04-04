@@ -11,8 +11,10 @@ import (
 )
 
 func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
-	hub := sentry.GetHubFromContext(r.Context())
-	hub.Scope().SetTransaction(fmt.Sprintf("%s APIList", r.Method))
+	tx := sentry.TransactionFromContext(r.Context())
+	if tx != nil {
+		tx.Name = fmt.Sprintf("%s APIList", r.Method)
+	}
 	offset := r.URL.Query().Get("pathOffset")
 	files, err := s.sd.List(r.Context(), offset)
 	if err != nil {
@@ -34,8 +36,10 @@ func (s *Server) APIListHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) APIMoveHandler(w http.ResponseWriter, r *http.Request) {
-	hub := sentry.GetHubFromContext(r.Context())
-	hub.Scope().SetTransaction(fmt.Sprintf("%s APIMove", r.Method))
+	tx := sentry.TransactionFromContext(r.Context())
+	if tx != nil {
+		tx.Name = fmt.Sprintf("%s APIMove", r.Method)
+	}
 	var from, to string
 	if from = r.URL.Query().Get("from"); from == "" {
 		schema.ErrorHandlerAPI(errors.New("missing from path"), w)
