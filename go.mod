@@ -13,7 +13,7 @@ require (
 	github.com/gorilla/sessions v1.2.1
 	github.com/influxdata/influxdb-client-go/v2 v2.12.3
 	github.com/jellydator/ttlcache/v3 v3.0.1
-	github.com/minio/minio-go/v7 v7.0.51
+	github.com/minio/minio-go/v7 v7.0.52
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.14.0
 	github.com/sirupsen/logrus v1.9.0
