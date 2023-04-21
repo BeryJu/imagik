@@ -1,5 +1,5 @@
 # Build WebUI First
-FROM --platform=${BUILDPLATFORM} docker.io/node:19 as npm-builder
+FROM --platform=${BUILDPLATFORM} docker.io/node:20 as npm-builder
 
 COPY ./web/ /build/web
 
