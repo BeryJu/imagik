@@ -16,7 +16,7 @@ require (
 	github.com/minio/minio-go/v7 v7.0.55
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.15.1
-	github.com/sirupsen/logrus v1.9.2
+	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.7.0
 	golang.org/x/crypto v0.9.0
 	golang.org/x/oauth2 v0.8.0
