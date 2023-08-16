@@ -179,6 +179,7 @@ func (lsd *LocalStorageDriver) CleanURL(raw string) string {
 	if !strings.HasPrefix(raw, "/") {
 		raw = "/" + raw
 	}
+	raw = strings.TrimPrefix(raw, config.C.StorageLocalConfig.Root)
 	return filepath.Join(config.C.StorageLocalConfig.Root, filepath.FromSlash(path.Clean("/"+raw)))
 }
 
