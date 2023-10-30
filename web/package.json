@@ -26,6 +26,6 @@
         "@rollup/plugin-image": "^3.0.3",
         "@sentry/browser": "^7.75.1",
         "construct-style-sheets-polyfill": "^3.1.0",
-        "lit": "^3.0.0"
+        "lit": "^3.0.1"
     }
 }
