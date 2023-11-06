@@ -9,7 +9,7 @@ require (
 	github.com/getsentry/sentry-go v0.25.0
 	github.com/gorilla/handlers v1.5.1
 	github.com/gorilla/mux v1.8.1
-	github.com/gorilla/securecookie v1.1.1
+	github.com/gorilla/securecookie v1.1.2
 	github.com/gorilla/sessions v1.2.1
 	github.com/influxdata/influxdb-client-go/v2 v2.12.3
 	github.com/jellydator/ttlcache/v3 v3.1.0
