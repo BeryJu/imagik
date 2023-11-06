@@ -11,7 +11,7 @@ require (
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/securecookie v1.1.2
 	github.com/gorilla/sessions v1.2.1
-	github.com/influxdata/influxdb-client-go/v2 v2.12.3
+	github.com/influxdata/influxdb-client-go/v2 v2.12.4
 	github.com/jellydator/ttlcache/v3 v3.1.0
 	github.com/minio/minio-go/v7 v7.0.63
 	github.com/pkg/errors v0.9.1
@@ -25,9 +25,10 @@ require (
 )
 
 require (
+	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect
-	github.com/deepmap/oapi-codegen v1.8.2 // indirect
+	github.com/deepmap/oapi-codegen v1.12.4 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
