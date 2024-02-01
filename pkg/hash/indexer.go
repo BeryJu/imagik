@@ -39,7 +39,7 @@ func (hm *HashMap) Populated() bool {
 // RunIndexer Run full indexing
 func (hm *HashMap) RunIndexer() {
 	hm.logger.Info("Started indexing...")
-	span := sentry.StartSpan(hm.ctx, "imagik.hash.indexer", sentry.TransactionName("File Hasher"))
+	span := sentry.StartSpan(hm.ctx, "imagik.hash.indexer", sentry.WithTransactionName("File Hasher"))
 	defer span.Finish()
 	err := hm.sd.Walk(span.Context(), func(path string, info storage.ObjectInfo) {
 		hm.hashFile(path, info, span.Context())
