@@ -270,7 +270,7 @@ func (sd *S3StorageDriver) List(ctx context.Context, offset string) ([]schema.Li
 		offset += "/"
 	}
 	objects := sd.s3.ListObjects(ctx, sd.bucket, minio.ListObjectsOptions{
-		Prefix: offset,
+		Prefix: strings.TrimPrefix(offset, "/"),
 	})
 	files := make([]schema.ListFile, 0)
 
