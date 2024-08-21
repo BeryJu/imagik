@@ -1,8 +1,7 @@
 module beryju.io/imagik
 
 go 1.21
-
-toolchain go1.22.0
+toolchain go1.23.0
 
 require (
 	github.com/coreos/go-oidc v2.2.1+incompatible
@@ -12,7 +11,7 @@ require (
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/securecookie v1.1.2
-	github.com/gorilla/sessions v1.3.0
+	github.com/gorilla/sessions v1.4.0
 	github.com/influxdata/influxdb-client-go/v2 v2.14.0
 	github.com/jellydator/ttlcache/v3 v3.2.0
 	github.com/minio/minio-go/v7 v7.0.75
