@@ -15,7 +15,7 @@ require (
 	github.com/gorilla/sessions v1.4.0
 	github.com/influxdata/influxdb-client-go/v2 v2.14.0
 	github.com/jellydator/ttlcache/v3 v3.2.1
-	github.com/minio/minio-go/v7 v7.0.75
+	github.com/minio/minio-go/v7 v7.0.76
 	github.com/pkg/errors v0.9.1
 	github.com/prometheus/client_golang v1.20.2
 	github.com/sirupsen/logrus v1.9.3
@@ -46,11 +46,11 @@ require (
 	github.com/prometheus/client_model v0.6.1 // indirect
 	github.com/prometheus/common v0.55.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
-	github.com/rs/xid v1.5.0 // indirect
+	github.com/rs/xid v1.6.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	golang.org/x/net v0.27.0 // indirect
+	golang.org/x/net v0.28.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
-	golang.org/x/sys v0.23.0 // indirect
+	golang.org/x/sys v0.24.0 // indirect
 	golang.org/x/text v0.17.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/square/go-jose.v2 v2.5.1 // indirect
