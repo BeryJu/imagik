@@ -8,7 +8,7 @@ import (
 	"net/http"
 
 	"beryju.io/imagik/pkg/config"
-	"github.com/coreos/go-oidc"
+	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/getsentry/sentry-go"
 	"github.com/gorilla/mux"
 	"github.com/gorilla/securecookie"
