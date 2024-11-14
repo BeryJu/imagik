@@ -16,7 +16,7 @@
         "eslint": "^9.14.0",
         "eslint-config-google": "^0.14.0",
         "prettier": "^3.3.3",
-        "rollup": "^4.25.0",
+        "rollup": "^4.26.0",
         "rollup-plugin-copy": "^3.5.0",
         "rollup-plugin-cssimport": "^1.0.3",
         "rollup-plugin-minify-html-literals": "^1.2.6",
