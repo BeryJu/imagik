@@ -2,8 +2,8 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import cssimport from "rollup-plugin-cssimport";
 import copy from "rollup-plugin-copy";
-import minifyHTML from "rollup-plugin-minify-html-literals";
-import { terser } from "rollup-plugin-terser";
+import minifyHTML from "rollup-plugin-minify-html-literals-v3";
+import terser from "@rollup/plugin-terser";
 import image from "@rollup/plugin-image";
 
 const resources = [
@@ -11,7 +11,7 @@ const resources = [
     { src: "assets/*", dest: "./dist/assets" },
 ];
 
-module.exports = [
+export default [
     {
         input: "./src/main.js",
         output: [
