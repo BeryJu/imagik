@@ -5,7 +5,7 @@ go 1.23
 toolchain go1.23.0
 
 require (
-	github.com/coreos/go-oidc/v3 v3.11.0
+	github.com/coreos/go-oidc/v3 v3.12.0
 	github.com/cornelk/hashmap v1.0.8
 	github.com/gabriel-vasile/mimetype v1.4.7
 	github.com/getsentry/sentry-go v0.31.1
