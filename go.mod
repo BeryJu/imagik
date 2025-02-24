@@ -1,9 +1,6 @@
 module beryju.io/imagik
 
 go 1.23
-
-toolchain go1.23.0
-
 require (
 	github.com/coreos/go-oidc/v3 v3.12.0
 	github.com/cornelk/hashmap v1.0.8
@@ -20,7 +17,7 @@ require (
 	github.com/prometheus/client_golang v1.21.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.9.1
-	golang.org/x/crypto v0.33.0
+	golang.org/x/crypto v0.34.0
 	golang.org/x/oauth2 v0.26.0
 	golang.org/x/term v0.29.0
 	gopkg.in/yaml.v2 v2.4.0
