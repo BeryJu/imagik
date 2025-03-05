@@ -14,7 +14,7 @@ require (
 	github.com/jellydator/ttlcache/v3 v3.3.0
 	github.com/minio/minio-go/v7 v7.0.87
 	github.com/pkg/errors v0.9.1
-	github.com/prometheus/client_golang v1.21.0
+	github.com/prometheus/client_golang v1.21.1
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.9.1
 	golang.org/x/crypto v0.35.0
