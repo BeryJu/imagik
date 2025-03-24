@@ -1,6 +1,7 @@
 module beryju.io/imagik
 
-go 1.23
+go 1.23.0
+
 toolchain go1.24.1
 
 require (
