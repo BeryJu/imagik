@@ -7,7 +7,7 @@ toolchain go1.24.1
 require (
 	github.com/coreos/go-oidc/v3 v3.14.1
 	github.com/cornelk/hashmap v1.0.8
-	github.com/gabriel-vasile/mimetype v1.4.8
+	github.com/gabriel-vasile/mimetype v1.4.9
 	github.com/getsentry/sentry-go v0.32.0
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
@@ -49,7 +49,7 @@ require (
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/rs/xid v1.6.0 // indirect
 	github.com/spf13/pflag v1.0.6 // indirect
-	golang.org/x/net v0.38.0 // indirect
+	golang.org/x/net v0.39.0 // indirect
 	golang.org/x/sync v0.13.0 // indirect
 	golang.org/x/sys v0.32.0 // indirect
 	golang.org/x/text v0.24.0 // indirect
