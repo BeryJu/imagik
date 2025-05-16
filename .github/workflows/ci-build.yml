@@ -29,7 +29,7 @@ jobs:
         echo "##[set-output name=sha]$GITHUB_SHA"
         echo "##[set-output name=timestamp]$(date +%s)"
     - name: Build and push Docker images
-      uses: docker/build-push-action@v6.16.0
+      uses: docker/build-push-action@v6.17.0
       with:
         tags: |
           ghcr.io/beryju/imagik:latest
