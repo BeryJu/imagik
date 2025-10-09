@@ -22,7 +22,7 @@ require (
 	github.com/spf13/cobra v1.10.1
 	golang.org/x/crypto v0.42.0
 	golang.org/x/oauth2 v0.31.0
-	golang.org/x/term v0.35.0
+	golang.org/x/term v0.36.0
 	gopkg.in/yaml.v2 v2.4.0
 )
 
@@ -54,7 +54,7 @@ require (
 	go.yaml.in/yaml/v2 v2.4.2 // indirect
 	golang.org/x/net v0.43.0 // indirect
 	golang.org/x/sync v0.17.0 // indirect
-	golang.org/x/sys v0.36.0 // indirect
+	golang.org/x/sys v0.37.0 // indirect
 	golang.org/x/text v0.29.0 // indirect
 	google.golang.org/protobuf v1.36.8 // indirect
 )
