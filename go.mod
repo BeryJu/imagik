@@ -8,7 +8,7 @@ require (
 	github.com/coreos/go-oidc/v3 v3.16.0
 	github.com/cornelk/hashmap v1.0.8
 	github.com/gabriel-vasile/mimetype v1.4.10
-	github.com/getsentry/sentry-go v0.35.3
+	github.com/getsentry/sentry-go v0.36.0
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
 	github.com/gorilla/securecookie v1.1.2
