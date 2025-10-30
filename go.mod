@@ -7,7 +7,7 @@ toolchain go1.24.1
 require (
 	github.com/coreos/go-oidc/v3 v3.16.0
 	github.com/cornelk/hashmap v1.0.8
-	github.com/gabriel-vasile/mimetype v1.4.10
+	github.com/gabriel-vasile/mimetype v1.4.11
 	github.com/getsentry/sentry-go v0.36.2
 	github.com/gorilla/handlers v1.5.2
 	github.com/gorilla/mux v1.8.1
