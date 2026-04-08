@@ -3,7 +3,7 @@ module beryju.io/imagik
 go 1.25.0
 
 require (
-	github.com/coreos/go-oidc/v3 v3.17.0
+	github.com/coreos/go-oidc/v3 v3.18.0
 	github.com/cornelk/hashmap v1.0.8
 	github.com/gabriel-vasile/mimetype v1.4.13
 	github.com/getsentry/sentry-go v0.44.1
